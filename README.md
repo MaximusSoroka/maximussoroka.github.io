@@ -1,2 +1,37 @@
-# maximussoroka.github.io
-Desire Studio — static site: n8n recommendation and automation tool directory (English and German)
+# Desire Studio
+
+Static website: an honest, sourced recommendation of n8n, plus a directory of 19 automation and AI-agent tools. English is primary; German lives under `/de/`.
+
+Live URL: [https://maximussoroka.github.io/](https://maximussoroka.github.io/)
+
+## Pages
+
+| Path | Content |
+|---|---|
+| `/` | Home (English) |
+| `/n8n/` | n8n recommendation article |
+| `/directory/` | Tool directory |
+| `/legal/` | Legal notice / Impressum |
+| `/de/` | The same pages in German |
+
+## Affiliate links
+
+There are **no active affiliate links** at the moment. `N8N_AFFILIATE_URL` and `MAKE_AFFILIATE_URL` in `config.js` are empty, so product buttons go to the official vendor sites (`https://n8n.io/`, `https://www.make.com/`). The n8n partner application was declined on 19 November 2026; a later reapplication is planned.
+
+To add an official partner URL later, set it in `config.js` and redeploy that file. A rebuild (`python3 build.py`) is not required for the link switch. Links then get `rel="sponsored nofollow"` and are labelled **#ad / Anzeige**. Do not invent links.
+
+## Build
+
+```bash
+python3 build.py
+```
+
+Local preview:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open `http://127.0.0.1:8080/` (English) or `http://127.0.0.1:8080/de/` (German).
+
+Prices and programme figures come from official public pages checked on 18 November 2026. No figures were invented. Own revenue: €0. This is a static site with no cookies, tracking or analytics.
