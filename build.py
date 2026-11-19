@@ -1,0 +1,839 @@
+#!/usr/bin/env python3
+"""Build the static Desire Studio site from local source files.
+
+Does not publish, push, or create a repository.
+Run from this directory: python3 build.py
+"""
+from __future__ import annotations
+
+import html
+import json
+import shutil
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DATA = ROOT / "data"
+TOOLS = json.loads((DATA / "tools.json").read_text())
+TOOLS_EN = json.loads((DATA / "tools_en.json").read_text())
+PRUEF = "18.11.2026"
+PRUEF_EN = "18 November 2026"
+N_TOOLS = int(TOOLS.get("n_eintraege") or len(TOOLS["tools"]))
+
+def esc(s) -> str:
+    return html.escape("" if s is None else str(s), quote=True)
+
+
+def prefix(depth: int) -> str:
+    return "" if depth == 0 else "../" * depth
+
+
+def tool_view(src: dict, lang: str) -> dict:
+    en = TOOLS_EN.get(src["id"], {})
+    if lang == "en":
+        return {
+            **src,
+            "kategorie": en.get("kategorie") or src["kategorie"],
+            "kurz": en.get("kurz") or src["kurz"],
+            "preis": en.get("preis") or src["preis"],
+            "preis_status": en.get("preis_status") or src["preis_status"],
+            "affiliate_detail": en.get("affiliate_detail") or src["affiliate_detail"],
+        }
+    return src
+
+
+def group_of(t: dict) -> str:
+    cat = (t.get("kategorie") or "").lower()
+    if "ki-" in cat or cat.startswith("ai ") or "/ ai" in cat or "ai agents" in cat or "ai apps" in cat or "ai development" in cat or "ai workflow" in cat:
+        return "ai"
+    return "automation"
+
+
+def status_class(status: str) -> str:
+    s = (status or "").lower()
+    if "unbekannt" in s or s == "unknown":
+        return "badge-unknown"
+    if "teilweise" in s or "partial" in s or "vorbehalt" in s or "caveat" in s:
+        return "badge-partial"
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# Shared chrome
+# ---------------------------------------------------------------------------
+
+NAV = {
+    "en": [
+        ("home", "Home"),
+        ("n8n", "Recommend n8n"),
+        ("directory", "Directory"),
+        ("legal", "Legal notice"),
+    ],
+    "de": [
+        ("home", "Start"),
+        ("n8n", "n8n-Empfehlung"),
+        ("directory", "Verzeichnis"),
+        ("legal", "Impressum"),
+    ],
+}
+
+BANNER = {
+    "en": (
+        "This page may contain affiliate links in the future. Those links will be labelled "
+        "<strong>#ad / Anzeige</strong>. No earnings promises. Prices checked on {d}. "
+        "Our own revenue so far: €0."
+    ).format(d=PRUEF_EN),
+    "de": (
+        "Diese Seite kann in Zukunft Affiliate-Links enthalten. Solche Links werden als "
+        "<strong>#ad / Anzeige</strong> gekennzeichnet. Kein Gewinnversprechen. Preise geprüft am {d}. "
+        "Unser eigener Ertrag bisher: 0&nbsp;€."
+    ).format(d=PRUEF),
+}
+
+FOOT = {
+    "en": (
+        f"Prices and programme terms as of {PRUEF_EN}, from the vendors’ official pages. "
+        "Not financial advice. Our own revenue: €0."
+    ),
+    "de": (
+        f"Stand der Preise und Programmbedingungen: {PRUEF}, offizielle Seiten der Anbieter. "
+        "Keine Finanzberatung. Eigener Ertrag: 0 €."
+    ),
+}
+
+
+def page_paths(lang: str, depth: int) -> dict:
+    p = prefix(depth)
+    if lang == "en":
+        return {
+            "home": "./" if depth == 0 else p,
+            "n8n": p + "n8n/",
+            "directory": p + "directory/",
+            "legal": p + "legal/",
+            "other_lang": p + "de/" if depth == 0 else (p + "de/" if depth == 1 else "../../de/"),
+            "config": p + "config.js",
+            "css": p + "css/site.css",
+            "js_aff": p + "js/affiliate.js",
+            "js_dir": p + "js/directory.js",
+        }
+    # German lives under /de/
+    if depth == 1:  # /de/index.html
+        return {
+            "home": "./",
+            "n8n": "./n8n/",
+            "directory": "./directory/",
+            "legal": "./legal/",
+            "other_lang": "../",
+            "config": "../config.js",
+            "css": "../css/site.css",
+            "js_aff": "../js/affiliate.js",
+            "js_dir": "../js/directory.js",
+        }
+    # depth 2: /de/n8n/ etc.
+    return {
+        "home": "../",
+        "n8n": "../n8n/",
+        "directory": "../directory/",
+        "legal": "../legal/",
+        "other_lang": "../../",
+        "config": "../../config.js",
+        "css": "../../css/site.css",
+        "js_aff": "../../js/affiliate.js",
+        "js_dir": "../../js/directory.js",
+    }
+
+
+def lang_href(lang: str, page: str, depth: int) -> str:
+    """URL of the same page in the other language."""
+    p = prefix(depth)
+    mapping_en_to_de = {
+        "home": "de/",
+        "n8n": "de/n8n/" if depth == 0 else "../de/n8n/",
+        "directory": "de/directory/" if depth == 0 else "../de/directory/",
+        "legal": "de/legal/" if depth == 0 else "../de/legal/",
+    }
+    mapping_de_to_en = {
+        "home": "../",
+        "n8n": "../../n8n/",
+        "directory": "../../directory/",
+        "legal": "../../legal/",
+    }
+    if lang == "en":
+        if depth == 0:
+            return {"home": "de/", "n8n": "de/n8n/", "directory": "de/directory/", "legal": "de/legal/"}[page]
+        return {"home": "../de/", "n8n": "../de/n8n/", "directory": "../de/directory/", "legal": "../de/legal/"}[page]
+    if depth == 1:
+        return {"home": "../", "n8n": "../n8n/", "directory": "../directory/", "legal": "../legal/"}[page]
+    return mapping_de_to_en[page]
+
+
+def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "") -> str:
+    paths = page_paths(lang, depth)
+    nav = []
+    for key, label in NAV[lang]:
+        href = paths[key]
+        cur = ' aria-current="page"' if key == page else ""
+        nav.append(f'<a href="{href}"{cur}>{esc(label)}</a>')
+    other = "Deutsch" if lang == "en" else "English"
+    other_href = lang_href(lang, page, depth)
+    en_cur = ' aria-current="true"' if lang == "en" else ""
+    de_cur = ' aria-current="true"' if lang == "de" else ""
+    wrap = "wrap-narrow" if page in ("n8n", "legal", "home") else "wrap"
+    # home uses wrap for facts; keep wrap-narrow for typography? I'll use wrap on home.
+    if page == "home" or page == "directory":
+        wrap = "wrap"
+    dir_js = f'\n<script src="{paths["js_dir"]}" defer></script>' if page == "directory" else ""
+    return f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="{esc(description)}">
+  <title>{esc(title)}</title>
+  <link rel="stylesheet" href="{paths['css']}">
+</head>
+<body>
+  <a class="skip" href="#content">{"Skip to content" if lang == "en" else "Zum Inhalt"}</a>
+  <header class="site-header">
+    <div class="header-inner {wrap}">
+      <a class="brand" href="{paths['home']}">
+        <span class="brand-name">Desire Studio</span>
+        <span class="brand-tag">{"Automation tools, sourced" if lang == "en" else "Automatisierungs-Tools, mit Quellen"}</span>
+      </a>
+      <nav aria-label="{"Main" if lang == "en" else "Hauptnavigation"}">
+        {''.join(nav)}
+        <span class="lang" aria-label="Language">
+          <a href="{other_href if lang == "de" else "#"}"{en_cur}>EN</a>
+          <a href="{other_href if lang == "en" else "#"}"{de_cur}>DE</a>
+        </span>
+      </nav>
+    </div>
+  </header>
+  <div class="ad-banner">
+    <div class="{wrap}">{BANNER[lang]}</div>
+  </div>
+  <main id="content">
+    <div class="{wrap}">
+{body}
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="{wrap}">
+      <p>{esc(FOOT[lang])}</p>
+      <p>
+        <a href="{paths['legal']}">{"Legal notice / Impressum" if lang == "en" else "Impressum / Kontakt"}</a>
+        · <a href="{other_href}">{other}</a>
+      </p>
+    </div>
+  </footer>
+  <script src="{paths['config']}"></script>
+  <script src="{paths['js_aff']}"></script>{dir_js}{extra_js}
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Pages
+# ---------------------------------------------------------------------------
+
+HOME = {
+    "en": {
+        "title": "Why we recommend n8n — Desire Studio",
+        "description": "An honest, sourced recommendation of n8n, and a directory of 19 automation and AI-agent tools. Prices checked 18 November 2026.",
+        "h1": "Why we recommend n8n",
+        "lede": "And when Make is still a fair fit. An honest, sourced guide to automation and agent workflows. No earnings promises. Sources checked on 18 November 2026.",
+        "cta1": "Read the recommendation",
+        "cta2": "Browse 19 tools",
+        "cta_n8n": "See n8n",
+        "facts_title": "What the official pages said on 18 November 2026",
+        "facts": [
+            ("Cloud pricing", "n8n Starter is €20/month, Pro €50/month, Business €667/month — each billed annually on the official pricing page. Monthly prices were not stated as figures."),
+            ("Self-hosting and data", "The Community Edition for self-hosting is free on GitHub. For hosted cloud plans, n8n names Frankfurt (EU) as the storage location. 14-day trial, without a credit card according to the pricing page."),
+            ("When Make may fit better", "Make’s free plan includes 1,000 credits per month. Paid-plan prices were not reliably readable, so they are not listed here. Whether the same workflow is cheaper on Make or n8n depends on the concrete flow — that is not proven in general."),
+        ],
+        "dir_title": "Tool directory",
+        "dir_text": f"A sourced directory of {N_TOOLS} automation and AI-agent tools. Prices come only from official public pages dated {PRUEF_EN}. Where a figure was not readable, it is marked unknown. n8n is listed first on purpose.",
+        "dir_cta": "Open the directory",
+        "rev": "This is not financial advice and not a trading product. Our own revenue from these pages so far: €0.",
+    },
+    "de": {
+        "title": "Warum wir n8n empfehlen — Desire Studio",
+        "description": "Eine ehrliche, quellenbelegte Empfehlung für n8n und ein Verzeichnis mit 19 Automatisierungs- und KI-Agenten-Tools. Preise geprüft am 18.11.2026.",
+        "h1": "Warum wir n8n empfehlen",
+        "lede": "Und wann Make trotzdem passt. Ein ehrlicher, quellenbelegter Text zu Automatisierung und Agenten-Workflows. Kein Gewinnversprechen. Quellenstand: 18.11.2026.",
+        "cta1": "Empfehlung lesen",
+        "cta2": "19 Tools ansehen",
+        "cta_n8n": "n8n ansehen",
+        "facts_title": "Was die offiziellen Seiten am 18.11.2026 sagten",
+        "facts": [
+            ("Cloud-Preise", "n8n Starter kostet 20 €/Monat, Pro 50 €/Monat, Business 667 €/Monat — jeweils laut offizieller Preisseite bei jährlicher Abrechnung. Monatliche Preise standen dort nicht als Zahl."),
+            ("Selbst hosten und Datenort", "Die Community Edition zum Selbst-Hosten ist kostenlos auf GitHub. Für die gehosteten Cloud-Pläne nennt n8n Frankfurt (EU) als Speicherort. 14 Tage testen, laut Preisseite ohne Kreditkarte."),
+            ("Wo Make besser passen kann", "Im Free-Plan nennt Make 1.000 Credits pro Monat. Preise der Bezahlpläne waren nicht zuverlässig ablesbar und stehen deshalb hier nicht. Ob derselbe Ablauf bei Make oder n8n günstiger ist, hängt vom konkreten Workflow ab — das ist nicht pauschal belegt."),
+        ],
+        "dir_title": "Tool-Verzeichnis",
+        "dir_text": f"Ein quellenbelegtes Verzeichnis mit {N_TOOLS} Automatisierungs- und KI-Agenten-Tools. Preise nur aus öffentlichen offiziellen Seiten vom {PRUEF}. Wo ein Betrag nicht ablesbar war, steht unbekannt. n8n steht absichtlich zuerst.",
+        "dir_cta": "Zum Verzeichnis",
+        "rev": "Keine Finanzberatung, kein Trading-Produkt. Unser eigener Ertrag aus diesen Seiten bisher: 0 €.",
+    },
+}
+
+
+def home_body(lang: str, paths: dict) -> str:
+    t = HOME[lang]
+    facts = "\n".join(
+        f'<article class="fact"><h3>{esc(h)}</h3><p>{esc(p)}</p></article>'
+        for h, p in t["facts"]
+    )
+    return f"""
+      <section class="hero">
+        <h1>{esc(t["h1"])}</h1>
+        <p class="lede">{esc(t["lede"])}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="{paths["n8n"]}">{esc(t["cta1"])}</a>
+          <a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["cta2"])}</a>
+          <a class="btn btn-ad" data-aff="n8n" href="https://n8n.io/">{esc(t["cta_n8n"])}</a>
+        </div>
+        <p class="aff-state" data-aff-state="n8n"></p>
+      </section>
+      <section class="section">
+        <h2>{esc(t["facts_title"])}</h2>
+        <div class="facts">{facts}</div>
+      </section>
+      <section class="section">
+        <h2>{esc(t["dir_title"])}</h2>
+        <p>{esc(t["dir_text"])}</p>
+        <div class="actions"><a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["dir_cta"])}</a></div>
+        <p class="note">{esc(t["rev"])}</p>
+      </section>
+"""
+
+
+ARTICLE = {
+    "en": {
+        "title": "Why we recommend n8n — honest, sourced",
+        "description": "Why we recommend n8n for most self-hosting and execution-based workflows, and when Make can still be the more practical first step. Sources checked 18 November 2026.",
+        "h1": "Why we recommend n8n — honestly, with sources",
+        "intro": (
+            "This article is an honest, sourced recommendation of n8n. There are no active affiliate links on this site at the moment; "
+            "product buttons go to the official vendor pages. This page may contain affiliate links in the future; those will be labelled "
+            "<strong>#ad / Anzeige</strong>. There is no earnings promise and no revenue of our own (so far €0). "
+            "Not financial advice, not a trading product."
+        ),
+        "context": "It is about tools that connect recurring workflows between apps, or that build agent workflows.",
+        "s1": "The recommendation in one sentence",
+        "p1": (
+            "<strong>For most cases that matter in this project — being able to self-host, choosing where data lives, "
+            "and paying for complete workflow runs rather than every step — we recommend n8n.</strong> "
+            "Make remains a serious alternative if you want to start without your own server and prefer a credits model with a free plan. "
+            "A blanket claim that “n8n is always cheaper” is not substantiated."
+        ),
+        "s2": "Why n8n",
+        "why": [
+            (
+                "<strong>Pricing model:</strong> In the cloud, n8n bills by monthly workflow executions, regardless of complexity. "
+                "A run counts as one execution even if the workflow has many steps. According to the pricing page (billed annually): "
+                "Starter €20/month, Pro €50/month, Business €667/month, Enterprise on request. All plans include, according to the vendor, "
+                "unlimited users, workflows and integrations. Monthly billing exists according to the documentation and is more expensive; "
+                "the monthly amounts were not stated as figures on the public pricing page, so they are not stated here either."
+            ),
+            (
+                "<strong>Self-hosting:</strong> The Community Edition for self-hosting is free on GitHub. Paid Business/Enterprise options "
+                "also exist with self-hosting. If you run the server yourself, you decide where the data lives."
+            ),
+            (
+                "<strong>Cloud data location:</strong> For hosted cloud plans, n8n names Frankfurt (EU) as the storage location."
+            ),
+            (
+                "<strong>Trial:</strong> 14 days, according to n8n, without a credit card on the pricing page."
+            ),
+        ],
+        "why_end": "That fits the typical decision in this project better than a purely hosted credits model.",
+        "s3": "Where Make can honestly be a better fit",
+        "make": (
+            "Make is a hosted, visual platform and bills in credits per action. Most actions use 1 credit, some AI features use more. "
+            "Unused credits expire at the end of the period. If you run out of credits, scenarios stop until credits are available again."
+        ),
+        "make2": (
+            "On the free plan, Make states 1,000 credits per month. Prices for paid plans were not reliably readable when the official "
+            "pricing page was retrieved; they are therefore not listed here."
+        ),
+        "make3": (
+            "<strong>If you want to start quickly without your own server</strong> and need a free entry allowance, Make can be the more practical first step. "
+            "Whether Make or n8n is cheaper for the same flow depends on how many steps a flow has and how often it runs. "
+            "That cannot be predicted in euros in general."
+        ),
+        "s4": "What this recommendation is not",
+        "not_list": [
+            "Not evidence that an affiliate link or a subscription will pay off for you.",
+            "Not “always n8n, never Make”.",
+            "Not a comparison of the user interface as a taste judgement without a source.",
+        ],
+        "s5": "Affiliate programmes — for context only, not an earnings promise",
+        "aff_intro": "Both vendors have an official partner programme. The rates below are the vendors’ figures, not our own revenue.",
+        "th": ("", "n8n", "Make"),
+        "rows": [
+            ("Commission", "30% of net cloud revenue", "35% of subscription payments"),
+            (
+                "Duration",
+                "12 months",
+                "12 months (one FAQ on the same page says 24 months; that contradiction remains)",
+            ),
+            (
+                "Payout",
+                "PayPal, monthly, from €100",
+                "Wise, from 3 paying users and $100, 2–3 weeks after a request",
+            ),
+            (
+                "Particulars",
+                "Cloud referrals only; net basis, because customers pay including tax",
+                "No retroactive attribution without a link; the “Make” brand in ads only with written consent",
+            ),
+        ],
+        "aff_note": (
+            "If this article later appears with partner links, the links belong here and stay labelled <strong>#ad / Anzeige</strong>."
+        ),
+        "see_n8n": "See n8n",
+        "see_make": "See Make",
+        "passive": (
+            "Make advertises its programme page with “passive income”. That is a marketing phrase, not evidence that money arrives without ongoing work. "
+            "Our own revenue from this: so far €0."
+        ),
+        "s6": "A practical start (no account is created for you here)",
+        "steps": [
+            "Write down your own flow in steps (trigger, how often, which apps, whether data should stay in the EU).",
+            "Think through the same flow once as an n8n execution and once as a Make credit chain.",
+            "Check the current official pricing pages; figures in this article apply to 18 November 2026 and can change.",
+            "Only then create an account — that is your decision, not part of this article. If you follow our recommendation, start with n8n (cloud or Community Edition).",
+        ],
+        "s7": "Sources",
+        "sources_note": "Full table and open points are documented in the internal source pack (programme table and sources file, 18 November 2026).",
+    },
+    "de": {
+        "title": "Warum wir n8n empfehlen — ehrlich, mit Quellen",
+        "description": "Warum wir n8n für die meisten Fälle mit Selbst-Hosting und Abrechnung nach Workflow-Läufen empfehlen, und wann Make der praktischere erste Schritt sein kann. Quellenstand 18.11.2026.",
+        "h1": "Warum wir n8n empfehlen — ehrlich, mit Quellen",
+        "intro": (
+            "Dieser Text ist eine ehrliche, quellenbelegte Empfehlung für n8n. Auf dieser Seite sind derzeit keine Affiliate-Links aktiv; "
+            "die Produkt-Buttons führen auf die offiziellen Anbieterseiten. Diese Seite kann in Zukunft Affiliate-Links enthalten; "
+            "diese werden als <strong>#ad / Anzeige</strong> gekennzeichnet. Es gibt kein Gewinnversprechen und keinen eigenen Umsatz (bisher 0 €). "
+            "Keine Finanzberatung, kein Trading-Produkt."
+        ),
+        "context": "Es geht um Werkzeuge, mit denen man wiederkehrende Abläufe zwischen Apps verbindet oder Agenten-Workflows baut.",
+        "s1": "Empfehlung in einem Satz",
+        "p1": (
+            "<strong>Für die meisten Fälle, die in diesem Projekt zählen — selbst hosten können, Datenort festlegen, "
+            "nach ganzen Workflow-Läufen statt nach jedem Schritt zahlen — empfehlen wir n8n.</strong> "
+            "Make bleibt eine seriöse Alternative, wenn ihr ohne eigenen Server starten und ein Credits-Modell mit Free-Plan wollt. "
+            "Eine pauschale Aussage „n8n ist immer günstiger“ ist nicht belegt."
+        ),
+        "s2": "Warum n8n",
+        "why": [
+            (
+                "<strong>Preismodell:</strong> n8n berechnet in der Cloud nach monatlichen Workflow-Executions, unabhängig von der Komplexität. "
+                "Ein Lauf zählt als eine Execution, auch wenn der Workflow viele Schritte hat. Laut Preisseite (jährlich abgerechnet): "
+                "Starter 20 €/Monat, Pro 50 €/Monat, Business 667 €/Monat, Enterprise auf Anfrage. Alle Pläne enthalten laut Anbieter "
+                "unbegrenzt Nutzer, Workflows und Integrationen. Monatliche Abrechnung gibt es laut Dokumentation und ist teurer; "
+                "die monatlichen Beträge standen auf der öffentlichen Preisseite nicht als Zahl und stehen deshalb auch hier nicht."
+            ),
+            (
+                "<strong>Self-Hosting:</strong> Die Community Edition zum Selbst-Hosten ist kostenlos auf GitHub. Bezahlte Business-/Enterprise-Optionen "
+                "gibt es ebenfalls mit Self-Hosting. Wer den Server selbst betreibt, legt den Datenort selbst fest."
+            ),
+            (
+                "<strong>Cloud-Datenort:</strong> Für die gehosteten Cloud-Pläne nennt n8n Frankfurt (EU) als Speicherort."
+            ),
+            (
+                "<strong>Test:</strong> 14 Tage, laut n8n ohne Kreditkarte auf der Preisseite."
+            ),
+        ],
+        "why_end": "Das trifft die typische Entscheidung in diesem Projekt besser als ein rein gehostetes Credits-Modell.",
+        "s3": "Wo Make ehrlicherweise besser passen kann",
+        "make": (
+            "Make ist eine gehostete, visuelle Plattform und rechnet in Credits je Aktion. Die meisten Aktionen verbrauchen 1 Credit, einige KI-Funktionen mehr. "
+            "Unbenutzte Credits verfallen zum Periodenende. Wer keine Credits mehr hat, dessen Szenarien laufen nicht weiter, bis wieder Credits da sind."
+        ),
+        "make2": (
+            "Im Free-Plan nennt Make 1.000 Credits pro Monat. Die Preise der Bezahlpläne waren beim Abruf der offiziellen Preisseite nicht zuverlässig ablesbar; "
+            "sie stehen deshalb hier nicht."
+        ),
+        "make3": (
+            "<strong>Wenn ihr schnell ohne eigenen Server starten wollt</strong> und ein kostenloses Einstiegskontingent braucht, kann Make der praktischere erste Schritt sein. "
+            "Ob Make oder n8n für denselben Ablauf günstiger ist, hängt davon ab, wie viele Schritte ein Ablauf hat und wie oft er läuft. "
+            "Das lässt sich nicht allgemein in Euro vorhersagen."
+        ),
+        "s4": "Was diese Empfehlung nicht ist",
+        "not_list": [
+            "Kein Beleg, dass sich ein Affiliate-Link oder ein Abo für euch rechnet.",
+            "Kein „immer n8n, nie Make“.",
+            "Kein Vergleich der Benutzeroberfläche als Geschmacksurteil ohne Quelle.",
+        ],
+        "s5": "Affiliate-Programme — nur zur Einordnung, kein Verdienstversprechen",
+        "aff_intro": "Beide Anbieter haben ein offizielles Partnerprogramm. Die Sätze unten sind die der Anbieter, kein eigener Umsatz.",
+        "th": ("", "n8n", "Make"),
+        "rows": [
+            ("Provision", "30 % der Netto-Cloud-Einnahmen", "35 % der Abo-Zahlungen"),
+            (
+                "Dauer",
+                "12 Monate",
+                "12 Monate (eine FAQ auf derselben Seite nennt 24 Monate, das bleibt ein Widerspruch)",
+            ),
+            (
+                "Auszahlung",
+                "PayPal, monatlich, ab 100 €",
+                "Wise, ab 3 zahlenden Nutzerinnen oder Nutzern und 100 $, 2–3 Wochen nach Anforderung",
+            ),
+            (
+                "Besonderheit",
+                "Nur Cloud-Empfehlungen; Nettobasis, weil Kundinnen und Kunden inklusive Steuern zahlen",
+                "Keine nachträgliche Zuordnung ohne Link; Marke „Make“ in Anzeigen nur mit schriftlicher Zustimmung",
+            ),
+        ],
+        "aff_note": (
+            "Wenn dieser Text später mit Partnerschaftslinks erscheint, gehören die Links hierher und bleiben als <strong>#ad / Anzeige</strong> gekennzeichnet."
+        ),
+        "see_n8n": "n8n ansehen",
+        "see_make": "Make ansehen",
+        "passive": (
+            "Make wirbt auf der Programmseite mit „passive income“. Das ist eine Werbeformel, kein Beleg dafür, dass ohne laufende Arbeit Geld fließt. "
+            "Unser eigener Ertrag daraus: bisher 0 €."
+        ),
+        "s6": "Praktischer Einstieg (ohne Kontozwang in diesem Text)",
+        "steps": [
+            "Den eigenen Ablauf in Schritten aufschreiben (Auslöser, wie oft, welche Apps, ob Daten die EU nicht verlassen sollen).",
+            "Denselben Ablauf einmal als n8n-Execution und einmal als Make-Credit-Kette denken.",
+            "Die aktuellen offiziellen Preisseiten prüfen; Angaben in diesem Text gelten für den 18.11.2026 und können sich ändern.",
+            "Erst danach ein Konto anlegen — das ist eure Entscheidung, nicht Teil dieses Textes. Wer unserer Empfehlung folgt, beginnt bei n8n (Cloud oder Community Edition).",
+        ],
+        "s7": "Quellen",
+        "sources_note": "Ausführliche Tabelle und offene Punkte liegen im internen Quellenpaket (Programmtabelle und Quellendatei, 18.11.2026).",
+    },
+}
+
+SOURCES = [
+    ("https://n8n.io/affiliates/", "n8n.io/affiliates"),
+    ("https://n8n.io/pricing/", "n8n.io/pricing"),
+    ("https://docs.n8n.io/deploy/use-n8n-cloud/start-your-free-trial", "n8n Cloud trial docs"),
+    ("https://www.make.com/affiliate/", "make.com/affiliate"),
+    ("https://www.make.com/en/pricing", "make.com/en/pricing"),
+]
+
+
+def article_body(lang: str) -> str:
+    t = ARTICLE[lang]
+    why = "".join(f"<li>{item}</li>" for item in t["why"])
+    nots = "".join(f"<li>{esc(item)}</li>" for item in t["not_list"])
+    steps = "".join(f"<li>{esc(item)}</li>" for item in t["steps"])
+    rows = "".join(
+        f"<tr><th>{esc(a)}</th><td>{esc(b)}</td><td>{esc(c)}</td></tr>" for a, b, c in t["rows"]
+    )
+    src = "".join(f'<li><a href="{esc(u)}" rel="noopener noreferrer">{esc(l)}</a></li>' for u, l in SOURCES)
+    return f"""
+      <article>
+        <h1>{esc(t["h1"])}</h1>
+        <p>{t["intro"]}</p>
+        <p>{esc(t["context"])}</p>
+        <h2>{esc(t["s1"])}</h2>
+        <p>{t["p1"]}</p>
+        <h2>{esc(t["s2"])}</h2>
+        <ul>{why}</ul>
+        <p>{esc(t["why_end"])}</p>
+        <h2>{esc(t["s3"])}</h2>
+        <p>{esc(t["make"])}</p>
+        <p>{esc(t["make2"])}</p>
+        <p>{t["make3"]}</p>
+        <h2>{esc(t["s4"])}</h2>
+        <ul>{nots}</ul>
+        <h2>{esc(t["s5"])}</h2>
+        <p>{esc(t["aff_intro"])}</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>{esc(t["th"][0]) or ("Field" if lang == "en" else "Feld")}</th><th>{esc(t["th"][1])}</th><th>{esc(t["th"][2])}</th></tr></thead>
+            <tbody>{rows}</tbody>
+          </table>
+        </div>
+        <p>{t["aff_note"]}</p>
+        <div class="actions">
+          <a class="btn btn-ad" data-aff="n8n" href="https://n8n.io/">{esc(t["see_n8n"])}</a>
+          <a class="btn btn-ghost" data-aff="make" href="https://www.make.com/">{esc(t["see_make"])}</a>
+        </div>
+        <p class="aff-state" data-aff-state="n8n"></p>
+        <p class="aff-state" data-aff-state="make"></p>
+        <p>{esc(t["passive"])}</p>
+        <h2>{esc(t["s6"])}</h2>
+        <ol>{steps}</ol>
+        <h2>{esc(t["s7"])}</h2>
+        <ul>{src}</ul>
+        <p class="note">{esc(t["sources_note"])}</p>
+      </article>
+"""
+
+
+DIR = {
+    "en": {
+        "title": "Automation and AI-agent tools — sourced directory",
+        "description": f"A sourced directory of {N_TOOLS} automation and AI-agent tools. Prices from official public pages dated {PRUEF_EN}.",
+        "h1": "Directory of automation and AI-agent tools",
+        "lede": (
+            f"Sources checked on {PRUEF_EN}. {N_TOOLS} entries, n8n first. Our own revenue: €0. "
+            "There are no active affiliate links at the moment. This page may contain affiliate links in the future; "
+            "those will be labelled #ad / Anzeige. "
+            "Where a figure was not reliably readable, it is marked unknown."
+        ),
+        "search": "Search tools",
+        "all": "All",
+        "automation": "Automation",
+        "ai": "AI agents",
+        "recommended": "Recommended",
+        "price": "Price (official page)",
+        "aff": "Affiliate",
+        "yes": "Yes",
+        "no": "Not substantiated",
+        "official": "Official site",
+        "pricing": "Pricing",
+        "programme": "Programme page",
+        "see": "See {name}",
+        "empty": "No tools match this filter.",
+        "note": "Prices can change. Check the official page before you buy. No earnings promises.",
+    },
+    "de": {
+        "title": "Automatisierungs- und KI-Agenten-Tools — quellenbelegtes Verzeichnis",
+        "description": f"Quellenbelegtes Verzeichnis mit {N_TOOLS} Automatisierungs- und KI-Agenten-Tools. Preise aus offiziellen öffentlichen Seiten vom {PRUEF}.",
+        "h1": "Verzeichnis für Automatisierungs- und KI-Agenten-Tools",
+        "lede": (
+            f"Quellenstand: {PRUEF}. {N_TOOLS} Einträge, n8n zuerst. Eigener Ertrag: 0 €. "
+            "Derzeit sind keine Affiliate-Links aktiv. Diese Seite kann in Zukunft Affiliate-Links enthalten; "
+            "diese werden als #ad / Anzeige gekennzeichnet. "
+            "Wo ein Betrag nicht zuverlässig ablesbar war, steht unbekannt."
+        ),
+        "search": "Tools durchsuchen",
+        "all": "Alle",
+        "automation": "Automatisierung",
+        "ai": "KI-Agenten",
+        "recommended": "Empfehlung",
+        "price": "Preis (offizielle Seite)",
+        "aff": "Affiliate",
+        "yes": "Ja",
+        "no": "Nicht belegt",
+        "official": "Offizielle Seite",
+        "pricing": "Preise",
+        "programme": "Programmseite",
+        "see": "{name} ansehen",
+        "empty": "Kein Eintrag passt zu diesem Filter.",
+        "note": "Preise können sich ändern. Vor einem Kauf die offizielle Seite prüfen. Kein Gewinnversprechen.",
+    },
+}
+
+
+def directory_body(lang: str) -> str:
+    t = DIR[lang]
+    cards = []
+    for i, raw in enumerate(TOOLS["tools"], 1):
+        item = tool_view(raw, lang)
+        featured = item["id"] == "n8n"
+        group = group_of(item)
+        search = " ".join(
+            [
+                item["name"],
+                item["kategorie"],
+                item["kurz"],
+                item["preis"],
+                item.get("affiliate_detail") or "",
+            ]
+        )
+        st_cls = status_class(item.get("preis_status") or "")
+        aff = item.get("affiliate") is True
+        aff_label = t["yes"] if aff else t["no"]
+        rec = (
+            f'<span class="badge badge-rec">{esc(t["recommended"])}</span>'
+            if featured
+            else ""
+        )
+        links = [
+            f'<a href="{esc(item["url"])}" rel="noopener noreferrer">{esc(t["official"])}</a>',
+            f'<a href="{esc(item["preis_quelle"])}" rel="noopener noreferrer">{esc(t["pricing"])}</a>',
+        ]
+        if item.get("affiliate_quelle"):
+            links.append(
+                f'<a href="{esc(item["affiliate_quelle"])}" rel="noopener noreferrer">{esc(t["programme"])}</a>'
+            )
+        if item["id"] in ("n8n", "make"):
+            label = t["see"].format(name=item["name"])
+            links.insert(
+                0,
+                f'<a class="btn btn-ad" data-aff="{esc(item["id"])}" href="{esc(item["url"])}">{esc(label)}</a>',
+            )
+        state = (
+            f'<p class="aff-state" data-aff-state="{esc(item["id"])}"></p>'
+            if item["id"] in ("n8n", "make")
+            else ""
+        )
+        cards.append(
+            f"""
+        <article class="card{" featured" if featured else ""}" id="{esc(item["id"])}" data-group="{esc(group)}" data-search="{esc(search)}">
+          <div class="card-top">
+            <div>
+              <h2>{esc(item["name"])}</h2>
+              <div class="cat">{esc(item["kategorie"])}</div>
+            </div>
+            <div>{rec}<span class="badge {st_cls}">{esc(item["preis_status"])}</span></div>
+          </div>
+          <p>{esc(item["kurz"])}</p>
+          <p class="price"><strong>{esc(t["price"])}:</strong> {esc(item["preis"])}</p>
+          <p class="aff-detail"><strong>{esc(t["aff"])}:</strong> {esc(aff_label)}. {esc(item.get("affiliate_detail") or "")}</p>
+          {state}
+          <p class="card-links">{" ".join(links)}</p>
+        </article>"""
+        )
+    return f"""
+      <header class="hero">
+        <h1 class="page-title">{esc(t["h1"])}</h1>
+        <p class="lede">{esc(t["lede"])}</p>
+      </header>
+      <div class="toolbar">
+        <label class="visually-hidden" for="tool-search" style="position:absolute;left:-9999px">{esc(t["search"])}</label>
+        <input class="search" id="tool-search" type="search" placeholder="{esc(t["search"])}" autocomplete="off">
+        <div class="chips" role="group">
+          <button type="button" class="chip" data-group="all" aria-pressed="true">{esc(t["all"])}</button>
+          <button type="button" class="chip" data-group="automation" aria-pressed="false">{esc(t["automation"])}</button>
+          <button type="button" class="chip" data-group="ai" aria-pressed="false">{esc(t["ai"])}</button>
+        </div>
+      </div>
+      <div class="cards" id="tool-grid">
+        {''.join(cards)}
+      </div>
+      <p class="empty" id="no-results">{esc(t["empty"])}</p>
+      <p class="note">{esc(t["note"])}</p>
+"""
+
+
+LEGAL = {
+    "en": {
+        "title": "Legal notice / Impressum — Desire Studio",
+        "description": "Legal notice and contact details for Desire Studio.",
+        "h1": "Legal notice / Impressum",
+        "lead": "Operator information for this website.",
+        "fields": [
+            ("Operator / responsible person", "Saveliy Soroka"),
+            ("Address", "Av. Dom João II 36, 1998-017 Lisboa, Portugal"),
+            ("Email / contact", "desire.studio.agency@gmail.com"),
+            ("VAT ID, if required", "Not provided"),
+        ],
+        "status": (
+            f"Published on 19 November 2026 without an n8n partner link "
+            f"(N8N_AFFILIATE_URL in config.js is empty; buttons go to the official n8n site). "
+            f"The n8n partner application was declined on 19 November 2026; a later reapplication is planned. "
+            f"Source date for prices: {PRUEF_EN}. Own revenue: €0."
+        ),
+        "ad": (
+            "Advertising: there are no active affiliate links on this site at the moment. "
+            "This page may contain affiliate links in the future; those will be labelled #ad / Anzeige."
+        ),
+        "privacy": (
+            "Privacy: this is a static website. We do not use cookies, tracking pixels or analytics, "
+            "and we do not collect personal data through this site. The directory search runs only in your browser. "
+            "Links to vendor sites lead directly to those providers."
+        ),
+    },
+    "de": {
+        "title": "Impressum / Kontakt — Desire Studio",
+        "description": "Impressum und Kontaktdaten von Desire Studio.",
+        "h1": "Impressum / Kontakt",
+        "lead": "Anbieterinformationen für diese Website.",
+        "fields": [
+            ("Anbieter / verantwortliche Person", "Saveliy Soroka"),
+            ("Anschrift", "Av. Dom João II 36, 1998-017 Lisboa, Portugal"),
+            ("E-Mail / Kontakt", "desire.studio.agency@gmail.com"),
+            ("USt-IdNr., falls erforderlich", "Nicht angegeben"),
+        ],
+        "status": (
+            f"Veröffentlicht am 19.11.2026 ohne n8n-Partner-Link "
+            f"(N8N_AFFILIATE_URL in config.js ist leer; die Buttons führen auf die offizielle n8n-Seite). "
+            f"Die n8n-Partner-Bewerbung wurde am 19.11.2026 abgelehnt; eine spätere erneute Bewerbung ist geplant. "
+            f"Quellenstand der Preise: {PRUEF}. Eigener Ertrag: 0 €."
+        ),
+        "ad": (
+            "Werbung: Auf dieser Seite sind derzeit keine Affiliate-Links aktiv. "
+            "Diese Seite kann in Zukunft Affiliate-Links enthalten; diese werden als #ad / Anzeige gekennzeichnet."
+        ),
+        "privacy": (
+            "Datenschutz: Dies ist eine statische Website. Wir verwenden keine Cookies, Tracking-Pixel oder Analysedienste "
+            "und erheben über diese Seite keine personenbezogenen Daten. Die Suche im Verzeichnis läuft nur in Ihrem Browser. "
+            "Links zu Anbieterseiten führen unmittelbar dorthin."
+        ),
+    },
+}
+
+
+def _legal_field(k: str, v: str) -> str:
+    if v.endswith("@gmail.com") or (v.count("@") == 1 and " " not in v):
+        return f'<dt>{esc(k)}</dt><dd><a href="mailto:{esc(v)}">{esc(v)}</a></dd>'
+    return f"<dt>{esc(k)}</dt><dd>{esc(v)}</dd>"
+
+
+def legal_body(lang: str) -> str:
+    t = LEGAL[lang]
+    fields = "".join(_legal_field(k, v) for k, v in t["fields"])
+    return f"""
+      <h1 class="page-title">{esc(t["h1"])}</h1>
+      <p class="lede">{esc(t["lead"])}</p>
+      <dl class="placeholder-box">{fields}</dl>
+      <p>{esc(t["status"])}</p>
+      <p>{esc(t["ad"])}</p>
+      <h2>{"Privacy" if lang == "en" else "Datenschutz"}</h2>
+      <p>{esc(t["privacy"])}</p>
+"""
+
+
+def write(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text)
+    print(f"wrote {path.relative_to(ROOT)}")
+
+
+def not_found() -> str:
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Page not found — Desire Studio</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <main class="wrap-narrow" style="padding:3rem 0">
+    <h1>Page not found</h1>
+    <p>This URL is not part of the site. / Diese Adresse gehört nicht zur Seite.</p>
+    <p><a href="./">Home (English)</a> · <a href="./de/">Start (Deutsch)</a></p>
+  </main>
+</body>
+</html>
+"""
+
+
+def build() -> None:
+    pages = [
+        (ROOT / "index.html", "en", "home", 0, HOME["en"], home_body),
+        (ROOT / "n8n" / "index.html", "en", "n8n", 1, ARTICLE["en"], lambda lang, paths=None: article_body(lang)),
+        (ROOT / "directory" / "index.html", "en", "directory", 1, DIR["en"], lambda lang, paths=None: directory_body(lang)),
+        (ROOT / "legal" / "index.html", "en", "legal", 1, LEGAL["en"], lambda lang, paths=None: legal_body(lang)),
+        (ROOT / "de" / "index.html", "de", "home", 1, HOME["de"], home_body),
+        (ROOT / "de" / "n8n" / "index.html", "de", "n8n", 2, ARTICLE["de"], lambda lang, paths=None: article_body(lang)),
+        (ROOT / "de" / "directory" / "index.html", "de", "directory", 2, DIR["de"], lambda lang, paths=None: directory_body(lang)),
+        (ROOT / "de" / "legal" / "index.html", "de", "legal", 2, LEGAL["de"], lambda lang, paths=None: legal_body(lang)),
+    ]
+    for path, lang, page, depth, meta, body_fn in pages:
+        paths = page_paths(lang, depth)
+        if page == "home":
+            body = body_fn(lang, paths)
+        else:
+            body = body_fn(lang)
+        html_out = shell(lang, page, depth, meta["title"], meta["description"], body)
+        write(path, html_out)
+    write(ROOT / "404.html", not_found())
+    print(f"done. {N_TOOLS} tools, languages en+de.")
+
+
+if __name__ == "__main__":
+    build()

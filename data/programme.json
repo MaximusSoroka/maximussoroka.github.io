@@ -1,0 +1,40 @@
+{
+  "pruefdatum": "2026-11-18",
+  "hinweis": "Nur öffentliche Seiten, kein Login. Eigener Umsatz unbelegt. Keine geschätzten Verdienstbeispiele.",
+  "programme": [
+    {
+      "anbieter": "n8n Cloud",
+      "seite": "https://n8n.io/affiliates/",
+      "preis_seite": "https://n8n.io/pricing/",
+      "provision": "30 % der Netto-Einnahmen aus Cloud-Empfehlungen",
+      "laufzeit": "12 Monate / erstes Jahr",
+      "auszahlung": "PayPal, monatlich, ab 100 €",
+      "zuordnung": "eindeutige Affiliate-URL; Cookie-Frist auf der Seite nicht genannt",
+      "konto": "Bewerbung, danach Dashboard",
+      "cloud_preise_jaehrlich_abgerechnet": {
+        "starter_eur_pro_monat": 20,
+        "pro_eur_pro_monat": 50,
+        "business_eur_pro_monat": 667,
+        "enterprise": "Contact Sales",
+        "quelle": "https://n8n.io/pricing/",
+        "hinweis": "Beträge laut Seite 'billed annually'. Monatliche Preise nicht als Zahl angegeben."
+      },
+      "testzeit": "14 Tage",
+      "einschraenkungen": "Nur Cloud-Empfehlungen. Irreführendes Verhalten kann zum Kontowegfall führen."
+    },
+    {
+      "anbieter": "Make",
+      "seite": "https://www.make.com/affiliate/",
+      "preis_seite": "https://www.make.com/en/pricing",
+      "provision": "35 % der Abo-Zahlungen, nicht aus Extra-Operations",
+      "laufzeit": "12 Monate ab Registrierung über den Link",
+      "laufzeit_widerspruch": "Eine FAQ auf derselben Seite nennt 24 Monate für Affiliates. Hier wird die 12-Monats-Angabe verwendet, der Widerspruch bleibt offen.",
+      "auszahlung": "Nur Wise; 2–3 Wochen nach Anforderung; mindestens 3 zahlende Nutzer und 100 $",
+      "zuordnung": "Cookie 30 Tage; keine nachträgliche Zuordnung ohne Link",
+      "konto": "Zuerst Make-Konto, danach Affiliate laut FAQ",
+      "cloud_preise": null,
+      "cloud_preise_hinweis": "Bezahlplan-Preise auf der Preisseite nicht zuverlässig ablesbar. Free-Plan: 1000 Credits/Monat. Credits sind laut FAQ seit 27. August die Abrechnungseinheit (Jahr auf der Seite nicht genannt).",
+      "einschraenkungen": "Marke 'Make' in bezahlten Anzeigen nur mit schriftlicher Zustimmung von Celonis. Seite vermerkt aktuelle Auszahlungsverzögerungen."
+    }
+  ]
+}

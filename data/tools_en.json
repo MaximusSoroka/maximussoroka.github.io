@@ -1,0 +1,135 @@
+{
+  "n8n": {
+    "kategorie": "Automation / workflows",
+    "kurz": "Open-source and cloud tool for workflows and agents. Cloud billing is based on complete workflow runs, not individual steps. Community Edition can be self-hosted.",
+    "preis": "Starter €20/month, Pro €50/month, Business €667/month — each as shown on the pricing page when billed annually. Enterprise on request. Community Edition for self-hosting is free on GitHub. 14-day trial. Monthly cloud prices were not stated as figures on the public page.",
+    "preis_status": "checked",
+    "affiliate_detail": "Yes. Official cloud affiliate programme: 30% of net revenue from cloud referrals, 12 months, payout via PayPal monthly from €100."
+  },
+  "make": {
+    "kategorie": "Automation / workflows",
+    "kurz": "Hosted visual automation platform. Billed in credits per action.",
+    "preis": "Free plan: 1,000 credits per month. Credits are the billing unit according to the pricing-page FAQ (the page says “as of August 27”, with no year). Unused credits expire at the end of the period. Concrete prices for paid plans were not reliably readable in the static page content — therefore unknown.",
+    "preis_status": "partial / paid plans unknown",
+    "affiliate_detail": "Yes. 35% of subscription payments for 12 months (one FAQ on the same page says 24 months; the contradiction is left open). Payout only via Wise, from 3 paying users and $100, 2–3 weeks after a request. Cookie: 30 days. The “Make” brand may be used in ads only with written consent from Celonis."
+  },
+  "zapier": {
+    "kategorie": "Automation / workflows",
+    "kurz": "No-code platform for Zaps, tables, forms and AI products. Billing is by plan plus a task allowance.",
+    "preis": "Free: $0/month, 100 tasks/month. Professional: from $19.99/month (card labelled “Starting from”). Team: from $69/month (card labelled “Starting from”). Enterprise: price on request. Amounts in USD on the official pricing page.",
+    "preis_status": "checked",
+    "affiliate_detail": "Yes, official ambassador and affiliate programme (partner portal: zapier.partnerstack.com). The legal terms dated 6 Nov 2026 do not themselves state the reward amount and refer to the portal. On the public PartnerStack programme page: $100 per new customer who switches to a paid plan. Attribution for 90 days after the click, payout after a hold period according to the terms."
+  },
+  "activepieces": {
+    "kategorie": "Automation / workflows",
+    "kurz": "Open-source automation with cloud or self-hosting. Credits model, including agents and MCP.",
+    "preis": "Free: $0, 1,000 credits/month, up to 5 users. Plus: $20/month (10,000 credits, then $0.007/credit). Team: $200/month (50,000 credits, 25 users). Ultimate: custom. Embed: from $36,000 per year. Cloud or your own servers. EU cloud in Frankfurt according to the pricing page.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "pipedream": {
+    "kategorie": "Automation / developer integrations",
+    "kurz": "API and agent integrations (Connect). Development is free; production is a paid plan.",
+    "preis": "Free: $0 (development and testing). Startup: $99/month when billed annually, $150/month when billed monthly; 10,000 usage credits included, then $0.012/credit; 100 external users included, then $2 per user. Business: custom, annual contract. The pricing card includes a quantity slider; the figures quoted are the amounts labelled on the page.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "windmill": {
+    "kategorie": "Automation / developer workflows",
+    "kurz": "Open-source platform for scripts, flows and internal apps, self-hostable or in the cloud.",
+    "preis": "Free/open source: free, unlimited executions (Community Edition). Enterprise: from $120/month according to the page heading. The price calculator on the same page showed $170/month in the default example for 1 builder and 3 compute units. Builder $20/month, non-builder $10/month. Guests: the first 100 in 30 days are free.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "pabbly-connect": {
+    "kategorie": "Automation / workflows",
+    "kurz": "Workflow automation with task allowances, including lifetime licences.",
+    "preis": "According to checkout text on the official pricing page (USD): Standard $19/month (10,000 tasks/month), Unlimited $79/month (unlimited tasks). Annual price Standard $194, Unlimited $828. Lifetime one-off: Standard $349, Ultimate $799, Ultimate Plus $1,298. Annual plans are 25% cheaper than monthly according to the FAQ. The page also shows INR amounts by default.",
+    "preis_status": "checked",
+    "affiliate_detail": "Yes. Up to 30% recurring commission, “forever” according to the page, for as long as the customer stays. Monthly payout to PayPal or an Indian bank account, cookie 365 days, no minimum payout amount stated. The page’s worked examples (such as “$120 per Plus sale”) are marketing, not our own revenue."
+  },
+  "integrately": {
+    "kategorie": "Automation / workflows",
+    "kurz": "Click-to-automate tool. Triggers do not count as tasks, according to the vendor.",
+    "preis": "According to structured data (schema.org) on the pricing page: Free $0. Monthly: Starter $29.99, Professional $49, Growth $124, Business $299 (USD). Business annually: $2,868. Further annual prices were not included in that data.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "power-automate": {
+    "kategorie": "Automation / enterprise iPaaS",
+    "kurz": "Microsoft automation for cloud and desktop flows, part of the Power Platform.",
+    "preis": "Premium: $15.00 per user/month, billed annually. Process: $150.00 per bot/month, billed annually. Hosted Process: $215.00 per bot/month, billed annually. There is a free trial. The page states explicitly that the prices shown are for marketing purposes and may differ at checkout.",
+    "preis_status": "checked, with vendor caveat",
+    "affiliate_detail": "Not substantiated as a simple content-affiliate offer. Microsoft has partner programmes, which are not treated here as a fixed affiliate offer."
+  },
+  "gumloop": {
+    "kategorie": "AI agents / automation",
+    "kurz": "Platform for AI agents and workflows, billed in credits.",
+    "preis": "Pro: $37/month, 20,000 credits/month (7,400 at the list price of $0.005/credit plus 12,600 bonus credits). Enterprise: custom, unused credits roll over. 14-day trial of Pro, card required, then converts to a paid subscription if not cancelled. Source: official documentation; the marketing pricing page did not provide reliable static text in the check.",
+    "preis_status": "checked (documentation)",
+    "affiliate_detail": "Yes, an official creator/affiliate programme is announced on the creator page. The specific commission rates were not readable on the publicly retrieved page — terms therefore unknown."
+  },
+  "lindy": {
+    "kategorie": "AI agents",
+    "kurz": "AI teammate for email, meetings, Slack and automations, billed in credits per seat.",
+    "preis": "Getting started: $50 in free credits, 7 days. Team starts at $29.99/month for 3,000 credits. Each active user is billed from $29.99/month for 3,000 credits. Top-ups: $10 per 1,000 credits. Further tiers are on the pricing page (including 4,000 credits at $39.99, up to very large packs). Enterprise: custom (including SSO, SCIM, HIPAA).",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "dust": {
+    "kategorie": "AI agents / internal assistants",
+    "kurz": "Platform for internal AI agents with company data, MCP and multiple models.",
+    "preis": "Business seats according to the pricing-page FAQ, plus VAT: Free €0, 500 credits one-off. Pro €30/month or €24/month when billed annually, 8,000 credits/month. Max €150/month or €120/month annually, 40,000 credits/month. Enterprise: custom. Programmatic use on the Business plan: $0.01 per credit.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "crewai": {
+    "kategorie": "AI agents",
+    "kurz": "Platform for collaborative agent workflows, with a free entry tier and enterprise governance.",
+    "preis": "Free (Basic): free, 50 workflow runs/month, visual editor. Enterprise: custom (SSO, RBAC, cloud/VPC/your own infrastructure).",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "relevance-ai": {
+    "kategorie": "AI agents / workforce",
+    "kurz": "Platform for an “AI Workforce” with agents, integrations and analytics.",
+    "preis": "unknown. On the check date the public pricing page showed only Enterprise and a referral to the sales team, no self-serve prices.",
+    "preis_status": "unknown",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "dify": {
+    "kategorie": "AI apps / agent workflows",
+    "kurz": "Platform for building and running AI apps and agents, in the cloud or self-hosted.",
+    "preis": "Cloud, prices excluding tax, annual view (17% savings according to the page): Professional $590 per workspace/year; Team $1,590 per workspace/year. Sandbox: core features to try (no price stated, described as an entry option). Community (self-host, open source): free under the open-source licence. Enterprise: custom.",
+    "preis_status": "checked",
+    "affiliate_detail": "Yes, there is an official partner programme (reseller, service, marketplace) at dify.ai/partners. A fixed content-affiliate offer with a publicly stated commission rate was not on that page. Forum claims are not used here as evidence of price or commission."
+  },
+  "langsmith": {
+    "kategorie": "AI development / observability",
+    "kurz": "Observability, evaluation and operations for agents in the LangChain ecosystem.",
+    "preis": "Developer: $0/seat per month, then pay-as-you-go (up to 5,000 base traces/month included). Plus: $39/seat per month, then pay-as-you-go (up to 10,000 base traces). Enterprise: custom. Additional usage in LangChain Standard Units (1 LSU = $1.00).",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "botpress": {
+    "kategorie": "AI agents / customer conversations",
+    "kurz": "Platform for AI agents in customer conversations, billed by conversations.",
+    "preis": "Free: $0, 100 conversations, no overages, 3 seats, 3 agents. Plus: $150/month when billed annually, 250 conversations/month included. Team: $750/month when billed annually, 1,500 conversations/month. Custom: on request. Monthly prices for the paid plans were not shown as separate figures in the annual view retrieved.",
+    "preis_status": "checked",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "voiceflow": {
+    "kategorie": "AI agents / customer experience",
+    "kurz": "Platform for designing and running AI agents in voice and chat.",
+    "preis": "unknown. The pricing page mentioned usage-based billing for agencies and a free trial without a card, and “Request pricing” for companies. No reliably readable plan prices in the check.",
+    "preis_status": "unknown",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  },
+  "flowise": {
+    "kategorie": "AI workflows / low-code agents",
+    "kurz": "Open-source kit for LLM and agent flows, with a hosted cloud option.",
+    "preis": "unknown. Opening flowiseai.com/pricing on the check date led to a sign-in page, with no public plan prices. The community edition is known as an open-source project; a figure is still not stated here because it was not readable on the pricing page.",
+    "preis_status": "unknown",
+    "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+  }
+}
