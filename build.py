@@ -166,7 +166,7 @@ def lang_href(lang: str, page: str, depth: int) -> str:
     return mapping_de_to_en[page]
 
 
-def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "") -> str:
+def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "", extra_head: str = "") -> str:
     paths = page_paths(lang, depth)
     nav = []
     for key, label in NAV[lang]:
@@ -191,7 +191,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
   <link rel="stylesheet" href="{paths['css']}">
-</head>
+{extra_head}</head>
 <body>
   <a class="skip" href="#content">{"Skip to content" if lang == "en" else "Zum Inhalt"}</a>
   <header class="site-header">
@@ -595,6 +595,7 @@ DIR = {
         "see": "See {name}",
         "empty": "No tools match this filter.",
         "note": "Prices can change. Check the official page before you buy. No earnings promises.",
+        "machine": "A machine-readable copy of this directory is at /tools.json. A short site map for language models is at /llms.txt.",
     },
     "de": {
         "title": "Automatisierungs- und KI-Agenten-Tools — quellenbelegtes Verzeichnis",
@@ -621,6 +622,7 @@ DIR = {
         "see": "{name} ansehen",
         "empty": "Kein Eintrag passt zu diesem Filter.",
         "note": "Preise können sich ändern. Vor einem Kauf die offizielle Seite prüfen. Kein Gewinnversprechen.",
+        "machine": "Eine maschinenlesbare Fassung dieses Verzeichnisses liegt unter /tools.json. Eine kurze Seitenübersicht für Sprachmodelle liegt unter /llms.txt.",
     },
 }
 
@@ -704,6 +706,7 @@ def directory_body(lang: str) -> str:
       </div>
       <p class="empty" id="no-results">{esc(t["empty"])}</p>
       <p class="note">{esc(t["note"])}</p>
+      <p class="note">{esc(t["machine"])}</p>
 """
 
 
@@ -812,6 +815,211 @@ def not_found() -> str:
 """
 
 
+
+SITE_URL = "https://maximussoroka.github.io"
+
+
+def site_url(path: str) -> str:
+    return SITE_URL + (path if path.startswith("/") else "/" + path)
+
+
+def directory_jsonld(lang: str) -> str:
+    """schema.org ItemList of SoftwareApplication for the directory page."""
+    t = DIR[lang]
+    elements = []
+    for i, raw in enumerate(TOOLS["tools"], 1):
+        item = tool_view(raw, lang)
+        app = {
+            "@type": "SoftwareApplication",
+            "name": item["name"],
+            "url": item["url"],
+            "description": item["kurz"],
+            "applicationCategory": item["kategorie"],
+            "operatingSystem": "Web",
+        }
+        # Price text is sourced prose, not a single number — do not invent amount/currency.
+        if item.get("preis"):
+            offer = {
+                "@type": "Offer",
+                "description": item["preis"],
+                "url": item.get("preis_quelle") or item["url"],
+            }
+            app["offers"] = offer
+        elements.append({"@type": "ListItem", "position": i, "item": app})
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": t["h1"],
+        "description": t["description"],
+        "numberOfItems": N_TOOLS,
+        "url": site_url("/directory/" if lang == "en" else "/de/directory/"),
+        "datePublished": "2026-11-19",
+        "dateModified": "2026-11-19",
+        "itemListElement": elements,
+    }
+    dumped = json.dumps(payload, ensure_ascii=False, indent=2).replace("</", "<\\/")
+    alternate = site_url("/tools.json")
+    return (
+        f'  <link rel="alternate" type="application/json" href="{alternate}">\n'
+        f'  <script type="application/ld+json">\n{dumped}\n  </script>\n'
+    )
+
+
+def public_tools_payload() -> dict:
+    """Bilingual, public machine-readable directory. No affiliate links, no placeholder slots."""
+    tools = []
+    for raw in TOOLS["tools"]:
+        en = tool_view(raw, "en")
+        de = tool_view(raw, "de")
+        entry = {
+            "id": raw["id"],
+            "name": raw["name"],
+            "official_url": raw["url"],
+            "pricing_url": raw["preis_quelle"],
+            "recommended": raw["id"] == "n8n",
+            "affiliate_link_on_this_site": False,
+            "affiliate_programme_substantiated": raw.get("affiliate") is True,
+            "en": {
+                "category": en["kategorie"],
+                "summary": en["kurz"],
+                "price": en["preis"],
+                "price_status": en["preis_status"],
+                "affiliate_detail": en.get("affiliate_detail") or "",
+            },
+            "de": {
+                "category": de["kategorie"],
+                "summary": de["kurz"],
+                "price": de["preis"],
+                "price_status": de["preis_status"],
+                "affiliate_detail": de.get("affiliate_detail") or "",
+            },
+        }
+        if raw.get("affiliate_quelle"):
+            entry["programme_url"] = raw["affiliate_quelle"]
+        tools.append(entry)
+    return {
+        "name": "Desire Studio tool directory",
+        "url": site_url("/directory/"),
+        "url_de": site_url("/de/directory/"),
+        "checked_on": TOOLS["pruefdatum"],
+        "timezone": TOOLS["timezone_pruefung"],
+        "own_revenue_eur": TOOLS["eigener_ertrag_eur"],
+        "affiliate_links_active": False,
+        "n_entries": N_TOOLS,
+        "note": (
+            "Prices come only from official public vendor pages on the checked date. "
+            "Where a figure was not reliably readable, price_status is unknown or partial. "
+            "There are no active affiliate links on this site. "
+            "This is not financial advice. No earnings promises. Own revenue: €0."
+        ),
+        "note_de": (
+            "Preise nur aus offiziellen öffentlichen Anbieterseiten vom Prüfdatum. "
+            "Wo ein Betrag nicht zuverlässig ablesbar war, ist price_status unbekannt oder teilweise. "
+            "Auf dieser Seite sind keine Affiliate-Links aktiv. "
+            "Keine Finanzberatung. Kein Gewinnversprechen. Eigener Ertrag: 0 €."
+        ),
+        "pages": {
+            "home_en": site_url("/"),
+            "home_de": site_url("/de/"),
+            "n8n_en": site_url("/n8n/"),
+            "n8n_de": site_url("/de/n8n/"),
+            "directory_en": site_url("/directory/"),
+            "directory_de": site_url("/de/directory/"),
+            "legal_en": site_url("/legal/"),
+            "legal_de": site_url("/de/legal/"),
+            "llms_txt": site_url("/llms.txt"),
+            "tools_json": site_url("/tools.json"),
+            "sitemap": site_url("/sitemap.xml"),
+        },
+        "tools": tools,
+    }
+
+
+def write_public_tools_json() -> None:
+    payload = public_tools_payload()
+    write(ROOT / "tools.json", json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+
+
+def write_llms_txt() -> None:
+    text_out = f"""# Desire Studio
+
+> An honest, sourced recommendation of n8n, plus a directory of {N_TOOLS} automation and AI-agent tools. English is primary; German is under /de/.
+
+Live site: {SITE_URL}/
+Operator: Saveliy Soroka, Lisboa. Contact: desire.studio.agency@gmail.com (see /legal/).
+Prices and programme terms: official public vendor pages, checked on {PRUEF_EN} ({TOOLS["timezone_pruefung"]}).
+Own revenue so far: €0. No earnings promises. Not financial advice.
+There are no active affiliate links. Future affiliate links, if any, will be labelled #ad / Anzeige.
+This is a static site with no cookies, tracking or analytics.
+
+## Pages
+
+- [Home (English)]({SITE_URL}/): Why we recommend n8n, and when Make may still be a fair fit. Sourced cloud-pricing facts as of {PRUEF_EN}.
+- [Home (German)]({SITE_URL}/de/): The same start page in German.
+- [n8n recommendation (English)]({SITE_URL}/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site; the n8n partner application was declined on 19 November 2026.
+- [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
+- [Tool directory (English)]({SITE_URL}/directory/): {N_TOOLS} sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
+- [Tool directory (German)]({SITE_URL}/de/directory/): The same directory in German, with the same JSON-LD in German wording.
+- [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
+- [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
+
+## Machine-readable
+
+- [tools.json]({SITE_URL}/tools.json): JSON copy of all {N_TOOLS} directory entries in English and German, including official URLs, pricing URLs, sourced price text, and price-status. No affiliate links.
+- [sitemap.xml]({SITE_URL}/sitemap.xml): URL list for this site.
+- [robots.txt]({SITE_URL}/robots.txt): Allows indexing and points to the sitemap.
+
+## Optional
+
+- Do not invent prices or programme terms. If a field is unknown or partial, say so and send readers to the vendor's official page.
+- Product buttons currently go to official vendor sites (https://n8n.io/, https://www.make.com/), not to affiliate URLs.
+"""
+    write(ROOT / "llms.txt", text_out)
+
+
+def write_sitemap() -> None:
+    paths = [
+        ("/", "1.0", "weekly"),
+        ("/n8n/", "0.9", "weekly"),
+        ("/directory/", "0.9", "weekly"),
+        ("/legal/", "0.6", "yearly"),
+        ("/de/", "0.8", "weekly"),
+        ("/de/n8n/", "0.7", "weekly"),
+        ("/de/directory/", "0.7", "weekly"),
+        ("/de/legal/", "0.5", "yearly"),
+        ("/llms.txt", "0.5", "weekly"),
+        ("/tools.json", "0.6", "weekly"),
+    ]
+    # Lastmod for HTML/content pages that gained machine-readable files today.
+    lastmod = "2026-11-19"
+    urls = []
+    for path, prio, freq in paths:
+        urls.append(
+            "  <url>\n"
+            f"    <loc>{esc(site_url(path))}</loc>\n"
+            f"    <lastmod>{lastmod}</lastmod>\n"
+            f"    <changefreq>{freq}</changefreq>\n"
+            f"    <priority>{prio}</priority>\n"
+            "  </url>"
+        )
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(urls)
+        + "\n</urlset>\n"
+    )
+    write(ROOT / "sitemap.xml", xml)
+
+
+def write_robots() -> None:
+    write(
+        ROOT / "robots.txt",
+        "User-agent: *\n"
+        "Allow: /\n"
+        f"\nSitemap: {site_url('/sitemap.xml')}\n",
+    )
+
+
 def build() -> None:
     pages = [
         (ROOT / "index.html", "en", "home", 0, HOME["en"], home_body),
@@ -829,10 +1037,15 @@ def build() -> None:
             body = body_fn(lang, paths)
         else:
             body = body_fn(lang)
-        html_out = shell(lang, page, depth, meta["title"], meta["description"], body)
+        extra_head = directory_jsonld(lang) if page == "directory" else ""
+        html_out = shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head)
         write(path, html_out)
     write(ROOT / "404.html", not_found())
-    print(f"done. {N_TOOLS} tools, languages en+de.")
+    write_public_tools_json()
+    write_llms_txt()
+    write_sitemap()
+    write_robots()
+    print(f"done. {N_TOOLS} tools, languages en+de. Wrote llms.txt, tools.json, sitemap.xml, robots.txt.")
 
 
 if __name__ == "__main__":

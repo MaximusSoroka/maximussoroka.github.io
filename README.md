@@ -13,6 +13,9 @@ Live URL: [https://maximussoroka.github.io/](https://maximussoroka.github.io/)
 | `/directory/` | Tool directory |
 | `/legal/` | Legal notice / Impressum |
 | `/de/` | The same pages in German |
+| `/llms.txt` | Short site map for language models |
+| `/tools.json` | Machine-readable directory (EN+DE), no affiliate links |
+| `/sitemap.xml` | URL list |
 
 ## Affiliate links
 
@@ -35,3 +38,5 @@ python3 -m http.server 8080
 Then open `http://127.0.0.1:8080/` (English) or `http://127.0.0.1:8080/de/` (German).
 
 Prices and programme figures come from official public pages checked on 18 November 2026. No figures were invented. Own revenue: €0. This is a static site with no cookies, tracking or analytics.
+
+The directory pages include schema.org JSON-LD (`ItemList` of `SoftwareApplication`). `/tools.json` is the canonical machine-readable copy of those entries; it does not include affiliate URLs or unpublished placeholder slots.

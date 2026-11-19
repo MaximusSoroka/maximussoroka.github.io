@@ -1,0 +1,470 @@
+{
+  "name": "Desire Studio tool directory",
+  "url": "https://maximussoroka.github.io/directory/",
+  "url_de": "https://maximussoroka.github.io/de/directory/",
+  "checked_on": "2026-11-18",
+  "timezone": "Europe/Madrid",
+  "own_revenue_eur": 0,
+  "affiliate_links_active": false,
+  "n_entries": 19,
+  "note": "Prices come only from official public vendor pages on the checked date. Where a figure was not reliably readable, price_status is unknown or partial. There are no active affiliate links on this site. This is not financial advice. No earnings promises. Own revenue: €0.",
+  "note_de": "Preise nur aus offiziellen öffentlichen Anbieterseiten vom Prüfdatum. Wo ein Betrag nicht zuverlässig ablesbar war, ist price_status unbekannt oder teilweise. Auf dieser Seite sind keine Affiliate-Links aktiv. Keine Finanzberatung. Kein Gewinnversprechen. Eigener Ertrag: 0 €.",
+  "pages": {
+    "home_en": "https://maximussoroka.github.io/",
+    "home_de": "https://maximussoroka.github.io/de/",
+    "n8n_en": "https://maximussoroka.github.io/n8n/",
+    "n8n_de": "https://maximussoroka.github.io/de/n8n/",
+    "directory_en": "https://maximussoroka.github.io/directory/",
+    "directory_de": "https://maximussoroka.github.io/de/directory/",
+    "legal_en": "https://maximussoroka.github.io/legal/",
+    "legal_de": "https://maximussoroka.github.io/de/legal/",
+    "llms_txt": "https://maximussoroka.github.io/llms.txt",
+    "tools_json": "https://maximussoroka.github.io/tools.json",
+    "sitemap": "https://maximussoroka.github.io/sitemap.xml"
+  },
+  "tools": [
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "official_url": "https://n8n.io/",
+      "pricing_url": "https://n8n.io/pricing/",
+      "recommended": true,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "Open-source and cloud tool for workflows and agents. Cloud billing is based on complete workflow runs, not individual steps. Community Edition can be self-hosted.",
+        "price": "Starter €20/month, Pro €50/month, Business €667/month — each as shown on the pricing page when billed annually. Enterprise on request. Community Edition for self-hosting is free on GitHub. 14-day trial. Monthly cloud prices were not stated as figures on the public page.",
+        "price_status": "checked",
+        "affiliate_detail": "Yes. Official cloud affiliate programme: 30% of net revenue from cloud referrals, 12 months, payout via PayPal monthly from €100."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "Open-Source- und Cloud-Werkzeug für Workflows und Agenten. Abrechnung in der Cloud nach kompletten Workflow-Läufen, nicht nach einzelnen Schritten. Community Edition zum Selbst-Hosten.",
+        "price": "Starter 20 €/Monat, Pro 50 €/Monat, Business 667 €/Monat — jeweils laut Preisseite bei jährlicher Abrechnung. Enterprise auf Anfrage. Community Edition zum Selbst-Hosten kostenlos auf GitHub. 14 Tage testen. Monatliche Cloud-Preise standen auf der öffentlichen Seite nicht als Zahl.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Ja. Offizielles Cloud-Affiliate-Programm: 30 % der Netto-Einnahmen aus Cloud-Empfehlungen, 12 Monate, Auszahlung PayPal monatlich ab 100 €."
+      },
+      "programme_url": "https://n8n.io/affiliates/"
+    },
+    {
+      "id": "make",
+      "name": "Make",
+      "official_url": "https://www.make.com/",
+      "pricing_url": "https://www.make.com/en/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "Hosted visual automation platform. Billed in credits per action.",
+        "price": "Free plan: 1,000 credits per month. Credits are the billing unit according to the pricing-page FAQ (the page says “as of August 27”, with no year). Unused credits expire at the end of the period. Concrete prices for paid plans were not reliably readable in the static page content — therefore unknown.",
+        "price_status": "partial / paid plans unknown",
+        "affiliate_detail": "Yes. 35% of subscription payments for 12 months (one FAQ on the same page says 24 months; the contradiction is left open). Payout only via Wise, from 3 paying users and $100, 2–3 weeks after a request. Cookie: 30 days. The “Make” brand may be used in ads only with written consent from Celonis."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "Gehostete visuelle Automatisierungsplattform. Rechnet in Credits je Aktion.",
+        "price": "Free-Plan: 1.000 Credits pro Monat. Credits sind laut FAQ der Preisseite die Abrechnungseinheit (Stand der Seite: „as of August 27“, ohne Jahreszahl). Unbenutzte Credits verfallen zum Periodenende. Konkrete Preise der Bezahlpläne waren im statischen Seiteninhalt nicht zuverlässig ablesbar — deshalb unbekannt.",
+        "price_status": "teilweise / Bezahlpläne unbekannt",
+        "affiliate_detail": "Ja. 35 % der Abo-Zahlungen für 12 Monate (eine FAQ auf derselben Seite nennt 24 Monate; der Widerspruch bleibt offen). Auszahlung nur über Wise, ab 3 zahlenden Nutzerinnen oder Nutzern und 100 $, 2–3 Wochen nach Anforderung. Cookie 30 Tage. Marke „Make“ in Anzeigen nur mit schriftlicher Zustimmung von Celonis."
+      },
+      "programme_url": "https://www.make.com/affiliate/"
+    },
+    {
+      "id": "zapier",
+      "name": "Zapier",
+      "official_url": "https://zapier.com/",
+      "pricing_url": "https://zapier.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "No-code platform for Zaps, tables, forms and AI products. Billing is by plan plus a task allowance.",
+        "price": "Free: $0/month, 100 tasks/month. Professional: from $19.99/month (card labelled “Starting from”). Team: from $69/month (card labelled “Starting from”). Enterprise: price on request. Amounts in USD on the official pricing page.",
+        "price_status": "checked",
+        "affiliate_detail": "Yes, official ambassador and affiliate programme (partner portal: zapier.partnerstack.com). The legal terms dated 6 Nov 2026 do not themselves state the reward amount and refer to the portal. On the public PartnerStack programme page: $100 per new customer who switches to a paid plan. Attribution for 90 days after the click, payout after a hold period according to the terms."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "No-Code-Plattform für Zaps, Tabellen, Formulare und KI-Produkte. Abrechnung über Pläne plus Aufgaben-Kontingent.",
+        "price": "Free: 0 $/Monat, 100 Aufgaben/Monat. Professional: ab 19,99 $/Monat (Karte „Starting from“). Team: ab 69 $/Monat (Karte „Starting from“). Enterprise: Preis auf Anfrage. Beträge in USD laut offizieller Preisseite.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Ja, offizielles Ambassador- und Affiliate-Programm (Partner-Portal: zapier.partnerstack.com). Die rechtlichen Bedingungen vom 6.11.2026 nennen die Prämienhöhe nicht selbst, sondern verweisen auf das Portal. Auf der öffentlichen PartnerStack-Programmseite: 100 $ je neuem Kunden, der auf einen bezahlten Plan wechselt. Zuordnung 90 Tage nach Klick, Auszahlung nach Hold-Periode laut Bedingungen."
+      },
+      "programme_url": "https://zapier.com/legal/ambassador-affiliate-terms"
+    },
+    {
+      "id": "activepieces",
+      "name": "Activepieces",
+      "official_url": "https://www.activepieces.com/",
+      "pricing_url": "https://www.activepieces.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "Open-source automation with cloud or self-hosting. Credits model, including agents and MCP.",
+        "price": "Free: $0, 1,000 credits/month, up to 5 users. Plus: $20/month (10,000 credits, then $0.007/credit). Team: $200/month (50,000 credits, 25 users). Ultimate: custom. Embed: from $36,000 per year. Cloud or your own servers. EU cloud in Frankfurt according to the pricing page.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "Open-Source-Automatisierung mit Cloud- oder Eigenbetrieb. Credits-Modell, auch Agenten und MCP.",
+        "price": "Free: 0 $, 1.000 Credits/Monat, bis 5 Nutzer. Plus: 20 $/Monat (10.000 Credits, danach 0,007 $/Credit). Team: 200 $/Monat (50.000 Credits, 25 Nutzer). Ultimate: Custom. Embed: ab 36.000 $ pro Jahr. Cloud oder eigene Server. EU-Cloud in Frankfurt laut Preisseite.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "pipedream",
+      "name": "Pipedream",
+      "official_url": "https://pipedream.com/",
+      "pricing_url": "https://pipedream.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "Automation / developer integrations",
+        "summary": "API and agent integrations (Connect). Development is free; production is a paid plan.",
+        "price": "Free: $0 (development and testing). Startup: $99/month when billed annually, $150/month when billed monthly; 10,000 usage credits included, then $0.012/credit; 100 external users included, then $2 per user. Business: custom, annual contract. The pricing card includes a quantity slider; the figures quoted are the amounts labelled on the page.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "Automatisierung / Entwickler-Integrationen",
+        "summary": "API- und Agenten-Integrationen (Connect). Entwickeln ist kostenlos, Produktion ist ein bezahlter Plan.",
+        "price": "Free: 0 $ (Entwicklung und Test). Startup: 99 $/Monat bei jährlicher Abrechnung, 150 $/Monat bei monatlicher Abrechnung; 10.000 Usage-Credits inklusive, danach 0,012 $/Credit; 100 externe Nutzer inklusive, danach 2 $ je Nutzer. Business: Custom, jährlicher Vertrag. Die Preiskarte enthält einen Mengen-Slider; zitiert sind die auf der Seite beschrifteten Beträge.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "windmill",
+      "name": "Windmill",
+      "official_url": "https://www.windmill.dev/",
+      "pricing_url": "https://www.windmill.dev/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "Automation / developer workflows",
+        "summary": "Open-source platform for scripts, flows and internal apps, self-hostable or in the cloud.",
+        "price": "Free/open source: free, unlimited executions (Community Edition). Enterprise: from $120/month according to the page heading. The price calculator on the same page showed $170/month in the default example for 1 builder and 3 compute units. Builder $20/month, non-builder $10/month. Guests: the first 100 in 30 days are free.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "Automatisierung / Entwickler-Workflows",
+        "summary": "Open-Source-Plattform für Skripte, Flows und interne Apps, selbst hostbar oder in der Cloud.",
+        "price": "Free/Open-Source: kostenlos, unbegrenzte Ausführungen (Community Edition). Enterprise: laut Seitenüberschrift ab 120 $/Monat. Der Preisrechner auf derselben Seite zeigte im Standardbeispiel 170 $/Monat für 1 Builder und 3 Compute Units. Builder 20 $/Monat, Non-Builder 10 $/Monat. Gäste: die ersten 100 in 30 Tagen kostenlos.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "pabbly-connect",
+      "name": "Pabbly Connect",
+      "official_url": "https://www.pabbly.com/connect/",
+      "pricing_url": "https://www.pabbly.com/connect/pricing/",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "Workflow automation with task allowances, including lifetime licences.",
+        "price": "According to checkout text on the official pricing page (USD): Standard $19/month (10,000 tasks/month), Unlimited $79/month (unlimited tasks). Annual price Standard $194, Unlimited $828. Lifetime one-off: Standard $349, Ultimate $799, Ultimate Plus $1,298. Annual plans are 25% cheaper than monthly according to the FAQ. The page also shows INR amounts by default.",
+        "price_status": "checked",
+        "affiliate_detail": "Yes. Up to 30% recurring commission, “forever” according to the page, for as long as the customer stays. Monthly payout to PayPal or an Indian bank account, cookie 365 days, no minimum payout amount stated. The page’s worked examples (such as “$120 per Plus sale”) are marketing, not our own revenue."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "Workflow-Automatisierung mit Aufgaben-Kontingenten, auch Lifetime-Lizenzen.",
+        "price": "Laut Checkout-Text auf der offiziellen Preisseite (USD): Standard 19 $/Monat (10.000 Aufgaben/Monat), Unlimited 79 $/Monat (unbegrenzte Aufgaben). Jahrespreis Standard 194 $, Unlimited 828 $. Lifetime einmalig: Standard 349 $, Ultimate 799 $, Ultimate Plus 1.298 $. Jahrespläne sind laut FAQ 25 % günstiger als Monat. Die Seite zeigt standardmäßig auch INR-Beträge.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Ja. Bis zu 30 % wiederkehrende Provision, laut Seite „forever“, solange der Kunde bleibt. Auszahlung monatlich auf PayPal oder indisches Bankkonto, Cookie 365 Tage, kein Auszahlungs-Mindestbetrag genannt. Die Rechenbeispiele der Seite (etwa „120 $ je Plus-Verkauf“) sind Marketing, kein eigener Umsatz."
+      },
+      "programme_url": "https://www.pabbly.com/affiliates/"
+    },
+    {
+      "id": "integrately",
+      "name": "Integrately",
+      "official_url": "https://integrately.com/",
+      "pricing_url": "https://integrately.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "Automation / workflows",
+        "summary": "Click-to-automate tool. Triggers do not count as tasks, according to the vendor.",
+        "price": "According to structured data (schema.org) on the pricing page: Free $0. Monthly: Starter $29.99, Professional $49, Growth $124, Business $299 (USD). Business annually: $2,868. Further annual prices were not included in that data.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "Automatisierung / Workflows",
+        "summary": "Klick-Automatisierung. Trigger zählen laut Anbieter nicht als Aufgabe.",
+        "price": "Laut strukturierten Angaben (schema.org) auf der Preisseite: Free 0 $. Monatlich: Starter 29,99 $, Professional 49 $, Growth 124 $, Business 299 $ (USD). Business jährlich: 2.868 $. Weitere Jahrespreise waren in diesen Angaben nicht enthalten.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "power-automate",
+      "name": "Microsoft Power Automate",
+      "official_url": "https://www.microsoft.com/en-us/power-platform/products/power-automate/pricing",
+      "pricing_url": "https://www.microsoft.com/en-us/power-platform/products/power-automate/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "Automation / enterprise iPaaS",
+        "summary": "Microsoft automation for cloud and desktop flows, part of the Power Platform.",
+        "price": "Premium: $15.00 per user/month, billed annually. Process: $150.00 per bot/month, billed annually. Hosted Process: $215.00 per bot/month, billed annually. There is a free trial. The page states explicitly that the prices shown are for marketing purposes and may differ at checkout.",
+        "price_status": "checked, with vendor caveat",
+        "affiliate_detail": "Not substantiated as a simple content-affiliate offer. Microsoft has partner programmes, which are not treated here as a fixed affiliate offer."
+      },
+      "de": {
+        "category": "Automatisierung / Unternehmens-iPaaS",
+        "summary": "Microsoft-Automatisierung für Cloud- und Desktop-Flows, Teil der Power Platform.",
+        "price": "Premium: 15,00 $ je Nutzer/Monat, jährlich gezahlt. Process: 150,00 $ je Bot/Monat, jährlich gezahlt. Hosted Process: 215,00 $ je Bot/Monat, jährlich gezahlt. Es gibt eine kostenlose Testphase. Die Seite weist ausdrücklich hin: angezeigte Preise dienen Marketingzwecken und können an der Kasse abweichen.",
+        "price_status": "geprüft, mit Anbieter-Vorbehalt",
+        "affiliate_detail": "Nicht belegt als einfaches Content-Affiliate. Microsoft hat Partnerprogramme, die hier nicht als festes Affiliate-Angebot gewertet werden."
+      }
+    },
+    {
+      "id": "gumloop",
+      "name": "Gumloop",
+      "official_url": "https://www.gumloop.com/",
+      "pricing_url": "https://docs.gumloop.com/core-concepts/credits",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "AI agents / automation",
+        "summary": "Platform for AI agents and workflows, billed in credits.",
+        "price": "Pro: $37/month, 20,000 credits/month (7,400 at the list price of $0.005/credit plus 12,600 bonus credits). Enterprise: custom, unused credits roll over. 14-day trial of Pro, card required, then converts to a paid subscription if not cancelled. Source: official documentation; the marketing pricing page did not provide reliable static text in the check.",
+        "price_status": "checked (documentation)",
+        "affiliate_detail": "Yes, an official creator/affiliate programme is announced on the creator page. The specific commission rates were not readable on the publicly retrieved page — terms therefore unknown."
+      },
+      "de": {
+        "category": "KI-Agenten / Automatisierung",
+        "summary": "Plattform für KI-Agenten und Workflows, Abrechnung über Credits.",
+        "price": "Pro: 37 $/Monat, 20.000 Credits/Monat (7.400 zum Listenpreis 0,005 $/Credit plus 12.600 Bonus-Credits). Enterprise: Custom, ungenutzte Credits werden übertragen. 14 Tage Test von Pro, Karte nötig, geht danach in ein bezahltes Abo über, wenn nicht gekündigt. Quelle: offizielle Dokumentation; die Marketing-Preisseite lieferte im Abruf keinen zuverlässigen Statiktext.",
+        "price_status": "geprüft (Dokumentation)",
+        "affiliate_detail": "Ja, offizielles Creator-/Affiliate-Programm ist auf der Creator-Seite angekündigt. Die konkreten Provisionssätze waren auf der öffentlich abgerufenen Seite nicht ablesbar — Konditionen deshalb unbekannt."
+      },
+      "programme_url": "https://www.gumloop.com/blog/creators"
+    },
+    {
+      "id": "lindy",
+      "name": "Lindy",
+      "official_url": "https://www.lindy.ai/",
+      "pricing_url": "https://www.lindy.ai/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents",
+        "summary": "AI teammate for email, meetings, Slack and automations, billed in credits per seat.",
+        "price": "Getting started: $50 in free credits, 7 days. Team starts at $29.99/month for 3,000 credits. Each active user is billed from $29.99/month for 3,000 credits. Top-ups: $10 per 1,000 credits. Further tiers are on the pricing page (including 4,000 credits at $39.99, up to very large packs). Enterprise: custom (including SSO, SCIM, HIPAA).",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten",
+        "summary": "KI-Teamkollege für E-Mail, Meetings, Slack und Automationen, Abrechnung über Credits je Sitz.",
+        "price": "Einstieg: 50 $ kostenlose Credits, 7 Tage. Team beginnt bei 29,99 $/Monat für 3.000 Credits. Jeder aktive Nutzer wird ab 29,99 $/Monat für 3.000 Credits berechnet. Nachkauf: 10 $ je 1.000 Credits. Weitere Stufen stehen auf der Preisseite (u. a. 4.000 Credits 39,99 $, bis zu sehr hohen Paketen). Enterprise: Custom (u. a. SSO, SCIM, HIPAA).",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "dust",
+      "name": "Dust",
+      "official_url": "https://dust.tt/",
+      "pricing_url": "https://dust.tt/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents / internal assistants",
+        "summary": "Platform for internal AI agents with company data, MCP and multiple models.",
+        "price": "Business seats according to the pricing-page FAQ, plus VAT: Free €0, 500 credits one-off. Pro €30/month or €24/month when billed annually, 8,000 credits/month. Max €150/month or €120/month annually, 40,000 credits/month. Enterprise: custom. Programmatic use on the Business plan: $0.01 per credit.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten / Unternehmens-Assistenten",
+        "summary": "Plattform für interne KI-Agenten mit Unternehmensdaten, MCP und mehreren Modellen.",
+        "price": "Business-Sitze laut FAQ der Preisseite, zzgl. MwSt.: Free 0 €, 500 Credits einmalig. Pro 30 €/Monat bzw. 24 €/Monat bei jährlicher Abrechnung, 8.000 Credits/Monat. Max 150 €/Monat bzw. 120 €/Monat jährlich, 40.000 Credits/Monat. Enterprise: Custom. Programmatische Nutzung im Business-Plan: 0,01 $ je Credit.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "crewai",
+      "name": "CrewAI",
+      "official_url": "https://www.crewai.com/",
+      "pricing_url": "https://www.crewai.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents",
+        "summary": "Platform for collaborative agent workflows, with a free entry tier and enterprise governance.",
+        "price": "Free (Basic): free, 50 workflow runs/month, visual editor. Enterprise: custom (SSO, RBAC, cloud/VPC/your own infrastructure).",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten",
+        "summary": "Plattform für kollaborative Agenten-Workflows, mit Free-Einstieg und Enterprise-Governance.",
+        "price": "Free (Basic): kostenlos, 50 Workflow-Ausführungen/Monat, visueller Editor. Enterprise: Custom (SSO, RBAC, Cloud/VPC/eigene Infrastruktur).",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "relevance-ai",
+      "name": "Relevance AI",
+      "official_url": "https://relevanceai.com/",
+      "pricing_url": "https://relevanceai.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents / workforce",
+        "summary": "Platform for an “AI Workforce” with agents, integrations and analytics.",
+        "price": "unknown. On the check date the public pricing page showed only Enterprise and a referral to the sales team, no self-serve prices.",
+        "price_status": "unknown",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten / Workforce",
+        "summary": "Plattform für eine „AI Workforce“ mit Agenten, Integrationen und Auswertungen.",
+        "price": "unbekannt. Die öffentliche Preisseite zeigte am Prüfdatum nur Enterprise und den Verweis auf das Vertriebsteam, keine Selbstbedienungs-Preise.",
+        "price_status": "unbekannt",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "dify",
+      "name": "Dify",
+      "official_url": "https://dify.ai/",
+      "pricing_url": "https://dify.ai/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": true,
+      "en": {
+        "category": "AI apps / agent workflows",
+        "summary": "Platform for building and running AI apps and agents, in the cloud or self-hosted.",
+        "price": "Cloud, prices excluding tax, annual view (17% savings according to the page): Professional $590 per workspace/year; Team $1,590 per workspace/year. Sandbox: core features to try (no price stated, described as an entry option). Community (self-host, open source): free under the open-source licence. Enterprise: custom.",
+        "price_status": "checked",
+        "affiliate_detail": "Yes, there is an official partner programme (reseller, service, marketplace) at dify.ai/partners. A fixed content-affiliate offer with a publicly stated commission rate was not on that page. Forum claims are not used here as evidence of price or commission."
+      },
+      "de": {
+        "category": "KI-Anwendungen / Agenten-Workflows",
+        "summary": "Plattform zum Bauen und Betreiben von KI-Apps und Agenten, Cloud oder selbst gehostet.",
+        "price": "Cloud, Preise ohne Steuern, jährliche Ansicht (17 % Ersparnis laut Seite): Professional 590 $ je Workspace/Jahr; Team 1.590 $ je Workspace/Jahr. Sandbox: Kernfunktionen zum Ausprobieren (kein Preis genannt, als Einstieg beschrieben). Community (Self-Host, Open Source): kostenlos unter der Open-Source-Lizenz. Enterprise: Custom.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Ja, es gibt ein offizielles Partnerprogramm (Reseller, Service, Marketplace) unter dify.ai/partners. Ein festes Content-Affiliate mit öffentlich genanntem Provisionssatz stand auf dieser Seite nicht. Forum-Angaben werden hier nicht als Preis- oder Provisionsbeleg verwendet."
+      },
+      "programme_url": "https://dify.ai/partners"
+    },
+    {
+      "id": "langsmith",
+      "name": "LangSmith (LangChain)",
+      "official_url": "https://www.langchain.com/",
+      "pricing_url": "https://www.langchain.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI development / observability",
+        "summary": "Observability, evaluation and operations for agents in the LangChain ecosystem.",
+        "price": "Developer: $0/seat per month, then pay-as-you-go (up to 5,000 base traces/month included). Plus: $39/seat per month, then pay-as-you-go (up to 10,000 base traces). Enterprise: custom. Additional usage in LangChain Standard Units (1 LSU = $1.00).",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Entwicklung / Observability",
+        "summary": "Observability, Evaluierung und Betrieb von Agenten im LangChain-Ökosystem.",
+        "price": "Developer: 0 $/Sitz und Monat, danach Pay-as-you-go (bis 5.000 Basis-Traces/Monat inklusive). Plus: 39 $/Sitz und Monat, danach Pay-as-you-go (bis 10.000 Basis-Traces). Enterprise: Custom. Zusätzliche Nutzung in LangChain Standard Units (1 LSU = 1,00 $).",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "botpress",
+      "name": "Botpress",
+      "official_url": "https://botpress.com/",
+      "pricing_url": "https://botpress.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents / customer conversations",
+        "summary": "Platform for AI agents in customer conversations, billed by conversations.",
+        "price": "Free: $0, 100 conversations, no overages, 3 seats, 3 agents. Plus: $150/month when billed annually, 250 conversations/month included. Team: $750/month when billed annually, 1,500 conversations/month. Custom: on request. Monthly prices for the paid plans were not shown as separate figures in the annual view retrieved.",
+        "price_status": "checked",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten / Kundendialog",
+        "summary": "Plattform für KI-Agenten in Kundengesprächen, Abrechnung nach Conversations.",
+        "price": "Free: 0 $, 100 Conversations, ohne Nachkauf/Overages, 3 Sitze, 3 Agenten. Plus: 150 $/Monat bei jährlicher Abrechnung, 250 Conversations/Monat inklusive. Team: 750 $/Monat bei jährlicher Abrechnung, 1.500 Conversations/Monat. Custom: auf Anfrage. Monatliche Preise der Bezahlpläne waren in der abgerufenen Jahresansicht nicht als eigene Zahl ausgewiesen.",
+        "price_status": "geprüft",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "voiceflow",
+      "name": "Voiceflow",
+      "official_url": "https://www.voiceflow.com/",
+      "pricing_url": "https://www.voiceflow.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI agents / customer experience",
+        "summary": "Platform for designing and running AI agents in voice and chat.",
+        "price": "unknown. The pricing page mentioned usage-based billing for agencies and a free trial without a card, and “Request pricing” for companies. No reliably readable plan prices in the check.",
+        "price_status": "unknown",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Agenten / Kundenerlebnis",
+        "summary": "Plattform zum Entwerfen und Betreiben von KI-Agenten in Sprache und Chat.",
+        "price": "unbekannt. Die Preisseite nannte für Agenturen nutzungsbasierte Abrechnung und eine kostenlose Testphase ohne Karte, für Unternehmen „Request pricing“. Keine zuverlässig ablesbaren Planpreise im Abruf.",
+        "price_status": "unbekannt",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    },
+    {
+      "id": "flowise",
+      "name": "Flowise",
+      "official_url": "https://flowiseai.com/",
+      "pricing_url": "https://flowiseai.com/pricing",
+      "recommended": false,
+      "affiliate_link_on_this_site": false,
+      "affiliate_programme_substantiated": false,
+      "en": {
+        "category": "AI workflows / low-code agents",
+        "summary": "Open-source kit for LLM and agent flows, with a hosted cloud option.",
+        "price": "unknown. Opening flowiseai.com/pricing on the check date led to a sign-in page, with no public plan prices. The community edition is known as an open-source project; a figure is still not stated here because it was not readable on the pricing page.",
+        "price_status": "unknown",
+        "affiliate_detail": "Not substantiated. No official affiliate programme page was found on the check date."
+      },
+      "de": {
+        "category": "KI-Workflows / Low-Code-Agenten",
+        "summary": "Open-Source-Baukasten für LLM- und Agenten-Flows, mit gehosteter Cloud-Variante.",
+        "price": "unbekannt. Der Aufruf von flowiseai.com/pricing führte am Prüfdatum auf eine Anmeldeseite, keine öffentlichen Planpreise. Die Community-Edition ist als Open-Source-Projekt bekannt; ein Betrag wird hier trotzdem nicht angesetzt, weil er auf der Preisseite nicht ablesbar war.",
+        "price_status": "unbekannt",
+        "affiliate_detail": "Nicht belegt. Am Prüfdatum keine offizielle Affiliate-Programmseite gefunden."
+      }
+    }
+  ]
+}

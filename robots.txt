@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://maximussoroka.github.io/sitemap.xml

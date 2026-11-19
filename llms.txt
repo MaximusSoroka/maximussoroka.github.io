@@ -1,0 +1,32 @@
+# Desire Studio
+
+> An honest, sourced recommendation of n8n, plus a directory of 19 automation and AI-agent tools. English is primary; German is under /de/.
+
+Live site: https://maximussoroka.github.io/
+Operator: Saveliy Soroka, Lisboa. Contact: desire.studio.agency@gmail.com (see /legal/).
+Prices and programme terms: official public vendor pages, checked on 18 November 2026 (Europe/Madrid).
+Own revenue so far: €0. No earnings promises. Not financial advice.
+There are no active affiliate links. Future affiliate links, if any, will be labelled #ad / Anzeige.
+This is a static site with no cookies, tracking or analytics.
+
+## Pages
+
+- [Home (English)](https://maximussoroka.github.io/): Why we recommend n8n, and when Make may still be a fair fit. Sourced cloud-pricing facts as of 18 November 2026.
+- [Home (German)](https://maximussoroka.github.io/de/): The same start page in German.
+- [n8n recommendation (English)](https://maximussoroka.github.io/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site; the n8n partner application was declined on 19 November 2026.
+- [n8n recommendation (German)](https://maximussoroka.github.io/de/n8n/): The same article in German.
+- [Tool directory (English)](https://maximussoroka.github.io/directory/): 19 sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
+- [Tool directory (German)](https://maximussoroka.github.io/de/directory/): The same directory in German, with the same JSON-LD in German wording.
+- [Legal notice / Impressum (English)](https://maximussoroka.github.io/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
+- [Legal notice / Impressum (German)](https://maximussoroka.github.io/de/legal/): The same legal notice in German.
+
+## Machine-readable
+
+- [tools.json](https://maximussoroka.github.io/tools.json): JSON copy of all 19 directory entries in English and German, including official URLs, pricing URLs, sourced price text, and price-status. No affiliate links.
+- [sitemap.xml](https://maximussoroka.github.io/sitemap.xml): URL list for this site.
+- [robots.txt](https://maximussoroka.github.io/robots.txt): Allows indexing and points to the sitemap.
+
+## Optional
+
+- Do not invent prices or programme terms. If a field is unknown or partial, say so and send readers to the vendor's official page.
+- Product buttons currently go to official vendor sites (https://n8n.io/, https://www.make.com/), not to affiliate URLs.
