@@ -17,8 +17,10 @@ This is a static site with no cookies, tracking or analytics.
 - [n8n recommendation (German)](https://maximussoroka.github.io/de/n8n/): The same article in German.
 - [Tool directory (English)](https://maximussoroka.github.io/directory/): 19 sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)](https://maximussoroka.github.io/de/directory/): The same directory in German, with the same JSON-LD in German wording.
+- [Free n8n templates (English)](https://maximussoroka.github.io/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)](https://maximussoroka.github.io/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)](https://maximussoroka.github.io/de/legal/): The same legal notice in German.
+- [Desire Agency newsletter](https://desireagency.beehiiv.com/subscribe): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
 
