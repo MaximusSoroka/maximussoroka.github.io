@@ -65,15 +65,23 @@ NAV = {
     "en": [
         ("home", "Home"),
         ("n8n", "Recommend n8n"),
+        ("templates", "Templates"),
         ("directory", "Directory"),
         ("legal", "Legal notice"),
     ],
     "de": [
         ("home", "Start"),
         ("n8n", "n8n-Empfehlung"),
+        ("templates", "Templates"),
         ("directory", "Verzeichnis"),
         ("legal", "Impressum"),
     ],
+}
+
+SUBSCRIBE_URL = "https://desireagency.beehiiv.com/subscribe"
+SUBSCRIBE_LABEL = {
+    "en": "Get the build log",
+    "de": "Build-Log abonnieren",
 }
 
 BANNER = {
@@ -107,6 +115,7 @@ def page_paths(lang: str, depth: int) -> dict:
         return {
             "home": "./" if depth == 0 else p,
             "n8n": p + "n8n/",
+            "templates": p + "templates/",
             "directory": p + "directory/",
             "legal": p + "legal/",
             "other_lang": p + "de/" if depth == 0 else (p + "de/" if depth == 1 else "../../de/"),
@@ -120,6 +129,7 @@ def page_paths(lang: str, depth: int) -> dict:
         return {
             "home": "./",
             "n8n": "./n8n/",
+            "templates": "../templates/",
             "directory": "./directory/",
             "legal": "./legal/",
             "other_lang": "../",
@@ -132,6 +142,7 @@ def page_paths(lang: str, depth: int) -> dict:
     return {
         "home": "../",
         "n8n": "../n8n/",
+        "templates": "../../templates/",
         "directory": "../directory/",
         "legal": "../legal/",
         "other_lang": "../../",
@@ -144,26 +155,23 @@ def page_paths(lang: str, depth: int) -> dict:
 
 def lang_href(lang: str, page: str, depth: int) -> str:
     """URL of the same page in the other language."""
-    p = prefix(depth)
-    mapping_en_to_de = {
-        "home": "de/",
-        "n8n": "de/n8n/" if depth == 0 else "../de/n8n/",
-        "directory": "de/directory/" if depth == 0 else "../de/directory/",
-        "legal": "de/legal/" if depth == 0 else "../de/legal/",
-    }
-    mapping_de_to_en = {
-        "home": "../",
-        "n8n": "../../n8n/",
-        "directory": "../../directory/",
-        "legal": "../../legal/",
-    }
+    # Templates exist in English only; the DE language switch goes to the German home.
+    if page == "templates":
+        if lang == "en":
+            return "../de/" if depth >= 1 else "de/"
+        return "../templates/" if depth == 1 else "../../templates/"
     if lang == "en":
         if depth == 0:
             return {"home": "de/", "n8n": "de/n8n/", "directory": "de/directory/", "legal": "de/legal/"}[page]
         return {"home": "../de/", "n8n": "../de/n8n/", "directory": "../de/directory/", "legal": "../de/legal/"}[page]
     if depth == 1:
         return {"home": "../", "n8n": "../n8n/", "directory": "../directory/", "legal": "../legal/"}[page]
-    return mapping_de_to_en[page]
+    return {
+        "home": "../",
+        "n8n": "../../n8n/",
+        "directory": "../../directory/",
+        "legal": "../../legal/",
+    }[page]
 
 
 def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "", extra_head: str = "") -> str:
@@ -177,7 +185,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     other_href = lang_href(lang, page, depth)
     en_cur = ' aria-current="true"' if lang == "en" else ""
     de_cur = ' aria-current="true"' if lang == "de" else ""
-    wrap = "wrap-narrow" if page in ("n8n", "legal", "home") else "wrap"
+    wrap = "wrap-narrow" if page in ("n8n", "legal", "home", "templates") else "wrap"
     # home uses wrap for facts; keep wrap-narrow for typography? I'll use wrap on home.
     if page == "home" or page == "directory":
         wrap = "wrap"
@@ -222,6 +230,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
       <p>{esc(FOOT[lang])}</p>
       <p>
         <a href="{paths['legal']}">{"Legal notice / Impressum" if lang == "en" else "Impressum / Kontakt"}</a>
+        · <a href="{esc(SUBSCRIBE_URL)}">{esc(SUBSCRIBE_LABEL[lang])}</a>
         · <a href="{other_href}">{other}</a>
       </p>
     </div>
@@ -256,6 +265,12 @@ HOME = {
         "dir_text": f"A sourced directory of {N_TOOLS} automation and AI-agent tools. Prices come only from official public pages dated {PRUEF_EN}. Where a figure was not readable, it is marked unknown. n8n is listed first on purpose.",
         "dir_cta": "Open the directory",
         "rev": "This is not financial advice and not a trading product. Our own revenue from these pages so far: €0.",
+        "news_title": "The build log",
+        "news_text": "A short, free newsletter from Desire Agency about what we are actually building — including these templates, the site, and the rest of the system. No earnings promises. Our own revenue so far: €0.",
+        "news_cta": "Get the build log",
+        "tpl_title": "Free n8n templates",
+        "tpl_text": "Three small, free n8n workflows you can import and adapt: a daily RSS digest, a form that writes to Google Sheets, and a simple uptime check. Credentials in the files are placeholders.",
+        "tpl_cta": "Open the templates",
     },
     "de": {
         "title": "Warum wir n8n empfehlen — Desire Studio",
@@ -275,6 +290,12 @@ HOME = {
         "dir_text": f"Ein quellenbelegtes Verzeichnis mit {N_TOOLS} Automatisierungs- und KI-Agenten-Tools. Preise nur aus öffentlichen offiziellen Seiten vom {PRUEF}. Wo ein Betrag nicht ablesbar war, steht unbekannt. n8n steht absichtlich zuerst.",
         "dir_cta": "Zum Verzeichnis",
         "rev": "Keine Finanzberatung, kein Trading-Produkt. Unser eigener Ertrag aus diesen Seiten bisher: 0 €.",
+        "news_title": "Das Build-Log",
+        "news_text": "Ein kurzer, kostenloser Newsletter von Desire Agency über das, was wir tatsächlich bauen — Vorlagen, die Website und den Rest des Systems. Kein Gewinnversprechen. Unser eigener Ertrag bisher: 0 €.",
+        "news_cta": "Build-Log abonnieren",
+        "tpl_title": "Kostenlose n8n-Vorlagen",
+        "tpl_text": "Drei kleine, kostenlose n8n-Workflows zum Importieren: ein täglicher RSS-Digest, ein Formular in Google Sheets und eine einfache Erreichbarkeitsprüfung. Die Dateien enthalten nur Platzhalter für Zugangsdaten. Die Seite ist auf Englisch.",
+        "tpl_cta": "Zu den Vorlagen",
     },
 }
 
@@ -305,6 +326,16 @@ def home_body(lang: str, paths: dict) -> str:
         <p>{esc(t["dir_text"])}</p>
         <div class="actions"><a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["dir_cta"])}</a></div>
         <p class="note">{esc(t["rev"])}</p>
+      </section>
+      <section class="section">
+        <h2>{esc(t["tpl_title"])}</h2>
+        <p>{esc(t["tpl_text"])}</p>
+        <div class="actions"><a class="btn btn-ghost" href="{paths["templates"]}">{esc(t["tpl_cta"])}</a></div>
+      </section>
+      <section class="section">
+        <h2>{esc(t["news_title"])}</h2>
+        <p>{esc(t["news_text"])}</p>
+        <div class="actions"><a class="btn btn-primary" href="{esc(SUBSCRIBE_URL)}">{esc(t["news_cta"])}</a></div>
       </section>
 """
 
@@ -788,6 +819,117 @@ def legal_body(lang: str) -> str:
 """
 
 
+TEMPLATES_PAGE = {
+    "title": "Free n8n templates — Desire Studio",
+    "description": "Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.",
+}
+
+TEMPLATES = [
+    {
+        "id": "rss-daily-digest-email",
+        "title": "RSS to daily digest email",
+        "summary": "Once a day (default 07:00 in the n8n instance timezone, set here to Europe/Lisbon), the workflow reads an RSS feed, builds an HTML list of up to 20 items, and emails the digest.",
+        "file": "rss-daily-digest-email/workflow.json",
+        "steps": [
+            "In n8n: … → Import from File (or Add workflow → Import) and choose workflow.json.",
+            "Open Read RSS feed and replace https://example.com/feed.xml with your feed URL. Use the same URL in the Code node if you want it printed in the email (feedUrl).",
+            "In n8n, create an SMTP credential (your mailbox provider). Open Send digest email, remove the placeholder credential, and attach yours.",
+            "Set From and To. Change the schedule in Every day at 07:00 if needed (the time follows the workflow timezone under Settings).",
+            "Click Test workflow, confirm the email, then Activate. Leave it inactive until the test works.",
+        ],
+        "notes": [
+            "The Code node escapes titles and links before building HTML.",
+            "An empty feed still sends a short “no items” email so a silent failure is easier to notice.",
+            "Required n8n nodes are built-in: Schedule Trigger, RSS Read, Code, Send Email.",
+        ],
+        "credentials": "SMTP account (placeholder)",
+    },
+    {
+        "id": "form-to-google-sheet-notification",
+        "title": "Form to Google Sheet and notification",
+        "summary": "An n8n form collects Name, Email and Message. Each submission is appended to a Google Sheet, then a notification email is sent.",
+        "file": "form-to-google-sheet-notification/workflow.json",
+        "steps": [
+            "In Google Sheets, create a spreadsheet with a tab named Submissions.",
+            "In row 1, add the headers exactly: submitted_at, name, email, message.",
+            "Copy the spreadsheet ID from the URL (https://docs.google.com/spreadsheets/d/<ID>/edit).",
+            "In n8n: … → Import from File and choose workflow.json.",
+            "Open Append to Google Sheet, replace PLACEHOLDER_SPREADSHEET_ID with your ID, and attach a Google Sheets OAuth2 credential you created in n8n (the Google account must have access to the spreadsheet).",
+            "Create an SMTP credential, attach it to Send notification email, and set From and To.",
+            "Open Contact form, save the workflow, and copy the form URL n8n shows. Submit a test entry. Check the sheet and the inbox, then Activate.",
+        ],
+        "notes": [
+            "Form field labels (Name, Email, Message) must match the expressions in the Sheet and email nodes. Rename them in both places if you change the form.",
+            "The form path slug is contact-form (under the Form Trigger options). Change it if you already use that path.",
+            "Required n8n nodes are built-in: Form Trigger, Google Sheets, Send Email.",
+        ],
+        "credentials": "Google Sheets account (placeholder) and SMTP account (placeholder)",
+    },
+    {
+        "id": "website-uptime-check-alert",
+        "title": "Website uptime check to alert",
+        "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.",
+        "file": "website-uptime-check-alert/workflow.json",
+        "steps": [
+            "In n8n: … → Import from File and choose workflow.json.",
+            "Open Request website and replace https://example.com/ with the URL to check. Also replace that URL in the subject and body of Send down alert.",
+            "Create an SMTP credential in n8n, attach it to Send down alert (remove the placeholder), and set From and To.",
+            "Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If condition if you want to accept other 2xx codes.",
+            "Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the alert, then point it at the real URL and Activate.",
+        ],
+        "notes": [
+            "The HTTP node uses “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.",
+            "This is a simple local check, not a hosted monitoring service. It will not run while n8n is stopped, and it does not measure uptime percentages.",
+            "Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Send Email.",
+        ],
+        "credentials": "SMTP account (placeholder)",
+    },
+]
+
+
+def templates_body() -> str:
+    parts = [
+        """
+      <article>
+        <h1>Three free n8n templates</h1>
+        <p class="lede">Small starting points you can import into your own n8n, test, and only then turn on. They are free. The JSON files contain no real passwords, keys or accounts — only placeholders you replace with your own.</p>
+        <p>In n8n, use <strong>… → Import from File</strong> and choose the <code>workflow.json</code> for the template you want. Follow the setup steps below. Leave the workflow inactive until a test run works.</p>
+"""
+    ]
+    for t in TEMPLATES:
+        steps = "\n".join(f"          <li>{esc(s)}</li>" for s in t["steps"])
+        notes = "\n".join(f"          <li>{esc(n)}</li>" for n in t["notes"])
+        parts.append(f"""
+        <section class="section" id="{esc(t['id'])}">
+          <h2>{esc(t['title'])}</h2>
+          <p>{esc(t['summary'])}</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="{esc(t['file'])}" download>Download workflow.json</a>
+          </div>
+          <h3>Setup</h3>
+          <ol>
+{steps}
+          </ol>
+          <p class="note">Credentials in this file are placeholders: {esc(t['credentials'])}. Attach your own credentials in n8n before you activate the workflow.</p>
+          <h3>Good to know</h3>
+          <ul>
+{notes}
+          </ul>
+        </section>
+""")
+    parts.append(f"""
+        <section class="section">
+          <h2>Get the build log</h2>
+          <p>We write about what we actually build — including these templates — in the Desire Agency newsletter. No earnings promises. Our own revenue so far: €0.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="{esc(SUBSCRIBE_URL)}">{esc(SUBSCRIBE_LABEL['en'])}</a>
+          </div>
+        </section>
+      </article>
+""")
+    return "".join(parts)
+
+
 def write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text)
@@ -923,14 +1065,27 @@ def public_tools_payload() -> dict:
             "home_de": site_url("/de/"),
             "n8n_en": site_url("/n8n/"),
             "n8n_de": site_url("/de/n8n/"),
+            "templates_en": site_url("/templates/"),
             "directory_en": site_url("/directory/"),
             "directory_de": site_url("/de/directory/"),
             "legal_en": site_url("/legal/"),
             "legal_de": site_url("/de/legal/"),
+            "newsletter_subscribe": SUBSCRIBE_URL,
             "llms_txt": site_url("/llms.txt"),
             "tools_json": site_url("/tools.json"),
             "sitemap": site_url("/sitemap.xml"),
         },
+        "n8n_templates": [
+            {
+                "id": t["id"],
+                "title": t["title"],
+                "summary": t["summary"],
+                "page": site_url("/templates/") + "#" + t["id"],
+                "download": site_url("/templates/" + t["file"]),
+                "price": "free",
+            }
+            for t in TEMPLATES
+        ],
         "tools": tools,
     }
 
@@ -960,8 +1115,10 @@ This is a static site with no cookies, tracking or analytics.
 - [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
 - [Tool directory (English)]({SITE_URL}/directory/): {N_TOOLS} sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)]({SITE_URL}/de/directory/): The same directory in German, with the same JSON-LD in German wording.
+- [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
+- [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
 
@@ -981,6 +1138,7 @@ def write_sitemap() -> None:
     paths = [
         ("/", "1.0", "weekly"),
         ("/n8n/", "0.9", "weekly"),
+        ("/templates/", "0.8", "weekly"),
         ("/directory/", "0.9", "weekly"),
         ("/legal/", "0.6", "yearly"),
         ("/de/", "0.8", "weekly"),
@@ -990,8 +1148,7 @@ def write_sitemap() -> None:
         ("/llms.txt", "0.5", "weekly"),
         ("/tools.json", "0.6", "weekly"),
     ]
-    # Lastmod for HTML/content pages that gained machine-readable files today.
-    lastmod = "2026-11-19"
+    lastmod = "2026-11-20"
     urls = []
     for path, prio, freq in paths:
         urls.append(
@@ -1024,6 +1181,7 @@ def build() -> None:
     pages = [
         (ROOT / "index.html", "en", "home", 0, HOME["en"], home_body),
         (ROOT / "n8n" / "index.html", "en", "n8n", 1, ARTICLE["en"], lambda lang, paths=None: article_body(lang)),
+        (ROOT / "templates" / "index.html", "en", "templates", 1, TEMPLATES_PAGE, lambda lang, paths=None: templates_body()),
         (ROOT / "directory" / "index.html", "en", "directory", 1, DIR["en"], lambda lang, paths=None: directory_body(lang)),
         (ROOT / "legal" / "index.html", "en", "legal", 1, LEGAL["en"], lambda lang, paths=None: legal_body(lang)),
         (ROOT / "de" / "index.html", "de", "home", 1, HOME["de"], home_body),
@@ -1045,7 +1203,7 @@ def build() -> None:
     write_llms_txt()
     write_sitemap()
     write_robots()
-    print(f"done. {N_TOOLS} tools, languages en+de. Wrote llms.txt, tools.json, sitemap.xml, robots.txt.")
+    print(f"done. {N_TOOLS} tools, languages en+de, plus /templates/. Wrote llms.txt, tools.json, sitemap.xml, robots.txt.")
 
 
 if __name__ == "__main__":

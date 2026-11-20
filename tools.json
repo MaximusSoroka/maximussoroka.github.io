@@ -14,14 +14,42 @@
     "home_de": "https://maximussoroka.github.io/de/",
     "n8n_en": "https://maximussoroka.github.io/n8n/",
     "n8n_de": "https://maximussoroka.github.io/de/n8n/",
+    "templates_en": "https://maximussoroka.github.io/templates/",
     "directory_en": "https://maximussoroka.github.io/directory/",
     "directory_de": "https://maximussoroka.github.io/de/directory/",
     "legal_en": "https://maximussoroka.github.io/legal/",
     "legal_de": "https://maximussoroka.github.io/de/legal/",
+    "newsletter_subscribe": "https://desireagency.beehiiv.com/subscribe",
     "llms_txt": "https://maximussoroka.github.io/llms.txt",
     "tools_json": "https://maximussoroka.github.io/tools.json",
     "sitemap": "https://maximussoroka.github.io/sitemap.xml"
   },
+  "n8n_templates": [
+    {
+      "id": "rss-daily-digest-email",
+      "title": "RSS to daily digest email",
+      "summary": "Once a day (default 07:00 in the n8n instance timezone, set here to Europe/Lisbon), the workflow reads an RSS feed, builds an HTML list of up to 20 items, and emails the digest.",
+      "page": "https://maximussoroka.github.io/templates/#rss-daily-digest-email",
+      "download": "https://maximussoroka.github.io/templates/rss-daily-digest-email/workflow.json",
+      "price": "free"
+    },
+    {
+      "id": "form-to-google-sheet-notification",
+      "title": "Form to Google Sheet and notification",
+      "summary": "An n8n form collects Name, Email and Message. Each submission is appended to a Google Sheet, then a notification email is sent.",
+      "page": "https://maximussoroka.github.io/templates/#form-to-google-sheet-notification",
+      "download": "https://maximussoroka.github.io/templates/form-to-google-sheet-notification/workflow.json",
+      "price": "free"
+    },
+    {
+      "id": "website-uptime-check-alert",
+      "title": "Website uptime check to alert",
+      "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.",
+      "page": "https://maximussoroka.github.io/templates/#website-uptime-check-alert",
+      "download": "https://maximussoroka.github.io/templates/website-uptime-check-alert/workflow.json",
+      "price": "free"
+    }
+  ],
   "tools": [
     {
       "id": "n8n",
