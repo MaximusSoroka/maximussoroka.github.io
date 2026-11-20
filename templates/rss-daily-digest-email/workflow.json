@@ -1,0 +1,137 @@
+{
+  "name": "RSS to daily digest email",
+  "meta": {
+    "description": "Once a day, read an RSS feed and email an HTML digest. Placeholder URL and SMTP credentials — attach your own before activating."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Setup\n1. Replace the RSS URL in **Read RSS feed**.\n2. Create an SMTP credential in n8n and attach it to **Send digest email** (replace the placeholder).\n3. Set From and To addresses.\n4. Adjust the schedule if you do not want 07:00 (n8n instance timezone).\n5. Activate the workflow only after a successful manual test.\n\nNo credentials or secrets are included in this file.",
+        "height": 380,
+        "width": 340,
+        "color": 7
+      },
+      "id": "a1e1b4d0-6c11-4f7a-9c01-rss000000001",
+      "name": "Setup notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "a1e1b4d0-6c11-4f7a-9c01-rss000000002",
+      "name": "Every day at 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        120,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://example.com/feed.xml",
+        "options": {}
+      },
+      "id": "a1e1b4d0-6c11-4f7a-9c01-rss000000003",
+      "name": "Read RSS feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        360,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst escape = (value) => String(value ?? '')\n  .replace(/&/g, '&amp;')\n  .replace(/</g, '&lt;')\n  .replace(/>/g, '&gt;')\n  .replace(/\"/g, '&quot;');\n\nconst limit = 20;\nconst sliced = items.slice(0, limit);\nconst rows = sliced.map((item) => {\n  const title = escape(item.json.title || item.json.isoDate || '(no title)');\n  const link = String(item.json.link || item.json.guid || '').trim();\n  const safeLink = escape(link);\n  const date = escape(item.json.isoDate || item.json.pubDate || '');\n  const dateBit = date ? ` <small>(${date})</small>` : '';\n  if (link) {\n    return `<li><a href=\"${safeLink}\">${title}</a>${dateBit}</li>`;\n  }\n  return `<li>${title}${dateBit}</li>`;\n});\n\nconst count = rows.length;\nconst html = count\n  ? `<p>${count} item(s) from the feed (max ${limit}).</p><ul>${rows.join('')}</ul>`\n  : '<p>The feed returned no items in this run.</p>';\n\nreturn [{ json: { count, html, feedUrl: 'https://example.com/feed.xml' } }];\n"
+      },
+      "id": "a1e1b4d0-6c11-4f7a-9c01-rss000000004",
+      "name": "Build digest HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "digest@example.com",
+        "toEmail": "you@example.com",
+        "subject": "={{ $json.count === 0 ? 'Daily RSS digest (no items)' : 'Daily RSS digest: ' + $json.count + ' item(s)' }}",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "a1e1b4d0-6c11-4f7a-9c01-rss000000005",
+      "name": "Send digest email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        840,
+        280
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "PLACEHOLDER_SMTP",
+          "name": "SMTP account (placeholder)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every day at 07:00": {
+      "main": [
+        [
+          {
+            "node": "Read RSS feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read RSS feed": {
+      "main": [
+        [
+          {
+            "node": "Build digest HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build digest HTML": {
+      "main": [
+        [
+          {
+            "node": "Send digest email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Lisbon"
+  },
+  "tags": []
+}

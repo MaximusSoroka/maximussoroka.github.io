@@ -1,0 +1,203 @@
+{
+  "name": "Form to Google Sheet and notification",
+  "meta": {
+    "description": "n8n form submissions are appended to a Google Sheet and a notification email is sent. Placeholder spreadsheet ID and credentials — attach your own before activating."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Setup\n1. In Google Sheets, create a spreadsheet with a tab named `Submissions` and a header row: `submitted_at`, `name`, `email`, `message`.\n2. Copy the spreadsheet ID from the sheet URL into **Append to Google Sheet** (replace `PLACEHOLDER_SPREADSHEET_ID`).\n3. In n8n, create a Google Sheets OAuth2 credential and attach it, replacing the placeholder.\n4. Create an SMTP credential and attach it to **Send notification email**.\n5. Set From and To addresses.\n6. Open the Form Trigger and copy the form URL. Test a submission before activating.\n\nNo credentials or secrets are included in this file.",
+        "height": 460,
+        "width": 360,
+        "color": 7
+      },
+      "id": "b2e2c5e1-7d22-4a8b-8d02-form00000001",
+      "name": "Setup notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "Contact form",
+        "formDescription": "Send a message. Your name, email and message are stored in a spreadsheet, and a notification email is sent.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "Your name"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true,
+              "placeholder": "you@example.com"
+            },
+            {
+              "fieldLabel": "Message",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "How can we help?"
+            }
+          ]
+        },
+        "options": {
+          "path": "contact-form",
+          "buttonLabel": "Send",
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Thanks. Your message has been received."
+            }
+          }
+        }
+      },
+      "id": "b2e2c5e1-7d22-4a8b-8d02-form00000002",
+      "name": "Contact form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "webhookId": "b2e2c5e1-7d22-4a8b-8d02-formwebhook01",
+      "position": [
+        120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "PLACEHOLDER_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Submissions",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "submitted_at": "={{ $now.toISO() }}",
+            "name": "={{ $json.Name }}",
+            "email": "={{ $json.Email }}",
+            "message": "={{ $json.Message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b2e2c5e1-7d22-4a8b-8d02-form00000003",
+      "name": "Append to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        400,
+        300
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PLACEHOLDER_GOOGLE_SHEETS",
+          "name": "Google Sheets account (placeholder)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "forms@example.com",
+        "toEmail": "you@example.com",
+        "subject": "=New form submission from {{ $('Contact form').item.json.Name }}",
+        "html": "=<p>A new form submission was written to the spreadsheet.</p><ul><li><strong>Name:</strong> {{ $('Contact form').item.json.Name }}</li><li><strong>Email:</strong> {{ $('Contact form').item.json.Email }}</li><li><strong>Message:</strong> {{ $('Contact form').item.json.Message }}</li><li><strong>Time:</strong> {{ $now.toISO() }}</li></ul>",
+        "options": {}
+      },
+      "id": "b2e2c5e1-7d22-4a8b-8d02-form00000004",
+      "name": "Send notification email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "PLACEHOLDER_SMTP",
+          "name": "SMTP account (placeholder)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Contact form": {
+      "main": [
+        [
+          {
+            "node": "Append to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Send notification email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Lisbon"
+  },
+  "tags": []
+}
