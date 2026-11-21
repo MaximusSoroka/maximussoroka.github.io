@@ -95,7 +95,7 @@
 
   /* ---------- Scroll reveal (staggered) ---------- */
   var revealSel = [".section-head", ".stats", ".panel", ".product", ".fact", ".team", ".faq details", ".cta-band",
-    ".card", ".tpl-card", "article > h2", ".table-wrap", ".placeholder-box"].join(",");
+    ".card", ".tpl-card", ".step", ".stack-item", ".case", "article > h2", ".table-wrap", ".placeholder-box"].join(",");
   var revealEls = $all(revealSel).filter(function (el) { return !el.closest(".home-hero"); });
   if (!reduce && "IntersectionObserver" in window) {
     var groups = new Map();
