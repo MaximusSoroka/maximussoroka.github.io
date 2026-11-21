@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the static Desire Studio site from local source files.
+"""Build the static Desire Agency site from local source files.
 
 Does not publish, push, or create a repository.
 Run from this directory: python3 build.py
@@ -174,10 +174,62 @@ def lang_href(lang: str, page: str, depth: int) -> str:
     }[page]
 
 
+GUIDE_URL = "https://desireagencyai.gumroad.com/l/blhhwg"
+JOURNAL_URL = "https://desireagencyai.gumroad.com/l/htrxgl"
+X_URL = "https://x.com/desire__agency"
+DEVTO_URL = "https://dev.to/desire_agency"
+IH_URL = "https://www.indiehackers.com/desireagency"
+NUMBERS_AS_OF = {"en": "21 Nov 2026, 19:25 Lisbon", "de": "21.11.2026, 19:25 Lissabon"}
+
+LOGO_SVG = (
+    '<svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">'
+    '<defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1">'
+    '<stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#4b3be0"/></linearGradient></defs>'
+    '<rect width="64" height="64" rx="16" fill="url(#dg)"/>'
+    '<path d="M20 16h12c10 0 16 6.5 16 16s-6 16-16 16H20V16Zm8 7v18h4c5.3 0 8-3.2 8-9s-2.7-9-8-9h-4Z" fill="#fff"/>'
+    '</svg>'
+)
+
+ICON = {
+    "x": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>',
+    "devto": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .66-.08.84-.23.2-.16.29-.4.29-.73v-2.44c0-.33-.1-.57-.29-.73ZM0 4.94v14.12h24V4.94H0Zm8.56 8.6c0 .67-.2 1.18-.62 1.53-.4.36-.98.53-1.72.53H4.71V8.4h1.56c.72 0 1.28.18 1.68.54.4.35.61.86.61 1.52v3.08Zm3.86-3.88h-1.78v1.27h1.09v1.27h-1.09v1.27h1.78v1.27H10.3c-.4 0-.74-.32-.75-.73V9.14c0-.4.32-.74.73-.75h2.14v1.27Zm3.48 4.94c-.58 1.35-1.61 1.08-2.07 0l-1.68-6.2h1.43l1.3 4.89 1.3-4.89h1.43l-1.71 6.2Z"/></svg>',
+    "ih": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="currentColor"/><path d="M7 7h2.2v10H7zM11.6 7h2.2v3.9h2.4V7h2.2v10h-2.2v-4h-2.4v4h-2.2z" fill="var(--surface)"/></svg>',
+    "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    "book": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2Z"/><path d="M8 7h8M8 11h6"/></svg>',
+    "sheet": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>',
+    "flow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="15" width="6" height="6" rx="1.5"/><rect x="15" y="3" width="6" height="6" rx="1.5"/><path d="M9 6h6M18 9v6"/></svg>',
+}
+
+CANONICAL = {
+    ("en", "home"): "/", ("en", "n8n"): "/n8n/", ("en", "templates"): "/templates/",
+    ("en", "directory"): "/directory/", ("en", "legal"): "/legal/",
+    ("de", "home"): "/de/", ("de", "n8n"): "/de/n8n/", ("de", "directory"): "/de/directory/",
+    ("de", "legal"): "/de/legal/",
+}
+
+FOOTER_TEXT = {
+    "en": {
+        "about": "An AI agent team, built in public from Lisbon. We publish the real numbers, including the zeros.",
+        "site": "Site", "products": "Products", "follow": "Follow",
+        "guide": "Agent Team Guide", "journal": "Free trading journal", "templates": "Free n8n templates",
+        "newsletter": "Newsletter",
+    },
+    "de": {
+        "about": "Ein KI-Agenten-Team, öffentlich aufgebaut in Lissabon. Wir zeigen die echten Zahlen, auch die Nullen.",
+        "site": "Seite", "products": "Produkte", "follow": "Folgen",
+        "guide": "Agent-Team-Guide (EN)", "journal": "Kostenloses Trading-Journal", "templates": "Kostenlose n8n-Vorlagen",
+        "newsletter": "Newsletter",
+    },
+}
+
+
 def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "", extra_head: str = "") -> str:
     paths = page_paths(lang, depth)
+    root = paths["css"][: -len("css/site.css")]
     nav = []
     for key, label in NAV[lang]:
+        if key == "legal":
+            continue  # legal lives in the footer
         href = paths[key]
         cur = ' aria-current="page"' if key == page else ""
         nav.append(f'<a href="{href}"{cur}>{esc(label)}</a>')
@@ -185,11 +237,30 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     other_href = lang_href(lang, page, depth)
     en_cur = ' aria-current="true"' if lang == "en" else ""
     de_cur = ' aria-current="true"' if lang == "de" else ""
-    wrap = "wrap-narrow" if page in ("n8n", "legal", "home", "templates") else "wrap"
-    # home uses wrap for facts; keep wrap-narrow for typography? I'll use wrap on home.
-    if page == "home" or page == "directory":
-        wrap = "wrap"
+    wrap = "wrap-narrow" if page in ("n8n", "legal", "templates") else "wrap"
     dir_js = f'\n<script src="{paths["js_dir"]}" defer></script>' if page == "directory" else ""
+    canon = site_url(CANONICAL[(lang, page)])
+    alt = ""
+    if page != "templates":
+        en_url = site_url(CANONICAL[("en", page)])
+        de_url = site_url(CANONICAL[("de", page)])
+        alt = (
+            f'  <link rel="alternate" hreflang="en" href="{en_url}">\n'
+            f'  <link rel="alternate" hreflang="de" href="{de_url}">\n'
+            f'  <link rel="alternate" hreflang="x-default" href="{en_url}">\n'
+        )
+    og_img = site_url("/img/og.png")
+    # Binary assets are added separately; only reference them once they exist in the repo.
+    og_tags = tw_img = png_icons = ""
+    if (ROOT / "img" / "og.png").exists():
+        og_tags = (f'  <meta property="og:image" content="{og_img}">\n'
+                   '  <meta property="og:image:width" content="1200">\n'
+                   '  <meta property="og:image:height" content="630">\n')
+        tw_img = f'  <meta name="twitter:image" content="{og_img}">\n'
+    if (ROOT / "apple-touch-icon.png").exists():
+        png_icons = f'  <link rel="apple-touch-icon" href="{root}apple-touch-icon.png">\n'
+    f = FOOTER_TEXT[lang]
+    sub_label = SUBSCRIBE_LABEL[lang]
     return f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head>
@@ -198,27 +269,46 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <meta name="robots" content="index, follow">
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
+  <link rel="canonical" href="{canon}">
+{alt}  <meta name="theme-color" content="#0c0d12">
+  <link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
+{png_icons}  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Desire Agency">
+  <meta property="og:title" content="{esc(title)}">
+  <meta property="og:description" content="{esc(description)}">
+  <meta property="og:url" content="{canon}">
+{og_tags}  <meta property="og:locale" content="{"en_US" if lang == "en" else "de_DE"}">
+  <meta name="twitter:card" content="{"summary_large_image" if og_tags else "summary"}">
+  <meta name="twitter:site" content="@desire__agency">
+  <meta name="twitter:title" content="{esc(title)}">
+  <meta name="twitter:description" content="{esc(description)}">
+{tw_img}  <link rel="stylesheet" href="{root}fonts/inter.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{root}fonts/inter.css"></noscript>
   <link rel="stylesheet" href="{paths['css']}">
 {extra_head}</head>
 <body>
   <a class="skip" href="#content">{"Skip to content" if lang == "en" else "Zum Inhalt"}</a>
   <header class="site-header">
-    <div class="header-inner {wrap}">
-      <a class="brand" href="{paths['home']}">
-        <span class="brand-name">Desire Studio</span>
-        <span class="brand-tag">{"Automation tools, sourced" if lang == "en" else "Automatisierungs-Tools, mit Quellen"}</span>
+    <div class="header-inner wrap">
+      <a class="brand" href="{paths['home']}" aria-label="Desire Agency — {"home" if lang == "en" else "Start"}">
+        {LOGO_SVG}
+        <span class="brand-text">
+          <span class="brand-name">Desire Agency</span>
+          <span class="brand-tag">{"An AI agent team, built in public" if lang == "en" else "KI-Agenten-Team, öffentlich gebaut"}</span>
+        </span>
       </a>
       <nav aria-label="{"Main" if lang == "en" else "Hauptnavigation"}">
         {''.join(nav)}
+        <a class="btn btn-primary btn-sm nav-cta" href="{esc(SUBSCRIBE_URL)}">{esc(sub_label)}</a>
         <span class="lang" aria-label="Language">
-          <a href="{other_href if lang == "de" else "#"}"{en_cur}>EN</a>
-          <a href="{other_href if lang == "en" else "#"}"{de_cur}>DE</a>
+          <a href="{other_href if lang == "de" else "#"}"{en_cur} hreflang="en">EN</a>
+          <a href="{other_href if lang == "en" else "#"}"{de_cur} hreflang="de">DE</a>
         </span>
       </nav>
     </div>
   </header>
   <div class="ad-banner">
-    <div class="{wrap}">{BANNER[lang]}</div>
+    <div class="wrap">{BANNER[lang]}</div>
   </div>
   <main id="content">
     <div class="{wrap}">
@@ -226,13 +316,50 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     </div>
   </main>
   <footer class="site-footer">
-    <div class="{wrap}">
-      <p>{esc(FOOT[lang])}</p>
-      <p>
-        <a href="{paths['legal']}">{"Legal notice / Impressum" if lang == "en" else "Impressum / Kontakt"}</a>
-        · <a href="{esc(SUBSCRIBE_URL)}">{esc(SUBSCRIBE_LABEL[lang])}</a>
-        · <a href="{other_href}">{other}</a>
-      </p>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="{paths['home']}">{LOGO_SVG}<span class="brand-text"><span class="brand-name">Desire Agency</span></span></a>
+          <p>{esc(f["about"])}</p>
+          <div class="socials">
+            <a href="{X_URL}" rel="me noopener" aria-label="X (@desire__agency)">{ICON["x"]}</a>
+            <a href="{DEVTO_URL}" rel="me noopener" aria-label="dev.to">{ICON["devto"]}</a>
+            <a href="{IH_URL}" rel="me noopener" aria-label="Indie Hackers">{ICON["ih"]}</a>
+            <a href="{esc(SUBSCRIBE_URL)}" rel="noopener" aria-label="{esc(f["newsletter"])}">{ICON["mail"]}</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>{esc(f["site"])}</h3>
+          <ul>
+            <li><a href="{paths['home']}">{esc(NAV[lang][0][1])}</a></li>
+            <li><a href="{paths['n8n']}">{esc(NAV[lang][1][1])}</a></li>
+            <li><a href="{paths['directory']}">{esc(NAV[lang][3][1])}</a></li>
+            <li><a href="{paths['legal']}">{"Legal notice / Impressum" if lang == "en" else "Impressum / Kontakt"}</a></li>
+            <li><a href="{other_href}">{other}</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>{esc(f["products"])}</h3>
+          <ul>
+            <li><a href="{GUIDE_URL}" rel="noopener">{esc(f["guide"])}</a></li>
+            <li><a href="{JOURNAL_URL}" rel="noopener">{esc(f["journal"])}</a></li>
+            <li><a href="{paths['templates']}">{esc(f["templates"])}</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>{esc(f["follow"])}</h3>
+          <ul>
+            <li><a href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(f["newsletter"])}</a></li>
+            <li><a href="{X_URL}" rel="me noopener">X · @desire__agency</a></li>
+            <li><a href="{DEVTO_URL}" rel="me noopener">dev.to</a></li>
+            <li><a href="{IH_URL}" rel="me noopener">Indie Hackers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>{esc(FOOT[lang])}</p>
+        <p>© 2026 Desire Agency · Lisboa · {"No cookies, no tracking." if lang == "en" else "Keine Cookies, kein Tracking."}</p>
+      </div>
     </div>
   </footer>
   <script src="{paths['config']}"></script>
@@ -248,12 +375,80 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 
 HOME = {
     "en": {
-        "title": "Why we recommend n8n — Desire Studio",
-        "description": "An honest, sourced recommendation of n8n, and a directory of 19 automation and AI-agent tools. Prices checked 18 November 2026.",
-        "h1": "Why we recommend n8n",
-        "lede": "And when Make is still a fair fit. An honest, sourced guide to automation and agent workflows. No earnings promises. Sources checked on 18 November 2026.",
+        "title": "Desire Agency — an AI agent team, built in public",
+        "description": "One person and a team of AI agents, built in public from Lisbon. Real numbers including the zeros, free n8n templates, a sourced tool directory and an honest guide.",
+        "eyebrow": "Building in public from Lisbon",
+        "h1_a": "One person. A team of AI agents.",
+        "h1_b": "Every number in public.",
+        "lede": "We are building an autonomous AI agent team and writing down what actually happens: what ships, what breaks, and what it earns. Right now that is €0, and we say so.",
+        "cta_news": "Get the build log",
+        "cta_guide": "Read the guide — $19",
+        "link_tpl": "Free n8n templates",
+        "link_journal": "Free trading journal",
+        "link_n8n": "Why we recommend n8n",
+        "hero_note": "No earnings promises. Not financial advice.",
+        "ledger_title": "Ledger",
+        "ledger": [
+            ("Real revenue", "€0.00", ""),
+            ("Sales so far", "0", ""),
+            ("Server cost", "€6.14 / mo", ""),
+            ("Paper-trading P&amp;L (simulated)", "−$53.68", "neg"),
+        ],
+        "ledger_foot": "Paper trading uses simulated money only. It is not income.",
+        "bip_kicker": "Build in public",
+        "bip_title": "The honest numbers",
+        "bip_text": "No vanity metrics and no testimonials we don’t have. These are the figures from our own logs.",
+        "stats": [
+            ("11", "AI agents", "10 specialist bots and one chief of staff, coordinated by one person."),
+            ("83", "Closed paper trades", "Across four paper-trading desks. Closed P&amp;L −$53.68, simulated money."),
+            ("3", "Free n8n templates", "Importable workflow.json files with placeholder credentials."),
+            (str(N_TOOLS), "Tools sourced", f"Automation and AI-agent tools, prices from official pages ({PRUEF_EN})."),
+        ],
+        "shipped_title": "Shipped recently",
+        "shipped": [
+            ("20 Nov", "Three free n8n templates and the newsletter sign-up."),
+            ("21 Nov", "The Agent Team Guide on Gumroad and newsletter issue #1."),
+            ("21 Nov", "A free trading journal and risk sheet."),
+            ("21 Nov", "Profiles on dev.to and Indie Hackers."),
+        ],
+        "rules_title": "House rules",
+        "rules": [
+            "Real numbers only, including the zeros.",
+            "No earnings promises, no coin tips, no financial advice.",
+            "Affiliate links, if any, are labelled #ad / Anzeige.",
+            "This site sets no cookies and runs no tracking.",
+        ],
+        "prod_kicker": "Products",
+        "prod_title": "Start here",
+        "prod_text": "One paid guide, two free resources. All of them come out of what we actually run.",
+        "products": [
+            {
+                "icon": "book", "pill": "Guide", "featured": True,
+                "title": "How I Built a Self-Improving AI Agent Team",
+                "text": "A field report, not a demo: how one person works with ten AI agents, what each one does, and what went wrong.",
+                "price": "$19", "price_sub": "$9 with code <code>EARLYBIRD</code>",
+                "cta": "Get the guide", "url": GUIDE_URL,
+            },
+            {
+                "icon": "sheet", "pill": "Free", "featured": False,
+                "title": "Trading Journal + Risk Sheet",
+                "text": "Log every closed trade and check whether you follow your own rules. Sizes positions from your stop and risk per trade. Excel and Google Sheets.",
+                "price": "$0", "price_sub": "Free download on Gumroad",
+                "cta": "Get the journal", "url": JOURNAL_URL,
+            },
+            {
+                "icon": "flow", "pill": "Free", "featured": False,
+                "title": "Three n8n templates",
+                "text": "A daily RSS digest, a form that writes to Google Sheets, and an uptime check that retries once after 60 seconds before alerting.",
+                "price": "$0", "price_sub": "workflow.json, placeholder credentials",
+                "cta": "Open the templates", "url": "@templates",
+            },
+        ],
+        "n8n_kicker": "Tools we use",
+        "n8n_title": "Why we recommend n8n",
+        "n8n_text": "And when Make is still a fair fit. An honest, sourced guide to automation and agent workflows. Sources checked on 18 November 2026.",
         "cta1": "Read the recommendation",
-        "cta2": "Browse 19 tools",
+        "cta2": f"Browse {N_TOOLS} tools",
         "cta_n8n": "See n8n",
         "facts_title": "What the official pages said on 18 November 2026",
         "facts": [
@@ -268,17 +463,83 @@ HOME = {
         "news_title": "The build log",
         "news_text": "A short, free newsletter from Desire Agency about what we are actually building — including these templates, the site, and the rest of the system. No earnings promises. Our own revenue so far: €0.",
         "news_cta": "Get the build log",
-        "tpl_title": "Free n8n templates",
-        "tpl_text": "Three small, free n8n workflows you can import and adapt: a daily RSS digest, a form that writes to Google Sheets, and a simple uptime check. Credentials in the files are placeholders.",
-        "tpl_cta": "Open the templates",
+        "follow_text": "Or follow along:",
     },
     "de": {
-        "title": "Warum wir n8n empfehlen — Desire Studio",
-        "description": "Eine ehrliche, quellenbelegte Empfehlung für n8n und ein Verzeichnis mit 19 Automatisierungs- und KI-Agenten-Tools. Preise geprüft am 18.11.2026.",
-        "h1": "Warum wir n8n empfehlen",
-        "lede": "Und wann Make trotzdem passt. Ein ehrlicher, quellenbelegter Text zu Automatisierung und Agenten-Workflows. Kein Gewinnversprechen. Quellenstand: 18.11.2026.",
+        "title": "Desire Agency — ein KI-Agenten-Team, öffentlich gebaut",
+        "description": "Eine Person und ein Team aus KI-Agenten, öffentlich aufgebaut in Lissabon. Echte Zahlen inklusive der Nullen, kostenlose n8n-Vorlagen, ein Tool-Verzeichnis mit Quellen und ein ehrlicher Guide.",
+        "eyebrow": "Öffentlich gebaut in Lissabon",
+        "h1_a": "Eine Person. Ein Team aus KI-Agenten.",
+        "h1_b": "Jede Zahl öffentlich.",
+        "lede": "Wir bauen ein autonomes KI-Agenten-Team und schreiben auf, was wirklich passiert: was live geht, was kaputtgeht und was es einbringt. Im Moment sind das 0 €, und das sagen wir auch.",
+        "cta_news": "Build-Log abonnieren",
+        "cta_guide": "Zum Guide — 19 $",
+        "link_tpl": "Kostenlose n8n-Vorlagen",
+        "link_journal": "Kostenloses Trading-Journal",
+        "link_n8n": "Warum wir n8n empfehlen",
+        "hero_note": "Kein Gewinnversprechen. Keine Finanzberatung.",
+        "ledger_title": "Kassenbuch",
+        "ledger": [
+            ("Echter Ertrag", "0,00 €", ""),
+            ("Verkäufe bisher", "0", ""),
+            ("Serverkosten", "6,14 € / Monat", ""),
+            ("Papier-Trading (simuliert)", "−53,68 $", "neg"),
+        ],
+        "ledger_foot": "Papier-Trading nutzt nur Spielgeld. Es ist kein Einkommen.",
+        "bip_kicker": "Build in Public",
+        "bip_title": "Die ehrlichen Zahlen",
+        "bip_text": "Keine Schönwetter-Kennzahlen und keine Kundenstimmen, die wir nicht haben. Das sind die Werte aus unseren eigenen Logs.",
+        "stats": [
+            ("11", "KI-Agenten", "10 spezialisierte Bots und ein Chief of Staff, koordiniert von einer Person."),
+            ("83", "Geschlossene Papier-Trades", "Auf vier Papier-Desks. Ergebnis −53,68 $, nur Spielgeld."),
+            ("3", "Kostenlose n8n-Vorlagen", "Importierbare workflow.json-Dateien mit Platzhaltern für Zugangsdaten."),
+            (str(N_TOOLS), "Tools mit Quellen", f"Automatisierungs- und KI-Agenten-Tools, Preise von offiziellen Seiten ({PRUEF})."),
+        ],
+        "shipped_title": "Zuletzt veröffentlicht",
+        "shipped": [
+            ("20.11.", "Drei kostenlose n8n-Vorlagen und die Newsletter-Anmeldung."),
+            ("21.11.", "Der Agent-Team-Guide auf Gumroad und Newsletter-Ausgabe #1."),
+            ("21.11.", "Ein kostenloses Trading-Journal mit Risiko-Rechner."),
+            ("21.11.", "Profile auf dev.to und Indie Hackers."),
+        ],
+        "rules_title": "Unsere Regeln",
+        "rules": [
+            "Nur echte Zahlen, auch die Nullen.",
+            "Kein Gewinnversprechen, keine Coin-Tipps, keine Finanzberatung.",
+            "Affiliate-Links, falls es welche gibt, sind als #ad / Anzeige markiert.",
+            "Diese Seite setzt keine Cookies und hat kein Tracking.",
+        ],
+        "prod_kicker": "Produkte",
+        "prod_title": "Hier anfangen",
+        "prod_text": "Ein bezahlter Guide, zwei kostenlose Ressourcen. Alles stammt aus dem, was wir selbst betreiben.",
+        "products": [
+            {
+                "icon": "book", "pill": "Guide · EN", "featured": True,
+                "title": "How I Built a Self-Improving AI Agent Team",
+                "text": "Ein Praxisbericht statt einer Demo: wie eine Person mit zehn KI-Agenten arbeitet, was jeder davon macht und was schiefging. Auf Englisch.",
+                "price": "19 $", "price_sub": "9 $ mit Code <code>EARLYBIRD</code>",
+                "cta": "Zum Guide", "url": GUIDE_URL,
+            },
+            {
+                "icon": "sheet", "pill": "Kostenlos", "featured": False,
+                "title": "Trading-Journal + Risiko-Sheet",
+                "text": "Jeden geschlossenen Trade festhalten und prüfen, ob du deine eigenen Regeln einhältst. Berechnet die Positionsgröße aus Stop und Risiko. Für Excel und Google Sheets.",
+                "price": "0 $", "price_sub": "Kostenlos auf Gumroad",
+                "cta": "Zum Journal", "url": JOURNAL_URL,
+            },
+            {
+                "icon": "flow", "pill": "Kostenlos", "featured": False,
+                "title": "Drei n8n-Vorlagen",
+                "text": "Ein täglicher RSS-Digest, ein Formular in Google Sheets und eine Erreichbarkeitsprüfung, die nach 60 Sekunden einmal erneut prüft, bevor sie alarmiert. Seite auf Englisch.",
+                "price": "0 $", "price_sub": "workflow.json, nur Platzhalter",
+                "cta": "Zu den Vorlagen", "url": "@templates",
+            },
+        ],
+        "n8n_kicker": "Tools, die wir nutzen",
+        "n8n_title": "Warum wir n8n empfehlen",
+        "n8n_text": "Und wann Make trotzdem passt. Ein ehrlicher, quellenbelegter Text zu Automatisierung und Agenten-Workflows. Quellenstand: 18.11.2026.",
         "cta1": "Empfehlung lesen",
-        "cta2": "19 Tools ansehen",
+        "cta2": f"{N_TOOLS} Tools ansehen",
         "cta_n8n": "n8n ansehen",
         "facts_title": "Was die offiziellen Seiten am 18.11.2026 sagten",
         "facts": [
@@ -293,49 +554,140 @@ HOME = {
         "news_title": "Das Build-Log",
         "news_text": "Ein kurzer, kostenloser Newsletter von Desire Agency über das, was wir tatsächlich bauen — Vorlagen, die Website und den Rest des Systems. Kein Gewinnversprechen. Unser eigener Ertrag bisher: 0 €.",
         "news_cta": "Build-Log abonnieren",
-        "tpl_title": "Kostenlose n8n-Vorlagen",
-        "tpl_text": "Drei kleine, kostenlose n8n-Workflows zum Importieren: ein täglicher RSS-Digest, ein Formular in Google Sheets und eine einfache Erreichbarkeitsprüfung. Die Dateien enthalten nur Platzhalter für Zugangsdaten. Die Seite ist auf Englisch.",
-        "tpl_cta": "Zu den Vorlagen",
+        "follow_text": "Oder folge uns:",
     },
 }
 
 
 def home_body(lang: str, paths: dict) -> str:
     t = HOME[lang]
+    ledger = "\n".join(
+        f'<div class="ledger-row"><span>{label}</span><b class="{cls}">{val}</b></div>'
+        for label, val, cls in t["ledger"]
+    )
+    stats = "\n".join(
+        f'<div class="stat"><div class="value">{esc(v)}</div><div class="label">{lab}</div><div class="sub">{sub}</div></div>'
+        for v, lab, sub in t["stats"]
+    )
+    shipped = "\n".join(
+        f'<div class="ledger-row" style="border-color:var(--line);color:var(--muted)"><span style="color:var(--ink-2)">{esc(txt)}</span><b style="color:var(--muted);font-size:.82rem">{esc(d)}</b></div>'
+        for d, txt in t["shipped"]
+    )
+    rules = "\n".join(f"<li>{esc(r)}</li>" for r in t["rules"])
+    cards = []
+    for p in t["products"]:
+        url = paths["templates"] if p["url"] == "@templates" else p["url"]
+        ext = ' rel="noopener"' if url.startswith("http") else ""
+        pill_cls = "pill" if p["featured"] else "pill pill-free"
+        btn_cls = "btn btn-primary" if p["featured"] else "btn btn-ghost"
+        cards.append(f"""
+          <article class="product{" is-featured" if p["featured"] else ""}">
+            <div class="product-icon">{ICON[p["icon"]]}</div>
+            <span class="{pill_cls}">{esc(p["pill"])}</span>
+            <h3>{esc(p["title"])}</h3>
+            <p>{esc(p["text"])}</p>
+            <div class="price-line"><span class="price-big">{esc(p["price"])}</span><span class="price-sub">{p["price_sub"]}</span></div>
+            <div class="actions"><a class="{btn_cls}" href="{url}"{ext}>{esc(p["cta"])} <span class="arrow" aria-hidden="true">→</span></a></div>
+          </article>""")
     facts = "\n".join(
         f'<article class="fact"><h3>{esc(h)}</h3><p>{esc(p)}</p></article>'
         for h, p in t["facts"]
     )
     return f"""
-      <section class="hero">
-        <h1>{esc(t["h1"])}</h1>
-        <p class="lede">{esc(t["lede"])}</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="{paths["n8n"]}">{esc(t["cta1"])}</a>
-          <a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["cta2"])}</a>
-          <a class="btn btn-ad" data-aff="n8n" href="https://n8n.io/">{esc(t["cta_n8n"])}</a>
+      <section class="home-hero">
+        <div>
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>{esc(t["eyebrow"])}</p>
+          <h1>{esc(t["h1_a"])} <span class="grad">{esc(t["h1_b"])}</span></h1>
+          <p class="lede">{esc(t["lede"])}</p>
+          <div class="actions">
+            <a class="btn btn-light" href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(t["cta_news"])} <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-outline-light" href="{GUIDE_URL}" rel="noopener">{esc(t["cta_guide"])}</a>
+          </div>
+          <div class="hero-links">
+            <a href="{paths["templates"]}">{esc(t["link_tpl"])}</a>
+            <a href="{JOURNAL_URL}" rel="noopener">{esc(t["link_journal"])}</a>
+            <a href="{paths["n8n"]}">{esc(t["link_n8n"])}</a>
+          </div>
+          <p class="hero-note">{esc(t["hero_note"])}</p>
         </div>
-        <p class="aff-state" data-aff-state="n8n"></p>
+        <aside class="ledger" aria-label="{esc(t["ledger_title"])}">
+          <div class="ledger-head"><strong>{esc(t["ledger_title"])}</strong><span>{esc(NUMBERS_AS_OF[lang])}</span></div>
+          {ledger}
+          <p class="ledger-foot">{esc(t["ledger_foot"])}</p>
+        </aside>
       </section>
-      <section class="section">
-        <h2>{esc(t["facts_title"])}</h2>
+
+      <section class="section" id="build-in-public">
+        <div class="section-head">
+          <div>
+            <p class="kicker">{esc(t["bip_kicker"])}</p>
+            <h2>{esc(t["bip_title"])}</h2>
+            <p>{esc(t["bip_text"])}</p>
+          </div>
+          <p class="note" style="margin:0">{esc(NUMBERS_AS_OF[lang])}</p>
+        </div>
+        <div class="stats">
+          {stats}
+        </div>
+        <div class="split" style="margin-top:1.1rem">
+          <div class="panel">
+            <h3>{esc(t["shipped_title"])}</h3>
+            {shipped}
+          </div>
+          <div class="panel">
+            <h3>{esc(t["rules_title"])}</h3>
+            <ul style="margin:.4rem 0 0;padding-left:1.15rem;color:var(--ink-2);line-height:1.9">{rules}</ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="products">
+        <div class="section-head">
+          <div>
+            <p class="kicker">{esc(t["prod_kicker"])}</p>
+            <h2>{esc(t["prod_title"])}</h2>
+            <p>{esc(t["prod_text"])}</p>
+          </div>
+        </div>
+        <div class="products">{''.join(cards)}
+        </div>
+      </section>
+
+      <section class="section" id="n8n">
+        <div class="section-head">
+          <div>
+            <p class="kicker">{esc(t["n8n_kicker"])}</p>
+            <h2>{esc(t["n8n_title"])}</h2>
+            <p>{esc(t["n8n_text"])}</p>
+          </div>
+          <div class="actions" style="margin:0">
+            <a class="btn btn-ghost" href="{paths["n8n"]}">{esc(t["cta1"])}</a>
+            <a class="btn btn-ad" data-aff="n8n" href="https://n8n.io/">{esc(t["cta_n8n"])}</a>
+          </div>
+        </div>
+        <p class="kicker" style="margin-top:.4rem">{esc(t["facts_title"])}</p>
         <div class="facts">{facts}</div>
-      </section>
-      <section class="section">
-        <h2>{esc(t["dir_title"])}</h2>
-        <p>{esc(t["dir_text"])}</p>
-        <div class="actions"><a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["dir_cta"])}</a></div>
+        <p class="aff-state" data-aff-state="n8n"></p>
+        <div class="panel" style="margin-top:1.1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+          <div style="max-width:44rem">
+            <h3>{esc(t["dir_title"])}</h3>
+            <p>{esc(t["dir_text"])}</p>
+          </div>
+          <a class="btn btn-ghost" href="{paths["directory"]}">{esc(t["cta2"])} <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
         <p class="note">{esc(t["rev"])}</p>
       </section>
+
       <section class="section">
-        <h2>{esc(t["tpl_title"])}</h2>
-        <p>{esc(t["tpl_text"])}</p>
-        <div class="actions"><a class="btn btn-ghost" href="{paths["templates"]}">{esc(t["tpl_cta"])}</a></div>
-      </section>
-      <section class="section">
-        <h2>{esc(t["news_title"])}</h2>
-        <p>{esc(t["news_text"])}</p>
-        <div class="actions"><a class="btn btn-primary" href="{esc(SUBSCRIBE_URL)}">{esc(t["news_cta"])}</a></div>
+        <div class="cta-band">
+          <div>
+            <h2>{esc(t["news_title"])}</h2>
+            <p>{esc(t["news_text"])}</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-light" href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(t["news_cta"])} <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
       </section>
 """
 
@@ -743,8 +1095,8 @@ def directory_body(lang: str) -> str:
 
 LEGAL = {
     "en": {
-        "title": "Legal notice / Impressum — Desire Studio",
-        "description": "Legal notice and contact details for Desire Studio.",
+        "title": "Legal notice / Impressum — Desire Agency",
+        "description": "Legal notice and contact details for Desire Agency.",
         "h1": "Legal notice / Impressum",
         "lead": "Operator information for this website.",
         "fields": [
@@ -770,8 +1122,8 @@ LEGAL = {
         ),
     },
     "de": {
-        "title": "Impressum / Kontakt — Desire Studio",
-        "description": "Impressum und Kontaktdaten von Desire Studio.",
+        "title": "Impressum / Kontakt — Desire Agency",
+        "description": "Impressum und Kontaktdaten von Desire Agency.",
         "h1": "Impressum / Kontakt",
         "lead": "Anbieterinformationen für diese Website.",
         "fields": [
@@ -809,6 +1161,7 @@ def legal_body(lang: str) -> str:
     t = LEGAL[lang]
     fields = "".join(_legal_field(k, v) for k, v in t["fields"])
     return f"""
+      <div class="legal">
       <h1 class="page-title">{esc(t["h1"])}</h1>
       <p class="lede">{esc(t["lead"])}</p>
       <dl class="placeholder-box">{fields}</dl>
@@ -816,11 +1169,12 @@ def legal_body(lang: str) -> str:
       <p>{esc(t["ad"])}</p>
       <h2>{"Privacy" if lang == "en" else "Datenschutz"}</h2>
       <p>{esc(t["privacy"])}</p>
+      </div>
 """
 
 
 TEMPLATES_PAGE = {
-    "title": "Free n8n templates — Desire Studio",
+    "title": "Free n8n templates — Desire Agency",
     "description": "Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.",
 }
 
@@ -868,19 +1222,21 @@ TEMPLATES = [
     {
         "id": "website-uptime-check-alert",
         "title": "Website uptime check to alert",
-        "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.",
+        "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it waits 60 seconds and requests the URL again. An alert email is sent only if the second check also fails. A successful 200 on either check does not send mail.",
         "file": "website-uptime-check-alert/workflow.json",
         "steps": [
             "In n8n: … → Import from File and choose workflow.json.",
-            "Open Request website and replace https://example.com/ with the URL to check. Also replace that URL in the subject and body of Send down alert.",
+            "Open Request website and Retry request website and replace https://example.com/ with the URL to check in both nodes. Also replace that URL in the subject and body of Send down alert.",
             "Create an SMTP credential in n8n, attach it to Send down alert (remove the placeholder), and set From and To.",
-            "Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If condition if you want to accept other 2xx codes.",
-            "Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the alert, then point it at the real URL and Activate.",
+            "The default retry wait is 60 seconds. To change it, open the Wait 60 seconds node and edit Amount and Unit.",
+            "Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If conditions if you want to accept other 2xx codes.",
+            "Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the wait and the alert, then point it at the real URL and Activate.",
         ],
         "notes": [
-            "The HTTP node uses “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.",
+            "After the first failed check, the workflow waits 60 seconds and requests the URL again. The alert is sent only if that second check also fails (status other than 200, or a missing status).",
+            "The HTTP nodes use “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.",
             "This is a simple local check, not a hosted monitoring service. It will not run while n8n is stopped, and it does not measure uptime percentages.",
-            "Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Send Email.",
+            "Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Wait, Send Email.",
         ],
         "credentials": "SMTP account (placeholder)",
     },
@@ -900,7 +1256,7 @@ def templates_body() -> str:
         steps = "\n".join(f"          <li>{esc(s)}</li>" for s in t["steps"])
         notes = "\n".join(f"          <li>{esc(n)}</li>" for n in t["notes"])
         parts.append(f"""
-        <section class="section" id="{esc(t['id'])}">
+        <section class="section tpl-card" id="{esc(t['id'])}">
           <h2>{esc(t['title'])}</h2>
           <p>{esc(t['summary'])}</p>
           <div class="actions">
@@ -943,19 +1299,23 @@ def not_found() -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Page not found — Desire Studio</title>
-  <link rel="stylesheet" href="css/site.css">
+  <title>Page not found — Desire Agency</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
-  <main class="wrap-narrow" style="padding:3rem 0">
+  <main class="wrap-narrow nf">
+    <div class="code">404</div>
     <h1>Page not found</h1>
-    <p>This URL is not part of the site. / Diese Adresse gehört nicht zur Seite.</p>
-    <p><a href="./">Home (English)</a> · <a href="./de/">Start (Deutsch)</a></p>
+    <p class="lede" style="margin-left:auto;margin-right:auto">This URL is not part of the site. / Diese Adresse gehört nicht zur Seite.</p>
+    <div class="actions" style="justify-content:center">
+      <a class="btn btn-primary" href="/">Home (English)</a>
+      <a class="btn btn-ghost" href="/de/">Start (Deutsch)</a>
+    </div>
   </main>
 </body>
 </html>
 """
-
 
 
 SITE_URL = "https://maximussoroka.github.io"
@@ -1040,7 +1400,7 @@ def public_tools_payload() -> dict:
             entry["programme_url"] = raw["affiliate_quelle"]
         tools.append(entry)
     return {
-        "name": "Desire Studio tool directory",
+        "name": "Desire Agency tool directory",
         "url": site_url("/directory/"),
         "url_de": site_url("/de/directory/"),
         "checked_on": TOOLS["pruefdatum"],
@@ -1096,7 +1456,7 @@ def write_public_tools_json() -> None:
 
 
 def write_llms_txt() -> None:
-    text_out = f"""# Desire Studio
+    text_out = f"""# Desire Agency
 
 > An honest, sourced recommendation of n8n, plus a directory of {N_TOOLS} automation and AI-agent tools. English is primary; German is under /de/.
 
@@ -1104,18 +1464,20 @@ Live site: {SITE_URL}/
 Operator: Saveliy Soroka, Lisboa. Contact: desire.studio.agency@gmail.com (see /legal/).
 Prices and programme terms: official public vendor pages, checked on {PRUEF_EN} ({TOOLS["timezone_pruefung"]}).
 Own revenue so far: €0. No earnings promises. Not financial advice.
+Products: Agent Team Guide ({GUIDE_URL}, $19), free Trading Journal + Risk Sheet ({JOURNAL_URL}).
+Elsewhere: X {X_URL} · dev.to {DEVTO_URL} · Indie Hackers {IH_URL}.
 There are no active affiliate links. Future affiliate links, if any, will be labelled #ad / Anzeige.
 This is a static site with no cookies, tracking or analytics.
 
 ## Pages
 
-- [Home (English)]({SITE_URL}/): Why we recommend n8n, and when Make may still be a fair fit. Sourced cloud-pricing facts as of {PRUEF_EN}.
+- [Home (English)]({SITE_URL}/): Desire Agency, an AI agent team built in public from Lisbon. Real numbers including the zeros (revenue so far €0), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of {PRUEF_EN}.
 - [Home (German)]({SITE_URL}/de/): The same start page in German.
 - [n8n recommendation (English)]({SITE_URL}/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site; the n8n partner application was declined on 19 November 2026.
 - [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
 - [Tool directory (English)]({SITE_URL}/directory/): {N_TOOLS} sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)]({SITE_URL}/de/directory/): The same directory in German, with the same JSON-LD in German wording.
-- [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
+- [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.

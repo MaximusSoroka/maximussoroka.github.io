@@ -1,4 +1,4 @@
-# Desire Studio
+# Desire Agency
 
 Static website: an honest, sourced recommendation of n8n, plus a directory of 19 automation and AI-agent tools. English is primary; German lives under `/de/`.
 
