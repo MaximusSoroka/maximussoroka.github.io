@@ -303,6 +303,7 @@
     if (reduce) return;
     // per-word reveal
     $all(".home-hero h1, .hero h1").forEach(function (h) {
+      if (h.classList.contains("wsplit")) return;
       var i = 0;
       Array.prototype.slice.call(h.childNodes).forEach(function (n) {
         if (n.nodeType === 3) {

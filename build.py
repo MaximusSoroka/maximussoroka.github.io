@@ -228,6 +228,34 @@ FOOTER_TEXT = {
 }
 
 
+def split_h1(doc: str) -> str:
+    """Pre-split h1 words into spans at build time (no DOM mutation -> no layout shift)."""
+    import re as _re
+    def fix(m):
+        attrs, inner = m.group(1), m.group(2)
+        parts = _re.split(r"(<[^>]+>[^<]*</[^>]+>)", inner)
+        out, i = [], 0
+        for part in parts:
+            if part.startswith("<"):
+                out.append(part.replace("<span ", f'<span style="--gd:{i * 45 + 120}ms" ', 1) if part.startswith("<span ") else part)
+                i += 2
+                continue
+            for tok in _re.split(r"(\s+)", part):
+                if not tok:
+                    continue
+                if tok.isspace():
+                    out.append(tok)
+                else:
+                    out.append(f'<span class="w" style="--i:{i}">{tok}</span>')
+                    i += 1
+        if 'class="' in attrs:
+            attrs = attrs.replace('class="', 'class="wsplit ', 1)
+        else:
+            attrs += ' class="wsplit"'
+        return f"<h1{attrs}>{''.join(out)}</h1>"
+    return _re.sub(r"<h1([^>]*)>(.*?)</h1>", fix, doc, count=1, flags=_re.S)
+
+
 def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "", extra_head: str = "") -> str:
     paths = page_paths(lang, depth)
     root = paths["css"][: -len("css/site.css")]
@@ -1908,7 +1936,7 @@ def build() -> None:
         else:
             body = body_fn(lang)
         extra_head = directory_jsonld(lang) if page == "directory" else ""
-        html_out = shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head)
+        html_out = split_h1(shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head))
         write(path, html_out)
     write(ROOT / "404.html", not_found())
     write_public_tools_json()
