@@ -885,6 +885,7 @@ def websites_body(lang: str) -> str:
         <p class="lede">{esc(t["lede"])}</p>
         <p class="notice notice-info" role="note">{esc(t["status"])}</p>
       </header>
+      <h2 class="visually-hidden">{"Pakete" if lang == "de" else "Packages"}</h2>
       <div class="products products-4">{''.join(cards)}
       </div>
       <p class="note">{esc(t["vat"])} {esc(t["time_note"])}</p>
