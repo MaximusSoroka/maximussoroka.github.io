@@ -30,7 +30,9 @@
         var r = btn.getBoundingClientRect();
         var x = r.left + r.width / 2, y = r.top + r.height / 2;
         var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        root.classList.add("vt-theme");
         var vt = doc.startViewTransition(apply);
+        vt.finished.then(function () { root.classList.remove("vt-theme"); }, function () { root.classList.remove("vt-theme"); });
         vt.ready.then(function () {
           root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + end + "px at " + x + "px " + y + "px)"] },
             { duration: 550, easing: "cubic-bezier(.4,0,.2,1)", pseudoElement: "::view-transition-new(root)" });
@@ -288,4 +290,80 @@
     });
     count();
   }
+
+  /* ---------- Round 3: aurora, word reveal, magnetic, tilt, marquee, parallax ---------- */
+  (function () {
+    var hero = doc.querySelector(".home-hero");
+    if (hero) {
+      var au = doc.createElement("div");
+      au.className = "aurora"; au.setAttribute("aria-hidden", "true");
+      au.innerHTML = "<i></i><i></i><i></i>";
+      hero.insertBefore(au, hero.firstChild);
+    }
+    if (reduce) return;
+    // per-word reveal
+    $all(".home-hero h1, .hero h1").forEach(function (h) {
+      var i = 0;
+      Array.prototype.slice.call(h.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = doc.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(doc.createTextNode(part)); return; }
+            var s = doc.createElement("span"); s.className = "w"; s.style.setProperty("--i", i++); s.textContent = part;
+            frag.appendChild(s);
+          });
+          h.replaceChild(frag, n);
+        } else if (n.nodeType === 1) {
+          n.style.setProperty("--gd", (i * 45 + 120) + "ms"); i += 2;
+        }
+      });
+      h.classList.add("split");
+    });
+    // marquee for the stack
+    $all(".stack").forEach(function (ul) {
+      var wrap = doc.createElement("div"); wrap.className = "marquee-wrap";
+      ul.parentNode.insertBefore(wrap, ul); wrap.appendChild(ul);
+      $all(".stack-item", ul).forEach(function (li) {
+        var c = li.cloneNode(true); c.setAttribute("aria-hidden", "true"); ul.appendChild(c);
+      });
+      ul.classList.add("marquee");
+    });
+    if (fine) {
+      // magnetic buttons
+      $all(".btn-primary, .btn-light, .btn-ad, .nav-cta, .btn-outline-light").forEach(function (b) {
+        b.classList.add("mag");
+        b.addEventListener("pointermove", function (e) {
+          var r = b.getBoundingClientRect();
+          b.style.setProperty("--bx", ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + "px");
+          b.style.setProperty("--by", ((e.clientY - r.top - r.height / 2) * .3 - 1).toFixed(1) + "px");
+        });
+        b.addEventListener("pointerleave", function () { b.style.removeProperty("--bx"); b.style.removeProperty("--by"); });
+      });
+      // tilt cards
+      $all(".product, .pkg, .tpl-card, .stat, .process li, .step").forEach(function (el) {
+        el.classList.add("tilt");
+        el.addEventListener("pointermove", function (e) {
+          var r = el.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
+          el.style.setProperty("--ry", (px * 6).toFixed(2) + "deg");
+          el.style.setProperty("--rx", (-py * 6).toFixed(2) + "deg");
+          el.classList.add("is-tilting");
+        });
+        el.addEventListener("pointerleave", function () { el.classList.remove("is-tilting"); });
+      });
+    }
+    // hero parallax
+    if (hero) {
+      var content = hero.querySelector(":scope > div");
+      var pt = false;
+      var par = function () {
+        pt = false;
+        var y = Math.min(window.scrollY || 0, 700);
+        au.style.setProperty("--py", (y * .25).toFixed(1) + "px");
+        if (content) content.style.setProperty("--pc", (y * -.06).toFixed(1) + "px");
+      };
+      window.addEventListener("scroll", function () { if (!pt) { pt = true; requestAnimationFrame(par); } }, { passive: true });
+    }
+  })();
 })();
