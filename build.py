@@ -189,11 +189,8 @@ IH_URL = "https://www.indiehackers.com/desireagency"
 NUMBERS_AS_OF = {"en": "21 Nov 2026, 19:25 Lisbon", "de": "21.11.2026, 19:25 Lissabon"}
 
 LOGO_SVG = (
-    '<svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">'
-    '<defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1">'
-    '<stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#4b3be0"/></linearGradient></defs>'
-    '<rect width="64" height="64" rx="16" fill="url(#dg)"/>'
-    '<path d="M20 16h12c10 0 16 6.5 16 16s-6 16-16 16H20V16Zm8 7v18h4c5.3 0 8-3.2 8-9s-2.7-9-8-9h-4Z" fill="#fff"/>'
+    '<svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">'
+    '<defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#5b4cf0"/></linearGradient><radialGradient id="dgp" cx=".85" cy=".1" r=".8"><stop offset="0" stop-color="#e26bd8" stop-opacity=".75"/><stop offset="1" stop-color="#e26bd8" stop-opacity="0"/></radialGradient><radialGradient id="dgg" cx=".05" cy="1" r=".7"><stop offset="0" stop-color="#3ccf91" stop-opacity=".7"/><stop offset="1" stop-color="#3ccf91" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" rx="26" fill="url(#dg)"/><rect width="100" height="100" rx="26" fill="url(#dgp)"/><rect width="100" height="100" rx="26" fill="url(#dgg)"/><path d="M29 24h19c16.6 0 28 10.6 28 26s-11.4 26-28 26H29Z" fill="none" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><circle cx="50" cy="50" r="7" fill="#fff"/>'
     '</svg>'
 )
 
@@ -283,6 +280,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <link rel="canonical" href="{canon}">
 {alt}  <meta name="theme-color" content="#0c0d12">
   <link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="{root}site.webmanifest">
 {png_icons}  <meta property="og:type" content="website">
   <meta property="og:site_name" content="Desire Agency">
   <meta property="og:title" content="{esc(title)}">
