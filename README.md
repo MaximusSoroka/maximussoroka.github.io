@@ -42,11 +42,6 @@ Prices and programme figures come from official public pages checked on 18 Novem
 
 The directory pages include schema.org JSON-LD (`ItemList` of `SoftwareApplication`). `/tools.json` is the canonical machine-readable copy of those entries; it does not include affiliate URLs or unpublished placeholder slots.
 
-## Prepared, not public: /websites/ and /de/websites/
+## Websites service: /websites/ and /de/websites/
 
-A preview of the planned website service (packages Vitrine, Atelier, Maison and Care, shown as "price on request"). It is **not linked anywhere**, is set to `noindex, nofollow` and is **not in sitemap.xml or llms.txt**.
-To switch it on later, once the owner approves prices and launch:
-1. In `build.py`, set the prices in `WEBSITES` (replace `price`) and add a contact action.
-2. In `shell()`, remove the `noindex` case for `page == "websites"` and let it get hreflang links (the `page not in ("templates", "websites")` check).
-3. Add `("websites", "Websites")` to `NAV` and a `"websites"` path to `page_paths()`, then add `/websites/` and `/de/websites/` to `write_sitemap()` and `write_llms_txt()`.
-4. Run `python3 build.py` and push.
+Public since 21 Nov 2026 (prices approved by the owner). Packages and prices live in `WEBSITES` in `build.py`. Contact is enquiry-only via mailto with a prefilled subject per package; there is no payment or checkout on the site.
