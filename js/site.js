@@ -318,7 +318,7 @@
           n.style.setProperty("--gd", (i * 45 + 120) + "ms"); i += 2;
         }
       });
-      h.classList.add("split");
+      h.classList.add("wsplit");
     });
     // marquee for the stack
     $all(".stack").forEach(function (ul) {
