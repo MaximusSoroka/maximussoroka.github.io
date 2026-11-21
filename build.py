@@ -67,6 +67,7 @@ NAV = {
         ("n8n", "Recommend n8n"),
         ("templates", "Templates"),
         ("directory", "Directory"),
+        ("websites", "Websites"),
         ("legal", "Legal notice"),
     ],
     "de": [
@@ -74,6 +75,7 @@ NAV = {
         ("n8n", "n8n-Empfehlung"),
         ("templates", "Templates"),
         ("directory", "Verzeichnis"),
+        ("websites", "Websites"),
         ("legal", "Impressum"),
     ],
 }
@@ -117,6 +119,7 @@ def page_paths(lang: str, depth: int) -> dict:
             "n8n": p + "n8n/",
             "templates": p + "templates/",
             "directory": p + "directory/",
+            "websites": p + "websites/",
             "legal": p + "legal/",
             "other_lang": p + "de/" if depth == 0 else (p + "de/" if depth == 1 else "../../de/"),
             "config": p + "config.js",
@@ -131,6 +134,7 @@ def page_paths(lang: str, depth: int) -> dict:
             "n8n": "./n8n/",
             "templates": "../templates/",
             "directory": "./directory/",
+            "websites": "./websites/",
             "legal": "./legal/",
             "other_lang": "../",
             "config": "../config.js",
@@ -144,6 +148,7 @@ def page_paths(lang: str, depth: int) -> dict:
         "n8n": "../n8n/",
         "templates": "../../templates/",
         "directory": "../directory/",
+        "websites": "../websites/",
         "legal": "../legal/",
         "other_lang": "../../",
         "config": "../../config.js",
@@ -245,7 +250,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     progress = '\n  <div class="progress" aria-hidden="true"></div>' if page in ("n8n", "templates", "legal") else ""
     canon = site_url(CANONICAL[(lang, page)])
     alt = ""
-    if page not in ("templates", "websites"):
+    if page != "templates":
         en_url = site_url(CANONICAL[("en", page)])
         de_url = site_url(CANONICAL[("de", page)])
         alt = (
@@ -272,7 +277,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="{"noindex, nofollow" if page == "websites" else "index, follow"}">
+  <meta name="robots" content="index, follow">
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
   <link rel="canonical" href="{canon}">
@@ -342,6 +347,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
             <li><a href="{paths['home']}">{esc(NAV[lang][0][1])}</a></li>
             <li><a href="{paths['n8n']}">{esc(NAV[lang][1][1])}</a></li>
             <li><a href="{paths['directory']}">{esc(NAV[lang][3][1])}</a></li>
+            <li><a href="{paths['websites']}">Websites</a></li>
             <li><a href="{paths['legal']}">{"Legal notice / Impressum" if lang == "en" else "Impressum / Kontakt"}</a></li>
             <li><a href="{other_href}">{other}</a></li>
           </ul>
@@ -733,12 +739,12 @@ CASE = {
            "text": "Our own site is the first project. Same content, same honest numbers. New design system, motion, a team diagram and EN/DE, still static and tracker-free.",
            "before": "Before · 20 Nov 2026", "after": "After · 21 Nov 2026",
            "points": ["Self-hosted font, no third-party requests", "Light and dark theme, reduced-motion support", "Canonical, hreflang, Open Graph, sitemap and llms.txt", "Hosted on GitHub Pages: server cost for the site €0"],
-           "alt_before": "Screenshot of the old Desire Agency home page: serif headings on a beige background", "alt_after": "Screenshot of the new Desire Agency home page: dark hero with the ledger card"},
+           "alt_before": "Screenshot of the old Desire Agency home page: serif headings on a beige background", "alt_after": "Screenshot of the new Desire Agency home page: dark hero with the ledger card", "cta": "Want a site like this?"},
     "de": {"kicker": "Fallstudie", "title": "Diese Website, an einem Abend neu gebaut",
            "text": "Unsere eigene Seite ist das erste Projekt. Gleicher Inhalt, gleiche ehrliche Zahlen. Neues Design-System, Animationen, ein Team-Schaubild und EN/DE, weiterhin statisch und ohne Tracker.",
            "before": "Vorher · 20.11.2026", "after": "Nachher · 21.11.2026",
            "points": ["Schrift selbst gehostet, keine Anfragen an Dritte", "Helles und dunkles Design, Rücksicht auf reduzierte Bewegung", "Canonical, hreflang, Open Graph, Sitemap und llms.txt", "Gehostet auf GitHub Pages: Serverkosten für die Seite 0 €"],
-           "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler Hero mit dem Kassenbuch"},
+           "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler Hero mit dem Kassenbuch", "cta": "Auch so eine Website?"},
 }
 
 
@@ -784,67 +790,92 @@ def case_section(lang: str, paths: dict) -> str:
             {frame("case-before.svg", t["before"], t["alt_before"], "is-before")}
             {frame("case-after.svg", t["after"], t["alt_after"], "is-after")}
           </div>
-          <ul class="checks">{pts}</ul>
+          <div><ul class="checks">{pts}</ul>
+          <p style="margin:1.2rem 0 0"><a class="btn btn-ghost" href="{paths["websites"]}">{esc(t["cta"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
         </div>
       </section>
 """
 
 
+CONTACT_EMAIL = "desire.studio.agency@gmail.com"
+
 WEBSITES = {
     "en": {
-        "title": "Websites by Desire Agency (preview, not public yet)",
-        "description": "Preview of a planned website service. Not available yet.",
-        "kicker": "Coming later", "h1": "Fast, honest websites for small businesses",
-        "lede": "A planned service: a clean site that works on the phone, brings enquiries and belongs to the client, with no builder subscription and no tracking unless the client wants it. This page is a preview. We are not taking orders yet.",
-        "status": "Not open yet. Prices and start date are not set.",
-        "price": "Price on request",
+        "title": "Websites for small businesses — Desire Agency",
+        "description": "Fast, mobile-first websites for small businesses, built by Desire Agency in Lisbon. Vitrine from €390, Atelier from €750, Maison from €1,190, Care €29/month (plus VAT). No builder subscription, no tracking unless you want it.",
+        "kicker": "Websites", "h1": "Fast, honest websites for small businesses",
+        "lede": "A clean site that works on the phone, brings enquiries and belongs to you. No builder subscription and no tracking unless you want it. Built by the same team that runs this site.",
+        "status": "Projects start after a short call. You get a written quote first, then the invoice.",
+        "vat": "Net prices plus 23% VAT.",
+        "from": "from", "per_month": "/ month", "plus_vat": "+ VAT",
+        "delivery": "Delivery", "revisions": "Revisions",
+        "ask": "Ask about {name}", "subject": "Enquiry {name}",
         "common_title": "Included in every package",
-        "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless requested", "Hosted on GitHub Pages with HTTPS; the client owns the files", "Domain set up in the client’s name"],
+        "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless you ask for it", "Hosting on GitHub Pages with HTTPS in the first year; you own the files", "Domain set up in your name (registry fee paid by you or passed on 1:1)"],
         "packages": [
-            ("Vitrine", "One-page site", "For a local business or a single offer.", ["One long page, one language", "WhatsApp button and/or contact form", "Basic SEO and preview image", "2 revision rounds"]),
-            ("Atelier", "Business site, 3–5 pages", "For businesses that need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and profile links"]),
-            ("Maison", "Up to 8 pages, two languages", "For international or tourist audiences.", ["Everything in Atelier", "Up to 8 pages, two languages with switcher", "SEO per language with hreflang", "3 revision rounds"]),
-            ("Care", "Monthly care (optional)", "Keeps the site running after launch.", ["Hosting and HTTPS", "Uptime check and alerts", "Backups via Git history", "Small content changes each month"]),
+            ("Vitrine", "One-page site", "For a local business or a single offer.", ["One long page, one language (PT, EN or DE)", "WhatsApp button and/or contact form", "Basic SEO and preview image"], "390 €", False, "5–7 working days", "2 rounds"),
+            ("Atelier", "Business site, 3–5 pages", "For businesses that need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and links to your profiles"], "750 €", False, "10–14 working days", "2 rounds"),
+            ("Maison", "Up to 8 pages, two languages", "For international or tourist audiences.", ["Everything in Atelier", "Up to 8 pages, two languages with switcher", "SEO per language with hreflang"], "1,190 €", False, "14–21 working days", "3 rounds"),
+            ("Care", "Monthly care (optional)", "Keeps the site running after launch. Cancel with 30 days’ notice.", ["Hosting and HTTPS", "Uptime check and a heads-up if the site goes down", "Backups via Git history", "Small content changes, up to 30 minutes a month"], "29 €", True, "", ""),
         ],
-        "not": "Not included: shops, booking systems, member areas, WordPress, logo design, photography, ad campaigns.",
+        "time_note": "Delivery times count from the complete briefing (texts, photos, logo, access), not from the first message.",
+        "not": "Not included: shops, booking systems, member areas, WordPress, logo design, photography, ad campaigns. Anything beyond the package is quoted before we start.",
         "example": "Live example: this website.",
-        "back": "Back to home",
+        "contact": "Questions first? Write to us",
     },
     "de": {
-        "title": "Websites von Desire Agency (Vorschau, noch nicht öffentlich)",
-        "description": "Vorschau auf einen geplanten Website-Service. Noch nicht verfügbar.",
-        "kicker": "Kommt später", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
-        "lede": "Ein geplanter Service: eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dem Kunden gehört, ohne Baukasten-Abo und ohne Tracking, wenn er keines will. Diese Seite ist eine Vorschau. Wir nehmen noch keine Aufträge an.",
-        "status": "Noch nicht geöffnet. Preise und Start stehen noch nicht fest.",
-        "price": "Preis auf Anfrage",
+        "title": "Websites für kleine Betriebe — Desire Agency",
+        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut von Desire Agency in Lissabon. Vitrine ab 390 €, Atelier ab 750 €, Maison ab 1.190 €, Care 29 €/Monat (zzgl. MwSt.). Kein Baukasten-Abo, kein Tracking, wenn du keines willst.",
+        "kicker": "Websites", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
+        "lede": "Eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dir gehört. Kein Baukasten-Abo und kein Tracking, wenn du keines willst. Gebaut vom selben Team, das diese Seite betreibt.",
+        "status": "Projektstart nach einem kurzen Gespräch. Du bekommst zuerst ein schriftliches Angebot, danach die Rechnung.",
+        "vat": "Nettopreise zzgl. 23 % MwSt. (IVA).",
+        "from": "ab", "per_month": "/ Monat", "plus_vat": "zzgl. MwSt.",
+        "delivery": "Lieferzeit", "revisions": "Korrekturen",
+        "ask": "{name} anfragen", "subject": "Anfrage {name}",
         "common_title": "In jedem Paket enthalten",
-        "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer gewünscht", "Hosting auf GitHub Pages mit HTTPS; die Dateien gehören dem Kunden", "Domain auf den Namen des Kunden eingerichtet"],
+        "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer du wünschst es", "Hosting auf GitHub Pages mit HTTPS im ersten Jahr; die Dateien gehören dir", "Domain auf deinen Namen eingerichtet (Registry-Gebühr zahlst du oder sie wird 1:1 weitergegeben)"],
         "packages": [
-            ("Vitrine", "Onepager", "Für einen lokalen Betrieb oder ein einzelnes Angebot.", ["Eine lange Seite, eine Sprache", "WhatsApp-Button und/oder Kontaktformular", "Grundlegendes SEO und Vorschaubild", "2 Korrekturrunden"]),
-            ("Atelier", "Firmenwebsite, 3–5 Seiten", "Für Betriebe, die mehr als eine Seite brauchen.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Profil-Links"]),
-            ("Maison", "Bis 8 Seiten, zwei Sprachen", "Für internationales oder touristisches Publikum.", ["Alles aus Atelier", "Bis zu 8 Seiten, zwei Sprachen mit Umschalter", "SEO je Sprache mit hreflang", "3 Korrekturrunden"]),
-            ("Care", "Monatliche Betreuung (optional)", "Hält die Seite nach dem Start am Laufen.", ["Hosting und HTTPS", "Erreichbarkeitsprüfung mit Hinweis", "Sicherung über die Git-Historie", "Kleine Inhaltsänderungen pro Monat"]),
+            ("Vitrine", "Onepager", "Für einen lokalen Betrieb oder ein einzelnes Angebot.", ["Eine lange Seite, eine Sprache (PT, EN oder DE)", "WhatsApp-Button und/oder Kontaktformular", "Grundlegendes SEO und Vorschaubild"], "390 €", False, "5–7 Werktage", "2 Runden"),
+            ("Atelier", "Firmenwebsite, 3–5 Seiten", "Für Betriebe, die mehr als eine Seite brauchen.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Links zu deinen Profilen"], "750 €", False, "10–14 Werktage", "2 Runden"),
+            ("Maison", "Bis 8 Seiten, zwei Sprachen", "Für internationales oder touristisches Publikum.", ["Alles aus Atelier", "Bis zu 8 Seiten, zwei Sprachen mit Umschalter", "SEO je Sprache mit hreflang"], "1.190 €", False, "14–21 Werktage", "3 Runden"),
+            ("Care", "Monatliche Betreuung (optional)", "Hält die Seite nach dem Start am Laufen. Kündbar mit 30 Tagen Vorlauf.", ["Hosting und HTTPS", "Erreichbarkeitsprüfung mit Hinweis, wenn die Seite ausfällt", "Sicherung über die Git-Historie", "Kleine Inhaltsänderungen, bis 30 Minuten pro Monat"], "29 €", True, "", ""),
         ],
-        "not": "Nicht enthalten: Shops, Buchungssysteme, Mitgliederbereiche, WordPress, Logo-Design, Fotos, Werbekampagnen.",
+        "time_note": "Lieferzeiten gelten ab vollständigem Briefing (Texte, Fotos, Logo, Zugänge), nicht ab der ersten Nachricht.",
+        "not": "Nicht enthalten: Shops, Buchungssysteme, Mitgliederbereiche, WordPress, Logo-Design, Fotos, Werbekampagnen. Alles darüber hinaus bekommst du vorher als Angebot.",
         "example": "Live-Beispiel: diese Website.",
-        "back": "Zur Startseite",
+        "contact": "Erst Fragen? Schreib uns",
     },
 }
+
+
+def _mailto(subject: str) -> str:
+    from urllib.parse import quote
+    return f"mailto:{CONTACT_EMAIL}?subject={quote(subject)}"
 
 
 def websites_body(lang: str) -> str:
     t = WEBSITES[lang]
     paths = page_paths(lang, 1 if lang == "en" else 2)
     cards = []
-    for i, (name, sub, who, feats) in enumerate(t["packages"]):
+    for i, (name, sub, who, feats, price, monthly, delivery, revs) in enumerate(t["packages"]):
         fl = "".join(f"<li>{esc(f)}</li>" for f in feats)
+        meta = ""
+        if delivery:
+            meta = (f'<dl class="pkg-meta"><div><dt>{esc(t["delivery"])}</dt><dd>{esc(delivery)}</dd></div>'
+                    f'<div><dt>{esc(t["revisions"])}</dt><dd>{esc(revs)}</dd></div></dl>')
+        pre = "" if monthly else f'<span class="price-from">{esc(t["from"])}</span>'
+        post = f'<span class="price-sub">{esc(t["per_month"])} · {esc(t["plus_vat"])}</span>' if monthly else f'<span class="price-sub">{esc(t["plus_vat"])}</span>'
+        btn = "btn btn-primary" if i == 1 else "btn btn-ghost"
         cards.append(f"""
-          <article class="product{" is-featured" if i == 1 else ""}">
+          <article class="product pkg{" is-featured" if i == 1 else ""}">
             <span class="pill">{esc(sub)}</span>
             <h3>{esc(name)}</h3>
             <p>{esc(who)}</p>
+            <div class="price-line">{pre}<span class="price-big">{esc(price)}</span>{post}</div>
             <ul class="checks checks-sm">{fl}</ul>
-            <div class="price-line"><span class="price-big price-tbd">{esc(t["price"])}</span></div>
+            {meta}
+            <div class="actions"><a class="{btn}" href="{esc(_mailto(t["subject"].format(name=name)))}">{esc(t["ask"].format(name=name))} <span class="arrow" aria-hidden="true">→</span></a></div>
           </article>""")
     common = "".join(f"<li>{esc(c)}</li>" for c in t["common"])
     return f"""
@@ -852,14 +883,16 @@ def websites_body(lang: str) -> str:
         <p class="kicker">{esc(t["kicker"])}</p>
         <h1 class="page-title">{esc(t["h1"])}</h1>
         <p class="lede">{esc(t["lede"])}</p>
-        <p class="notice" role="note">{esc(t["status"])}</p>
+        <p class="notice notice-info" role="note">{esc(t["status"])}</p>
       </header>
       <div class="products products-4">{''.join(cards)}
       </div>
+      <p class="note">{esc(t["vat"])} {esc(t["time_note"])}</p>
       <section class="section">
         <div class="split">
           <div class="panel"><h3>{esc(t["common_title"])}</h3><ul class="checks">{common}</ul></div>
-          <div class="panel"><p>{esc(t["not"])}</p><p><a href="{paths["home"]}#case-study">{esc(t["example"])}</a></p><p><a class="btn btn-ghost" href="{paths["home"]}">{esc(t["back"])}</a></p></div>
+          <div class="panel"><p>{esc(t["not"])}</p><p><a href="{paths["home"]}#case-study">{esc(t["example"])}</a></p>
+            <p><a class="btn btn-ghost" href="{esc(_mailto(t["subject"].format(name="Website")))}">{esc(t["contact"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
         </div>
       </section>
 """
@@ -1792,6 +1825,8 @@ This is a static site with no cookies, tracking or analytics.
 - [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
+- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Net prices plus 23% VAT. Delivery times count from the complete briefing. Enquiries by email only; no online payment.
+- [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
@@ -1819,10 +1854,12 @@ def write_sitemap() -> None:
         ("/de/n8n/", "0.7", "weekly"),
         ("/de/directory/", "0.7", "weekly"),
         ("/de/legal/", "0.5", "yearly"),
+        ("/websites/", "0.9", "weekly"),
+        ("/de/websites/", "0.8", "weekly"),
         ("/llms.txt", "0.5", "weekly"),
         ("/tools.json", "0.6", "weekly"),
     ]
-    lastmod = "2026-11-20"
+    lastmod = "2026-11-21"
     urls = []
     for path, prio, freq in paths:
         urls.append(
@@ -1862,7 +1899,6 @@ def build() -> None:
         (ROOT / "de" / "n8n" / "index.html", "de", "n8n", 2, ARTICLE["de"], lambda lang, paths=None: article_body(lang)),
         (ROOT / "de" / "directory" / "index.html", "de", "directory", 2, DIR["de"], lambda lang, paths=None: directory_body(lang)),
         (ROOT / "de" / "legal" / "index.html", "de", "legal", 2, LEGAL["de"], lambda lang, paths=None: legal_body(lang)),
-        # Prepared, not linked, noindex, not in sitemap (see README):
         (ROOT / "websites" / "index.html", "en", "websites", 1, WEBSITES["en"], lambda lang, paths=None: websites_body(lang)),
         (ROOT / "de" / "websites" / "index.html", "de", "websites", 2, WEBSITES["de"], lambda lang, paths=None: websites_body(lang)),
     ]

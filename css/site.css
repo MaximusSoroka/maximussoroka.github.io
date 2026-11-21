@@ -657,3 +657,12 @@ kbd { font-family: var(--mono); font-size: .75rem; border: 1px solid var(--line-
   .case-shots { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .mock:hover, .stack-item:hover { transform: none; } }
+
+/* Round 3: service packages */
+.pkg .price-line { margin: .3rem 0 .4rem; }
+.price-from { font-size: .82rem; color: var(--muted); font-weight: 600; }
+.pkg-meta { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: .6rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line); }
+.pkg-meta dt { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pkg-meta dd { margin: .1rem 0 0; font-size: .88rem; font-weight: 600; color: var(--ink); }
+.pkg .actions .btn { width: 100%; }
+.notice-info { background: var(--accent-soft); color: var(--accent-2); }
