@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the static Desire Studio site from local source files.
+"""Build the static Desire Agency site from local source files.
 
 Does not publish, push, or create a repository.
 Run from this directory: python3 build.py
@@ -205,7 +205,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <header class="site-header">
     <div class="header-inner {wrap}">
       <a class="brand" href="{paths['home']}">
-        <span class="brand-name">Desire Studio</span>
+        <span class="brand-name">Desire Agency</span>
         <span class="brand-tag">{"Automation tools, sourced" if lang == "en" else "Automatisierungs-Tools, mit Quellen"}</span>
       </a>
       <nav aria-label="{"Main" if lang == "en" else "Hauptnavigation"}">
@@ -248,7 +248,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 
 HOME = {
     "en": {
-        "title": "Why we recommend n8n — Desire Studio",
+        "title": "Why we recommend n8n — Desire Agency",
         "description": "An honest, sourced recommendation of n8n, and a directory of 19 automation and AI-agent tools. Prices checked 18 November 2026.",
         "h1": "Why we recommend n8n",
         "lede": "And when Make is still a fair fit. An honest, sourced guide to automation and agent workflows. No earnings promises. Sources checked on 18 November 2026.",
@@ -269,11 +269,11 @@ HOME = {
         "news_text": "A short, free newsletter from Desire Agency about what we are actually building — including these templates, the site, and the rest of the system. No earnings promises. Our own revenue so far: €0.",
         "news_cta": "Get the build log",
         "tpl_title": "Free n8n templates",
-        "tpl_text": "Three small, free n8n workflows you can import and adapt: a daily RSS digest, a form that writes to Google Sheets, and a simple uptime check. Credentials in the files are placeholders.",
+        "tpl_text": "Three small, free n8n workflows you can import and adapt: a daily RSS digest, a form that writes to Google Sheets, and an uptime check that retries once after 60 seconds before alerting. Credentials in the files are placeholders.",
         "tpl_cta": "Open the templates",
     },
     "de": {
-        "title": "Warum wir n8n empfehlen — Desire Studio",
+        "title": "Warum wir n8n empfehlen — Desire Agency",
         "description": "Eine ehrliche, quellenbelegte Empfehlung für n8n und ein Verzeichnis mit 19 Automatisierungs- und KI-Agenten-Tools. Preise geprüft am 18.11.2026.",
         "h1": "Warum wir n8n empfehlen",
         "lede": "Und wann Make trotzdem passt. Ein ehrlicher, quellenbelegter Text zu Automatisierung und Agenten-Workflows. Kein Gewinnversprechen. Quellenstand: 18.11.2026.",
@@ -294,7 +294,7 @@ HOME = {
         "news_text": "Ein kurzer, kostenloser Newsletter von Desire Agency über das, was wir tatsächlich bauen — Vorlagen, die Website und den Rest des Systems. Kein Gewinnversprechen. Unser eigener Ertrag bisher: 0 €.",
         "news_cta": "Build-Log abonnieren",
         "tpl_title": "Kostenlose n8n-Vorlagen",
-        "tpl_text": "Drei kleine, kostenlose n8n-Workflows zum Importieren: ein täglicher RSS-Digest, ein Formular in Google Sheets und eine einfache Erreichbarkeitsprüfung. Die Dateien enthalten nur Platzhalter für Zugangsdaten. Die Seite ist auf Englisch.",
+        "tpl_text": "Drei kleine, kostenlose n8n-Workflows zum Importieren: ein täglicher RSS-Digest, ein Formular in Google Sheets und eine Erreichbarkeitsprüfung, die nach 60 Sekunden einmal erneut prüft, bevor sie alarmiert. Die Dateien enthalten nur Platzhalter für Zugangsdaten. Die Seite ist auf Englisch.",
         "tpl_cta": "Zu den Vorlagen",
     },
 }
@@ -743,8 +743,8 @@ def directory_body(lang: str) -> str:
 
 LEGAL = {
     "en": {
-        "title": "Legal notice / Impressum — Desire Studio",
-        "description": "Legal notice and contact details for Desire Studio.",
+        "title": "Legal notice / Impressum — Desire Agency",
+        "description": "Legal notice and contact details for Desire Agency.",
         "h1": "Legal notice / Impressum",
         "lead": "Operator information for this website.",
         "fields": [
@@ -770,8 +770,8 @@ LEGAL = {
         ),
     },
     "de": {
-        "title": "Impressum / Kontakt — Desire Studio",
-        "description": "Impressum und Kontaktdaten von Desire Studio.",
+        "title": "Impressum / Kontakt — Desire Agency",
+        "description": "Impressum und Kontaktdaten von Desire Agency.",
         "h1": "Impressum / Kontakt",
         "lead": "Anbieterinformationen für diese Website.",
         "fields": [
@@ -820,7 +820,7 @@ def legal_body(lang: str) -> str:
 
 
 TEMPLATES_PAGE = {
-    "title": "Free n8n templates — Desire Studio",
+    "title": "Free n8n templates — Desire Agency",
     "description": "Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.",
 }
 
@@ -868,19 +868,21 @@ TEMPLATES = [
     {
         "id": "website-uptime-check-alert",
         "title": "Website uptime check to alert",
-        "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.",
+        "summary": "Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it waits 60 seconds and requests the URL again. An alert email is sent only if the second check also fails. A successful 200 on either check does not send mail.",
         "file": "website-uptime-check-alert/workflow.json",
         "steps": [
             "In n8n: … → Import from File and choose workflow.json.",
-            "Open Request website and replace https://example.com/ with the URL to check. Also replace that URL in the subject and body of Send down alert.",
+            "Open Request website and Retry request website and replace https://example.com/ with the URL to check in both nodes. Also replace that URL in the subject and body of Send down alert.",
             "Create an SMTP credential in n8n, attach it to Send down alert (remove the placeholder), and set From and To.",
-            "Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If condition if you want to accept other 2xx codes.",
-            "Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the alert, then point it at the real URL and Activate.",
+            "The default retry wait is 60 seconds. To change it, open the Wait 60 seconds node and edit Amount and Unit.",
+            "Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If conditions if you want to accept other 2xx codes.",
+            "Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the wait and the alert, then point it at the real URL and Activate.",
         ],
         "notes": [
-            "The HTTP node uses “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.",
+            "After the first failed check, the workflow waits 60 seconds and requests the URL again. The alert is sent only if that second check also fails (status other than 200, or a missing status).",
+            "The HTTP nodes use “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.",
             "This is a simple local check, not a hosted monitoring service. It will not run while n8n is stopped, and it does not measure uptime percentages.",
-            "Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Send Email.",
+            "Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Wait, Send Email.",
         ],
         "credentials": "SMTP account (placeholder)",
     },
@@ -943,7 +945,7 @@ def not_found() -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Page not found — Desire Studio</title>
+  <title>Page not found — Desire Agency</title>
   <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
@@ -1040,7 +1042,7 @@ def public_tools_payload() -> dict:
             entry["programme_url"] = raw["affiliate_quelle"]
         tools.append(entry)
     return {
-        "name": "Desire Studio tool directory",
+        "name": "Desire Agency tool directory",
         "url": site_url("/directory/"),
         "url_de": site_url("/de/directory/"),
         "checked_on": TOOLS["pruefdatum"],
@@ -1096,7 +1098,7 @@ def write_public_tools_json() -> None:
 
 
 def write_llms_txt() -> None:
-    text_out = f"""# Desire Studio
+    text_out = f"""# Desire Agency
 
 > An honest, sourced recommendation of n8n, plus a directory of {N_TOOLS} automation and AI-agent tools. English is primary; German is under /de/.
 
@@ -1115,7 +1117,7 @@ This is a static site with no cookies, tracking or analytics.
 - [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
 - [Tool directory (English)]({SITE_URL}/directory/): {N_TOOLS} sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)]({SITE_URL}/de/directory/): The same directory in German, with the same JSON-LD in German wording.
-- [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
+- [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.

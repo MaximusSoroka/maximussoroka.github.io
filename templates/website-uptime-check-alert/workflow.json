@@ -1,14 +1,14 @@
 {
   "name": "Website uptime check to alert",
   "meta": {
-    "description": "Every 5 minutes, request a URL and email an alert if the status is missing or not 200. Placeholder URL and SMTP credentials — attach your own before activating."
+    "description": "Every 5 minutes, request a URL. If the first check fails, wait 60 seconds and request it again. Email an alert only if the second check also fails. Placeholder URL and SMTP credentials — attach your own before activating."
   },
   "nodes": [
     {
       "parameters": {
-        "content": "## Setup\n1. Replace `https://example.com/` in **Request website** and in the alert email body with the URL you want to check.\n2. Create an SMTP credential in n8n and attach it to **Send down alert** (replace the placeholder).\n3. Set From and To addresses.\n4. The check treats anything other than HTTP 200, or a missing status (timeout/network error), as down. Adjust the If node if you want to accept other 2xx codes.\n5. Test once, then activate. Default interval: every 5 minutes.\n\nNo credentials or secrets are included in this file.",
-        "height": 440,
-        "width": 360,
+        "content": "## Setup\n1. Replace `https://example.com/` in **Request website**, **Retry request website**, and in the alert email subject and body with the URL you want to check.\n2. Create an SMTP credential in n8n and attach it to **Send down alert** (replace the placeholder).\n3. Set From and To addresses.\n4. After a failed first check the workflow waits **60 seconds**, then requests the URL again. An alert is sent only if the second check also fails. To change the wait, open **Wait 60 seconds** and edit Amount and Unit (currently 60 seconds).\n5. The check treats anything other than HTTP 200, or a missing status (timeout/network error), as down. Adjust the If nodes if you want to accept other 2xx codes.\n6. Test once, then activate. Default interval: every 5 minutes.\n\nNo credentials or secrets are included in this file.",
+        "height": 560,
+        "width": 380,
         "color": 7
       },
       "id": "c3e3d6f2-8e33-4b9c-9e03-up0000000001",
@@ -99,10 +99,83 @@
     },
     {
       "parameters": {
+        "resume": "timeInterval",
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "c3e3d6f2-8e33-4b9c-9e03-up0000000006",
+      "name": "Wait 60 seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        860,
+        180
+      ],
+      "webhookId": "00000000-0000-4000-a000-000000000060"
+    },
+    {
+      "parameters": {
+        "url": "https://example.com/",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "c3e3d6f2-8e33-4b9c-9e03-up0000000007",
+      "name": "Retry request website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        180
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-retry-not-200",
+              "leftValue": "={{ $json.statusCode ?? 0 }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c3e3d6f2-8e33-4b9c-9e03-up0000000008",
+      "name": "Retry status is not 200",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1340,
+        180
+      ]
+    },
+    {
+      "parameters": {
         "fromEmail": "monitor@example.com",
         "toEmail": "you@example.com",
         "subject": "=Uptime alert: {{ $json.statusCode ?? 'no status' }} for https://example.com/",
-        "html": "=<p>The uptime check did not get HTTP 200.</p><ul><li><strong>URL:</strong> https://example.com/</li><li><strong>Status:</strong> {{ $json.statusCode ?? 'missing (timeout or network error)' }}</li><li><strong>Time:</strong> {{ $now.toISO() }}</li></ul><p>This is an alert from a local n8n workflow template. It is not a hosted monitoring service.</p>",
+        "html": "=<p>The uptime check failed twice. A retry ran 60 seconds after the first failure, and the second check also did not get HTTP 200.</p><ul><li><strong>URL:</strong> https://example.com/</li><li><strong>First status:</strong> {{ $('Request website').item.json.statusCode ?? 'missing (timeout or network error)' }}</li><li><strong>Second status:</strong> {{ $json.statusCode ?? 'missing (timeout or network error)' }}</li><li><strong>Time:</strong> {{ $now.toISO() }}</li></ul><p>This is an alert from a local n8n workflow template. It is not a hosted monitoring service.</p>",
         "options": {}
       },
       "id": "c3e3d6f2-8e33-4b9c-9e03-up0000000005",
@@ -110,8 +183,8 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        860,
-        180
+        1580,
+        60
       ],
       "credentials": {
         "smtp": {
@@ -145,6 +218,40 @@
       ]
     },
     "Status is not 200": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Wait 60 seconds": {
+      "main": [
+        [
+          {
+            "node": "Retry request website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry request website": {
+      "main": [
+        [
+          {
+            "node": "Retry status is not 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry status is not 200": {
       "main": [
         [
           {

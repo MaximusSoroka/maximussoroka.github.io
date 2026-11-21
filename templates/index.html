@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <meta name="description" content="Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.">
-  <title>Free n8n templates — Desire Studio</title>
+  <title>Free n8n templates — Desire Agency</title>
   <link rel="stylesheet" href="../css/site.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
   <header class="site-header">
     <div class="header-inner wrap-narrow">
       <a class="brand" href="../">
-        <span class="brand-name">Desire Studio</span>
+        <span class="brand-name">Desire Agency</span>
         <span class="brand-tag">Automation tools, sourced</span>
       </a>
       <nav aria-label="Main">
@@ -86,24 +86,26 @@
 
         <section class="section" id="website-uptime-check-alert">
           <h2>Website uptime check to alert</h2>
-          <p>Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.</p>
+          <p>Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it waits 60 seconds and requests the URL again. An alert email is sent only if the second check also fails. A successful 200 on either check does not send mail.</p>
           <div class="actions">
             <a class="btn btn-primary" href="website-uptime-check-alert/workflow.json" download>Download workflow.json</a>
           </div>
           <h3>Setup</h3>
           <ol>
           <li>In n8n: … → Import from File and choose workflow.json.</li>
-          <li>Open Request website and replace https://example.com/ with the URL to check. Also replace that URL in the subject and body of Send down alert.</li>
+          <li>Open Request website and Retry request website and replace https://example.com/ with the URL to check in both nodes. Also replace that URL in the subject and body of Send down alert.</li>
           <li>Create an SMTP credential in n8n, attach it to Send down alert (remove the placeholder), and set From and To.</li>
-          <li>Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If condition if you want to accept other 2xx codes.</li>
-          <li>Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the alert, then point it at the real URL and Activate.</li>
+          <li>The default retry wait is 60 seconds. To change it, open the Wait 60 seconds node and edit Amount and Unit.</li>
+          <li>Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If conditions if you want to accept other 2xx codes.</li>
+          <li>Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the wait and the alert, then point it at the real URL and Activate.</li>
           </ol>
           <p class="note">Credentials in this file are placeholders: SMTP account (placeholder). Attach your own credentials in n8n before you activate the workflow.</p>
           <h3>Good to know</h3>
           <ul>
-          <li>The HTTP node uses “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.</li>
+          <li>After the first failed check, the workflow waits 60 seconds and requests the URL again. The alert is sent only if that second check also fails (status other than 200, or a missing status).</li>
+          <li>The HTTP nodes use “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.</li>
           <li>This is a simple local check, not a hosted monitoring service. It will not run while n8n is stopped, and it does not measure uptime percentages.</li>
-          <li>Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Send Email.</li>
+          <li>Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Wait, Send Email.</li>
           </ul>
         </section>
 
