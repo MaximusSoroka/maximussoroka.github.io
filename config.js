@@ -1,4 +1,4 @@
-/* Desire Studio site config — single file for affiliate URLs.
+/* Desire Agency site config — single file for affiliate URLs.
  *
  * To activate the n8n partner link later, set N8N_AFFILIATE_URL
  * to the official URL from PartnerStack / n8n (one line) and
