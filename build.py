@@ -156,6 +156,8 @@ def page_paths(lang: str, depth: int) -> dict:
 def lang_href(lang: str, page: str, depth: int) -> str:
     """URL of the same page in the other language."""
     # Templates exist in English only; the DE language switch goes to the German home.
+    if page == "websites":
+        return "../de/websites/" if lang == "en" else "../../websites/"
     if page == "templates":
         if lang == "en":
             return "../de/" if depth >= 1 else "de/"
@@ -205,6 +207,7 @@ CANONICAL = {
     ("en", "directory"): "/directory/", ("en", "legal"): "/legal/",
     ("de", "home"): "/de/", ("de", "n8n"): "/de/n8n/", ("de", "directory"): "/de/directory/",
     ("de", "legal"): "/de/legal/",
+    ("en", "websites"): "/websites/", ("de", "websites"): "/de/websites/",
 }
 
 FOOTER_TEXT = {
@@ -242,7 +245,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     progress = '\n  <div class="progress" aria-hidden="true"></div>' if page in ("n8n", "templates", "legal") else ""
     canon = site_url(CANONICAL[(lang, page)])
     alt = ""
-    if page != "templates":
+    if page not in ("templates", "websites"):
         en_url = site_url(CANONICAL[("en", page)])
         de_url = site_url(CANONICAL[("de", page)])
         alt = (
@@ -269,7 +272,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="{"noindex, nofollow" if page == "websites" else "index, follow"}">
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
   <link rel="canonical" href="{canon}">
@@ -294,10 +297,10 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <a class="skip" href="#content">{"Skip to content" if lang == "en" else "Zum Inhalt"}</a>
   <header class="site-header">
     <div class="header-inner wrap">
-      <a class="brand" href="{paths['home']}" aria-label="Desire Agency — {"home" if lang == "en" else "Start"}">
+      <a class="brand" href="{paths['home']}">
         {LOGO_SVG}
         <span class="brand-text">
-          <span class="brand-name">Desire Agency</span>
+          <span class="brand-name">Desire<span class="wm-2"> Agency</span></span>
           <span class="brand-tag">{"An AI agent team, built in public" if lang == "en" else "KI-Agenten-Team, öffentlich gebaut"}</span>
         </span>
       </a>
@@ -324,7 +327,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     <div class="wrap">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="{paths['home']}">{LOGO_SVG}<span class="brand-text"><span class="brand-name">Desire Agency</span></span></a>
+          <a class="brand" href="{paths['home']}">{LOGO_SVG}<span class="brand-text"><span class="brand-name">Desire<span class="wm-2"> Agency</span></span></span></a>
           <p>{esc(f["about"])}</p>
           <div class="socials">
             <a href="{X_URL}" rel="me noopener" aria-label="X (@desire__agency)">{ICON["x"]}</a>
@@ -693,6 +696,175 @@ def faq_section(lang: str) -> str:
 """
 
 
+PROCESS = {
+    "en": {"kicker": "How we work", "title": "From idea to public numbers",
+           "text": "The same loop runs every day. Nothing that costs real money skips the human step.",
+           "steps": [
+               ("01", "Plan", "Jojo, the chief of staff, sets the day's priorities from yesterday's results and hands out work."),
+               ("02", "Build", "Specialist agents draft the work: posts, products, templates, research, paper trades."),
+               ("03", "Check", "Results are reviewed before they ship. Money, purchases and deals need the owner’s explicit OK."),
+               ("04", "Publish & measure", "What ships goes live, and the numbers, including the zeros, go into the reports and onto this site."),
+           ]},
+    "de": {"kicker": "So arbeiten wir", "title": "Von der Idee zur öffentlichen Zahl",
+           "text": "Jeden Tag läuft dieselbe Schleife. Nichts, was echtes Geld kostet, überspringt den menschlichen Schritt.",
+           "steps": [
+               ("01", "Planen", "Jojo, der Chief of Staff, setzt die Prioritäten des Tages anhand der Ergebnisse von gestern und verteilt die Arbeit."),
+               ("02", "Bauen", "Spezialisierte Agenten entwerfen die Arbeit: Posts, Produkte, Vorlagen, Recherche, Papier-Trades."),
+               ("03", "Prüfen", "Ergebnisse werden geprüft, bevor sie live gehen. Geld, Käufe und Deals brauchen das ausdrückliche OK des Owners."),
+               ("04", "Veröffentlichen & messen", "Was fertig ist, geht live, und die Zahlen, auch die Nullen, landen in den Berichten und auf dieser Seite."),
+           ]},
+}
+
+STACK = {
+    "en": {"kicker": "Built with", "title": "A small, boring stack", "text": "Static files, no trackers, no build server. These are the tools the system actually runs on."},
+    "de": {"kicker": "Gebaut mit", "title": "Ein kleiner, solider Stack", "text": "Statische Dateien, keine Tracker, kein Build-Server. Das sind die Werkzeuge, auf denen das System wirklich läuft."},
+    "items": [
+        ("Python", "build.py, desks, reports", '<path d="M12 3c-4 0-4 1.7-4 1.7V7h4v1H6.3S3 7.6 3 12s2.9 4.2 2.9 4.2H8v-2.1s-.1-2.9 2.8-2.9h3.8s2.7 0 2.7-2.6V4.9S17.7 3 12 3Zm-2 1.4a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z"/><path d="M12 21c4 0 4-1.7 4-1.7V17h-4v-1h5.7s3.3.4 3.3-4-2.9-4.2-2.9-4.2H16v2.1s.1 2.9-2.8 2.9H9.4s-2.7 0-2.7 2.6v3.7S6.3 21 12 21Zm2-1.4a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6Z" opacity=".6"/>'),
+        ("GitHub Pages", "Hosting, HTTPS", '<path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 4.9.4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/>'),
+        ("n8n", "Workflows, templates", '<circle cx="5" cy="12" r="2.6"/><circle cx="12" cy="7" r="2.6"/><circle cx="12" cy="17" r="2.6"/><circle cx="19" cy="12" r="2.6"/><path d="M7.3 11 9.8 8.3M7.3 13l2.5 2.7M14.2 8.3l2.5 2.7M14.2 15.7l2.5-2.7" stroke="currentColor" stroke-width="1.6" fill="none"/>'),
+        ("Claude API", "Weekly analysis", '<path d="M12 2.5 13.9 9l6.6-1.2-5 4.4 3.6 5.7-6.1-2.7L12 21.5l-1-6.3-6.1 2.7 3.6-5.7-5-4.4L10.1 9 12 2.5Z"/>'),
+        ("Gumroad", "Products", '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 9.5A4 4 0 1 0 16 13h-4"/>'),
+        ("beehiiv", "Newsletter", '<rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2"/>'),
+    ],
+}
+
+CASE = {
+    "en": {"kicker": "Case study", "title": "This website, rebuilt in one evening",
+           "text": "Our own site is the first project. Same content, same honest numbers. New design system, motion, a team diagram and EN/DE, still static and tracker-free.",
+           "before": "Before · 20 Nov 2026", "after": "After · 21 Nov 2026",
+           "points": ["Self-hosted font, no third-party requests", "Light and dark theme, reduced-motion support", "Canonical, hreflang, Open Graph, sitemap and llms.txt", "Hosted on GitHub Pages: server cost for the site €0"],
+           "alt_before": "Screenshot of the old Desire Agency home page: serif headings on a beige background", "alt_after": "Screenshot of the new Desire Agency home page: dark hero with the ledger card"},
+    "de": {"kicker": "Fallstudie", "title": "Diese Website, an einem Abend neu gebaut",
+           "text": "Unsere eigene Seite ist das erste Projekt. Gleicher Inhalt, gleiche ehrliche Zahlen. Neues Design-System, Animationen, ein Team-Schaubild und EN/DE, weiterhin statisch und ohne Tracker.",
+           "before": "Vorher · 20.11.2026", "after": "Nachher · 21.11.2026",
+           "points": ["Schrift selbst gehostet, keine Anfragen an Dritte", "Helles und dunkles Design, Rücksicht auf reduzierte Bewegung", "Canonical, hreflang, Open Graph, Sitemap und llms.txt", "Gehostet auf GitHub Pages: Serverkosten für die Seite 0 €"],
+           "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler Hero mit dem Kassenbuch"},
+}
+
+
+def process_section(lang: str) -> str:
+    t = PROCESS[lang]
+    steps = "".join(
+        f'<li class="step"><span class="step-n">{n}</span><h3>{esc(h)}</h3><p>{esc(p)}</p></li>' for n, h, p in t["steps"]
+    )
+    return f"""
+      <section class="section" id="process">
+        <div class="section-head"><div><p class="kicker">{esc(t["kicker"])}</p><h2>{esc(t["title"])}</h2><p>{esc(t["text"])}</p></div></div>
+        <ol class="steps">{steps}</ol>
+      </section>
+"""
+
+
+def stack_section(lang: str) -> str:
+    t = STACK[lang]
+    items = "".join(
+        f'<li class="stack-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{svg}</svg><span><b>{esc(n)}</b><small>{esc(d)}</small></span></li>'
+        for n, d, svg in STACK["items"]
+    )
+    return f"""
+      <section class="section" id="stack">
+        <div class="section-head"><div><p class="kicker">{esc(t["kicker"])}</p><h2>{esc(t["title"])}</h2><p>{esc(t["text"])}</p></div></div>
+        <ul class="stack">{items}</ul>
+      </section>
+"""
+
+
+def case_section(lang: str, paths: dict) -> str:
+    t = CASE[lang]
+    root = paths["css"][: -len("css/site.css")]
+    pts = "".join(f"<li>{esc(x)}</li>" for x in t["points"])
+    def frame(src, cap, alt, cls=""):
+        return (f'<figure class="mock {cls}"><div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span>maximussoroka.github.io</span></div>'
+                f'<img src="{root}img/{src}" width="960" height="600" loading="lazy" decoding="async" alt="{esc(alt)}"><figcaption>{esc(cap)}</figcaption></figure>')
+    return f"""
+      <section class="section" id="case-study">
+        <div class="section-head"><div><p class="kicker">{esc(t["kicker"])}</p><h2>{esc(t["title"])}</h2><p>{esc(t["text"])}</p></div></div>
+        <div class="case">
+          <div class="case-shots">
+            {frame("case-before.svg", t["before"], t["alt_before"], "is-before")}
+            {frame("case-after.svg", t["after"], t["alt_after"], "is-after")}
+          </div>
+          <ul class="checks">{pts}</ul>
+        </div>
+      </section>
+"""
+
+
+WEBSITES = {
+    "en": {
+        "title": "Websites by Desire Agency (preview, not public yet)",
+        "description": "Preview of a planned website service. Not available yet.",
+        "kicker": "Coming later", "h1": "Fast, honest websites for small businesses",
+        "lede": "A planned service: a clean site that works on the phone, brings enquiries and belongs to the client, with no builder subscription and no tracking unless the client wants it. This page is a preview. We are not taking orders yet.",
+        "status": "Not open yet. Prices and start date are not set.",
+        "price": "Price on request",
+        "common_title": "Included in every package",
+        "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless requested", "Hosted on GitHub Pages with HTTPS; the client owns the files", "Domain set up in the client’s name"],
+        "packages": [
+            ("Vitrine", "One-page site", "For a local business or a single offer.", ["One long page, one language", "WhatsApp button and/or contact form", "Basic SEO and preview image", "2 revision rounds"]),
+            ("Atelier", "Business site, 3–5 pages", "For businesses that need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and profile links"]),
+            ("Maison", "Up to 8 pages, two languages", "For international or tourist audiences.", ["Everything in Atelier", "Up to 8 pages, two languages with switcher", "SEO per language with hreflang", "3 revision rounds"]),
+            ("Care", "Monthly care (optional)", "Keeps the site running after launch.", ["Hosting and HTTPS", "Uptime check and alerts", "Backups via Git history", "Small content changes each month"]),
+        ],
+        "not": "Not included: shops, booking systems, member areas, WordPress, logo design, photography, ad campaigns.",
+        "example": "Live example: this website.",
+        "back": "Back to home",
+    },
+    "de": {
+        "title": "Websites von Desire Agency (Vorschau, noch nicht öffentlich)",
+        "description": "Vorschau auf einen geplanten Website-Service. Noch nicht verfügbar.",
+        "kicker": "Kommt später", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
+        "lede": "Ein geplanter Service: eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dem Kunden gehört, ohne Baukasten-Abo und ohne Tracking, wenn er keines will. Diese Seite ist eine Vorschau. Wir nehmen noch keine Aufträge an.",
+        "status": "Noch nicht geöffnet. Preise und Start stehen noch nicht fest.",
+        "price": "Preis auf Anfrage",
+        "common_title": "In jedem Paket enthalten",
+        "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer gewünscht", "Hosting auf GitHub Pages mit HTTPS; die Dateien gehören dem Kunden", "Domain auf den Namen des Kunden eingerichtet"],
+        "packages": [
+            ("Vitrine", "Onepager", "Für einen lokalen Betrieb oder ein einzelnes Angebot.", ["Eine lange Seite, eine Sprache", "WhatsApp-Button und/oder Kontaktformular", "Grundlegendes SEO und Vorschaubild", "2 Korrekturrunden"]),
+            ("Atelier", "Firmenwebsite, 3–5 Seiten", "Für Betriebe, die mehr als eine Seite brauchen.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Profil-Links"]),
+            ("Maison", "Bis 8 Seiten, zwei Sprachen", "Für internationales oder touristisches Publikum.", ["Alles aus Atelier", "Bis zu 8 Seiten, zwei Sprachen mit Umschalter", "SEO je Sprache mit hreflang", "3 Korrekturrunden"]),
+            ("Care", "Monatliche Betreuung (optional)", "Hält die Seite nach dem Start am Laufen.", ["Hosting und HTTPS", "Erreichbarkeitsprüfung mit Hinweis", "Sicherung über die Git-Historie", "Kleine Inhaltsänderungen pro Monat"]),
+        ],
+        "not": "Nicht enthalten: Shops, Buchungssysteme, Mitgliederbereiche, WordPress, Logo-Design, Fotos, Werbekampagnen.",
+        "example": "Live-Beispiel: diese Website.",
+        "back": "Zur Startseite",
+    },
+}
+
+
+def websites_body(lang: str) -> str:
+    t = WEBSITES[lang]
+    paths = page_paths(lang, 1 if lang == "en" else 2)
+    cards = []
+    for i, (name, sub, who, feats) in enumerate(t["packages"]):
+        fl = "".join(f"<li>{esc(f)}</li>" for f in feats)
+        cards.append(f"""
+          <article class="product{" is-featured" if i == 1 else ""}">
+            <span class="pill">{esc(sub)}</span>
+            <h3>{esc(name)}</h3>
+            <p>{esc(who)}</p>
+            <ul class="checks checks-sm">{fl}</ul>
+            <div class="price-line"><span class="price-big price-tbd">{esc(t["price"])}</span></div>
+          </article>""")
+    common = "".join(f"<li>{esc(c)}</li>" for c in t["common"])
+    return f"""
+      <header class="hero">
+        <p class="kicker">{esc(t["kicker"])}</p>
+        <h1 class="page-title">{esc(t["h1"])}</h1>
+        <p class="lede">{esc(t["lede"])}</p>
+        <p class="notice" role="note">{esc(t["status"])}</p>
+      </header>
+      <div class="products products-4">{''.join(cards)}
+      </div>
+      <section class="section">
+        <div class="split">
+          <div class="panel"><h3>{esc(t["common_title"])}</h3><ul class="checks">{common}</ul></div>
+          <div class="panel"><p>{esc(t["not"])}</p><p><a href="{paths["home"]}#case-study">{esc(t["example"])}</a></p><p><a class="btn btn-ghost" href="{paths["home"]}">{esc(t["back"])}</a></p></div>
+        </div>
+      </section>
+"""
+
+
 def home_body(lang: str, paths: dict) -> str:
     t = HOME[lang]
     ledger = "\n".join(
@@ -775,6 +947,7 @@ def home_body(lang: str, paths: dict) -> str:
         </div>
       </section>
 
+{process_section(lang)}
 {team_section(lang)}
       <section class="section" id="products">
         <div class="section-head">
@@ -788,6 +961,7 @@ def home_body(lang: str, paths: dict) -> str:
         </div>
       </section>
 
+{case_section(lang, paths)}
       <section class="section" id="n8n">
         <div class="section-head">
           <div>
@@ -813,6 +987,7 @@ def home_body(lang: str, paths: dict) -> str:
         <p class="note">{esc(t["rev"])}</p>
       </section>
 
+{stack_section(lang)}
 {faq_section(lang)}
       <section class="section">
         <div class="cta-band">
@@ -1687,6 +1862,9 @@ def build() -> None:
         (ROOT / "de" / "n8n" / "index.html", "de", "n8n", 2, ARTICLE["de"], lambda lang, paths=None: article_body(lang)),
         (ROOT / "de" / "directory" / "index.html", "de", "directory", 2, DIR["de"], lambda lang, paths=None: directory_body(lang)),
         (ROOT / "de" / "legal" / "index.html", "de", "legal", 2, LEGAL["de"], lambda lang, paths=None: legal_body(lang)),
+        # Prepared, not linked, noindex, not in sitemap (see README):
+        (ROOT / "websites" / "index.html", "en", "websites", 1, WEBSITES["en"], lambda lang, paths=None: websites_body(lang)),
+        (ROOT / "de" / "websites" / "index.html", "de", "websites", 2, WEBSITES["de"], lambda lang, paths=None: websites_body(lang)),
     ]
     for path, lang, page, depth, meta, body_fn in pages:
         paths = page_paths(lang, depth)
