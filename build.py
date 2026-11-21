@@ -239,6 +239,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     de_cur = ' aria-current="true"' if lang == "de" else ""
     wrap = "wrap-narrow" if page in ("n8n", "legal", "templates") else "wrap"
     dir_js = f'\n<script src="{paths["js_dir"]}" defer></script>' if page == "directory" else ""
+    progress = '\n  <div class="progress" aria-hidden="true"></div>' if page in ("n8n", "templates", "legal") else ""
     canon = site_url(CANONICAL[(lang, page)])
     alt = ""
     if page != "templates":
@@ -249,16 +250,18 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
             f'  <link rel="alternate" hreflang="de" href="{de_url}">\n'
             f'  <link rel="alternate" hreflang="x-default" href="{en_url}">\n'
         )
-    og_img = site_url("/img/og.png")
+    og_img = site_url("/img/og.png") if (ROOT / "img" / "og.png").exists() else site_url("/og.png")
     # Binary assets are added separately; only reference them once they exist in the repo.
     og_tags = tw_img = png_icons = ""
-    if (ROOT / "img" / "og.png").exists():
+    if (ROOT / "img" / "og.png").exists() or (ROOT / "og.png").exists():
         og_tags = (f'  <meta property="og:image" content="{og_img}">\n'
                    '  <meta property="og:image:width" content="1200">\n'
                    '  <meta property="og:image:height" content="630">\n')
         tw_img = f'  <meta name="twitter:image" content="{og_img}">\n'
+    if (ROOT / "favicon-32.png").exists():
+        png_icons += f'  <link rel="icon" href="{root}favicon-32.png" sizes="32x32" type="image/png">\n'
     if (ROOT / "apple-touch-icon.png").exists():
-        png_icons = f'  <link rel="apple-touch-icon" href="{root}apple-touch-icon.png">\n'
+        png_icons += f'  <link rel="apple-touch-icon" href="{root}apple-touch-icon.png">\n'
     f = FOOTER_TEXT[lang]
     sub_label = SUBSCRIBE_LABEL[lang]
     return f"""<!DOCTYPE html>
@@ -282,7 +285,8 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <meta name="twitter:site" content="@desire__agency">
   <meta name="twitter:title" content="{esc(title)}">
   <meta name="twitter:description" content="{esc(description)}">
-{tw_img}  <link rel="stylesheet" href="{root}fonts/inter.css" media="print" onload="this.media='all'">
+{tw_img}  <script>try{{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}</script>
+  <link rel="stylesheet" href="{root}fonts/inter.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="{root}fonts/inter.css"></noscript>
   <link rel="stylesheet" href="{paths['css']}">
 {extra_head}</head>
@@ -305,8 +309,9 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
           <a href="{other_href if lang == "en" else "#"}"{de_cur} hreflang="de">DE</a>
         </span>
       </nav>
+      <button type="button" class="theme-toggle" aria-label="{"Toggle theme" if lang == "en" else "Design wechseln"}">{THEME_ICONS}</button>
     </div>
-  </header>
+  </header>{progress}
   <div class="ad-banner">
     <div class="wrap">{BANNER[lang]}</div>
   </div>
@@ -363,7 +368,8 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     </div>
   </footer>
   <script src="{paths['config']}"></script>
-  <script src="{paths['js_aff']}"></script>{dir_js}{extra_js}
+  <script src="{paths['js_aff']}"></script>{dir_js}
+  <script src="{root}js/site.js" defer></script>{extra_js}
 </body>
 </html>
 """
@@ -559,14 +565,142 @@ HOME = {
 }
 
 
+THEME_ICONS = (
+    '<svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>'
+    '<svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
+)
+
+TEAM = {
+    "en": {
+        "kicker": "The team", "title": "Who does what",
+        "text": "One human owner, one chief of staff, and ten specialist agents. Hover or tap an agent to see its job.",
+        "trade": "Trading desk (paper money)", "growth": "Growth & products", "lead_grp": "Coordination", "human_grp": "Owner",
+        "hint": "Lines show who reports to the chief of staff.",
+        "human": ("Desire", "Human owner", "Sets the goals and approves anything involving real money, purchases or deals."),
+        "lead": ("Jojo", "Chief of staff", "Plans the day, hands out work, checks results and writes the morning and evening reports."),
+        "trade_agents": [
+            ("Chef", "Desk manager", "Runs the paper-trading desks and proposes rule changes."),
+            ("Scout", "Candidate scout", "Looks for new candidates for the paper-trading desks."),
+            ("News", "News watch", "Tracks news that could matter for the desks."),
+            ("Charts", "Chart reader", "Reads price charts and market structure."),
+            ("Skeptiker", "The skeptic", "Argues against ideas before they ship and looks for the weak spot."),
+        ],
+        "growth_agents": [
+            ("Publisher", "Content & community", "Drafts posts and replies for X, Reddit and the newsletter."),
+            ("Produkte", "Products", "Builds and maintains the Gumroad products and templates."),
+            ("Analyst", "Social analyst", "Reads post performance and niche data, and suggests ideas. Posts nothing itself."),
+            ("Radar", "Trends", "Scans for broad trends and new ideas."),
+            ("Toolbox", "Tools", "Finds and tests new tools, and drops the ones that don’t help."),
+        ],
+    },
+    "de": {
+        "kicker": "Das Team", "title": "Wer macht was",
+        "text": "Ein menschlicher Owner, ein Chief of Staff und zehn spezialisierte Agenten. Fahr über einen Agenten oder tippe ihn an, um seine Aufgabe zu sehen.",
+        "trade": "Trading-Desk (Spielgeld)", "growth": "Wachstum & Produkte", "lead_grp": "Koordination", "human_grp": "Owner",
+        "hint": "Die Linien zeigen, wer an den Chief of Staff berichtet.",
+        "human": ("Desire", "Owner (Mensch)", "Setzt die Ziele und gibt alles frei, was echtes Geld, Käufe oder Deals betrifft."),
+        "lead": ("Jojo", "Chief of Staff", "Plant den Tag, verteilt Aufgaben, prüft Ergebnisse und schreibt den Morgen- und Abendbericht."),
+        "trade_agents": [
+            ("Chef", "Desk-Manager", "Führt die Papier-Trading-Desks und schlägt Regeländerungen vor."),
+            ("Scout", "Kandidaten-Scout", "Sucht neue Kandidaten für die Papier-Desks."),
+            ("News", "Nachrichten", "Verfolgt Nachrichten, die für die Desks wichtig sein könnten."),
+            ("Charts", "Chart-Leser", "Liest Kurscharts und Marktstruktur."),
+            ("Skeptiker", "Der Skeptiker", "Hält dagegen, bevor etwas live geht, und sucht die Schwachstelle."),
+        ],
+        "growth_agents": [
+            ("Publisher", "Content & Community", "Entwirft Posts und Antworten für X, Reddit und den Newsletter."),
+            ("Produkte", "Gumroad & Vorlagen", "Baut und pflegt die Gumroad-Produkte und Vorlagen."),
+            ("Analyst", "Social-Analyst", "Wertet Post-Performance und Nischendaten aus und liefert Ideen. Postet selbst nichts."),
+            ("Radar", "Trends", "Sucht breite Trends und neue Ideen."),
+            ("Toolbox", "Werkzeuge", "Findet und testet neue Tools und verwirft die, die nicht helfen."),
+        ],
+    },
+}
+
+FAQ = {
+    "en": {
+        "kicker": "FAQ", "title": "Fair questions",
+        "items": [
+            ("Why publish €0 in revenue?", "Because it is the real number. Build in public only means something if the zeros are shown too. We update the figures as they change."),
+            ("What is paper trading?", "The trading desks use simulated money to test rules. The results are not income, not a product and not financial advice. We publish them because they are part of the system."),
+            ("Are the n8n templates really free?", "Yes. You download the workflow.json, import it into your own n8n and add your own credentials. The files only contain placeholders."),
+            ("Do you use AI to write this?", "Yes. The agents draft most of the work and a human owner approves anything involving money. We say so wherever a platform asks for it."),
+            ("Does this site track me?", "No. There are no cookies, analytics or third-party requests. The theme toggle saves your choice in your own browser only."),
+        ],
+    },
+    "de": {
+        "kicker": "FAQ", "title": "Berechtigte Fragen",
+        "items": [
+            ("Warum zeigt ihr 0 € Ertrag?", "Weil es die echte Zahl ist. Build in Public bedeutet nur etwas, wenn auch die Nullen sichtbar sind. Wir aktualisieren die Zahlen, wenn sie sich ändern."),
+            ("Was ist Papier-Trading?", "Die Trading-Desks testen Regeln mit Spielgeld. Die Ergebnisse sind kein Einkommen, kein Produkt und keine Finanzberatung. Wir zeigen sie, weil sie Teil des Systems sind."),
+            ("Sind die n8n-Vorlagen wirklich kostenlos?", "Ja. Du lädst die workflow.json herunter, importierst sie in dein eigenes n8n und trägst deine eigenen Zugangsdaten ein. Die Dateien enthalten nur Platzhalter."),
+            ("Schreibt ihr das mit KI?", "Ja. Die Agenten entwerfen den Großteil der Arbeit, und ein menschlicher Owner gibt alles frei, was Geld betrifft. Wo eine Plattform es verlangt, legen wir das offen."),
+            ("Trackt mich diese Seite?", "Nein. Es gibt keine Cookies, keine Analytics und keine Anfragen an Dritte. Der Design-Schalter speichert deine Wahl nur in deinem eigenen Browser."),
+        ],
+    },
+}
+
+
+def _agent_btn(name, role, desc, group, cls="", aid=None):
+    return (
+        f'<button type="button" class="agent {cls}" aria-pressed="false" data-id="{esc(aid or name)}" '
+        f'data-name="{esc(name)} · {esc(role)}" data-role="{esc(desc)}" data-group="{esc(group)}">'
+        f'<span class="av" aria-hidden="true">{esc(name[:2])}</span><span>{esc(name)}<small>{esc(role)}</small></span></button>'
+    )
+
+
+def team_section(lang: str) -> str:
+    t = TEAM[lang]
+    trade = "".join(_agent_btn(n, r, d, t["trade"], "grp-trade") for n, r, d in t["trade_agents"])
+    growth = "".join(_agent_btn(n, r, d, t["growth"]) for n, r, d in t["growth_agents"])
+    hn, hr, hd = t["human"]
+    ln, lr, ld = t["lead"]
+    return f"""
+      <section class="section" id="team">
+        <div class="section-head">
+          <div>
+            <p class="kicker">{esc(t["kicker"])}</p>
+            <h2>{esc(t["title"])}</h2>
+            <p>{esc(t["text"])}</p>
+          </div>
+        </div>
+        <div class="team">
+          <svg class="team-lines" aria-hidden="true"></svg>
+          <div class="team-col"><h3>{esc(t["trade"])}</h3>{trade}</div>
+          <div class="team-center">
+            {_agent_btn(hn, hr, hd, t["human_grp"], "is-lead is-human", "desire")}
+            {_agent_btn(ln, lr, ld, t["lead_grp"], "is-lead")}
+            <div class="team-detail" aria-live="polite"><div class="grp">{esc(t["lead_grp"])}</div><div class="who">{esc(ln)} · {esc(lr)}</div><p>{esc(ld)}</p></div>
+            <p class="team-hint">{esc(t["hint"])}</p>
+          </div>
+          <div class="team-col"><h3>{esc(t["growth"])}</h3>{growth}</div>
+        </div>
+      </section>
+"""
+
+
+def faq_section(lang: str) -> str:
+    t = FAQ[lang]
+    items = "".join(
+        f'<details><summary>{esc(q)}</summary><div class="faq-a"><p>{esc(a)}</p></div></details>'
+        for q, a in t["items"]
+    )
+    return f"""
+      <section class="section" id="faq">
+        <div class="section-head"><div><p class="kicker">{esc(t["kicker"])}</p><h2>{esc(t["title"])}</h2></div></div>
+        <div class="faq">{items}</div>
+      </section>
+"""
+
+
 def home_body(lang: str, paths: dict) -> str:
     t = HOME[lang]
     ledger = "\n".join(
-        f'<div class="ledger-row"><span>{label}</span><b class="{cls}">{val}</b></div>'
+        f'<div class="ledger-row"><span>{label}</span><b class="{cls}" data-count>{val}</b></div>'
         for label, val, cls in t["ledger"]
     )
     stats = "\n".join(
-        f'<div class="stat"><div class="value">{esc(v)}</div><div class="label">{lab}</div><div class="sub">{sub}</div></div>'
+        f'<div class="stat"><div class="value" data-count>{esc(v)}</div><div class="label">{lab}</div><div class="sub">{sub}</div></div>'
         for v, lab, sub in t["stats"]
     )
     shipped = "\n".join(
@@ -641,6 +775,7 @@ def home_body(lang: str, paths: dict) -> str:
         </div>
       </section>
 
+{team_section(lang)}
       <section class="section" id="products">
         <div class="section-head">
           <div>
@@ -678,6 +813,7 @@ def home_body(lang: str, paths: dict) -> str:
         <p class="note">{esc(t["rev"])}</p>
       </section>
 
+{faq_section(lang)}
       <section class="section">
         <div class="cta-band">
           <div>
@@ -1261,6 +1397,7 @@ def templates_body() -> str:
           <p>{esc(t['summary'])}</p>
           <div class="actions">
             <a class="btn btn-primary" href="{esc(t['file'])}" download>Download workflow.json</a>
+            <button type="button" class="btn btn-ghost copy-btn" data-copy="{esc(t['file'])}">Copy file link</button>
           </div>
           <h3>Setup</h3>
           <ol>
