@@ -189,8 +189,8 @@ IH_URL = "https://www.indiehackers.com/desireagency"
 NUMBERS_AS_OF = {"en": "21 Nov 2026, 19:25 Lisbon", "de": "21.11.2026, 19:25 Lissabon"}
 
 LOGO_SVG = (
-    '<svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">'
-    '<defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#5b4cf0"/></linearGradient><radialGradient id="dgp" cx=".85" cy=".1" r=".8"><stop offset="0" stop-color="#e26bd8" stop-opacity=".75"/><stop offset="1" stop-color="#e26bd8" stop-opacity="0"/></radialGradient><radialGradient id="dgg" cx=".05" cy="1" r=".7"><stop offset="0" stop-color="#3ccf91" stop-opacity=".7"/><stop offset="1" stop-color="#3ccf91" stop-opacity="0"/></radialGradient></defs><rect width="100" height="100" rx="26" fill="url(#dg)"/><rect width="100" height="100" rx="26" fill="url(#dgp)"/><rect width="100" height="100" rx="26" fill="url(#dgg)"/><path d="M29 24h19c16.6 0 28 10.6 28 26s-11.4 26-28 26H29Z" fill="none" stroke="#fff" stroke-width="10" stroke-linejoin="round"/><circle cx="50" cy="50" r="7" fill="#fff"/>'
+    '<svg class="brand-mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
+    '<defs><linearGradient id="ng" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5ee6"/><stop offset=".5" stop-color="#b45cff"/><stop offset="1" stop-color="#3fe6f2"/></linearGradient></defs><rect width="120" height="120" rx="28" fill="#07071a"/><g transform="translate(11.4 12.2) scale(.8)"><path d="M22 16H58C83 16 100 35 100 60C100 85 83 104 58 104H22ZM40 34V86H57C71 86 81 75 81 60C81 45 71 34 57 34ZM22 16L40 34M22 104L40 86" fill="none" stroke="url(#ng)" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/></g>'
     '</svg>'
 )
 
@@ -270,7 +270,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     f = FOOTER_TEXT[lang]
     sub_label = SUBSCRIBE_LABEL[lang]
     return f"""<!DOCTYPE html>
-<html lang="{lang}">
+<html lang="{lang}" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -278,7 +278,7 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
   <link rel="canonical" href="{canon}">
-{alt}  <meta name="theme-color" content="#0c0d12">
+{alt}  <meta name="theme-color" content="#06060c">
   <link rel="icon" href="{root}favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="{root}site.webmanifest">
 {png_icons}  <meta property="og:type" content="website">
@@ -1638,7 +1638,7 @@ def write(path: Path, text: str) -> None:
 
 def not_found() -> str:
     return """<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
