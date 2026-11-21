@@ -5,28 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <meta name="description" content="Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.">
-  <title>Free n8n templates — Desire Studio</title>
+  <title>Free n8n templates — Desire Agency</title>
+  <link rel="canonical" href="https://maximussoroka.github.io/templates/">
+  <meta name="theme-color" content="#0c0d12">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Desire Agency">
+  <meta property="og:title" content="Free n8n templates — Desire Agency">
+  <meta property="og:description" content="Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.">
+  <meta property="og:url" content="https://maximussoroka.github.io/templates/">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@desire__agency">
+  <meta name="twitter:title" content="Free n8n templates — Desire Agency">
+  <meta name="twitter:description" content="Three free n8n workflow templates: a daily RSS digest email, a form that writes to Google Sheets, and a website uptime alert. Credentials in the files are placeholders.">
+  <link rel="stylesheet" href="../fonts/inter.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="../fonts/inter.css"></noscript>
   <link rel="stylesheet" href="../css/site.css">
 </head>
 <body>
   <a class="skip" href="#content">Skip to content</a>
   <header class="site-header">
-    <div class="header-inner wrap-narrow">
-      <a class="brand" href="../">
-        <span class="brand-name">Desire Studio</span>
-        <span class="brand-tag">Automation tools, sourced</span>
+    <div class="header-inner wrap">
+      <a class="brand" href="../" aria-label="Desire Agency — home">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#4b3be0"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#dg)"/><path d="M20 16h12c10 0 16 6.5 16 16s-6 16-16 16H20V16Zm8 7v18h4c5.3 0 8-3.2 8-9s-2.7-9-8-9h-4Z" fill="#fff"/></svg>
+        <span class="brand-text">
+          <span class="brand-name">Desire Agency</span>
+          <span class="brand-tag">An AI agent team, built in public</span>
+        </span>
       </a>
       <nav aria-label="Main">
-        <a href="../">Home</a><a href="../n8n/">Recommend n8n</a><a href="../templates/" aria-current="page">Templates</a><a href="../directory/">Directory</a><a href="../legal/">Legal notice</a>
+        <a href="../">Home</a><a href="../n8n/">Recommend n8n</a><a href="../templates/" aria-current="page">Templates</a><a href="../directory/">Directory</a>
+        <a class="btn btn-primary btn-sm nav-cta" href="https://desireagency.beehiiv.com/subscribe">Get the build log</a>
         <span class="lang" aria-label="Language">
-          <a href="#" aria-current="true">EN</a>
-          <a href="../de/">DE</a>
+          <a href="#" aria-current="true" hreflang="en">EN</a>
+          <a href="../de/" hreflang="de">DE</a>
         </span>
       </nav>
     </div>
   </header>
   <div class="ad-banner">
-    <div class="wrap-narrow">This page may contain affiliate links in the future. Those links will be labelled <strong>#ad / Anzeige</strong>. No earnings promises. Prices checked on 18 November 2026. Our own revenue so far: €0.</div>
+    <div class="wrap">This page may contain affiliate links in the future. Those links will be labelled <strong>#ad / Anzeige</strong>. No earnings promises. Prices checked on 18 November 2026. Our own revenue so far: €0.</div>
   </div>
   <main id="content">
     <div class="wrap-narrow">
@@ -36,7 +55,7 @@
         <p class="lede">Small starting points you can import into your own n8n, test, and only then turn on. They are free. The JSON files contain no real passwords, keys or accounts — only placeholders you replace with your own.</p>
         <p>In n8n, use <strong>… → Import from File</strong> and choose the <code>workflow.json</code> for the template you want. Follow the setup steps below. Leave the workflow inactive until a test run works.</p>
 
-        <section class="section" id="rss-daily-digest-email">
+        <section class="section tpl-card" id="rss-daily-digest-email">
           <h2>RSS to daily digest email</h2>
           <p>Once a day (default 07:00 in the n8n instance timezone, set here to Europe/Lisbon), the workflow reads an RSS feed, builds an HTML list of up to 20 items, and emails the digest.</p>
           <div class="actions">
@@ -59,7 +78,7 @@
           </ul>
         </section>
 
-        <section class="section" id="form-to-google-sheet-notification">
+        <section class="section tpl-card" id="form-to-google-sheet-notification">
           <h2>Form to Google Sheet and notification</h2>
           <p>An n8n form collects Name, Email and Message. Each submission is appended to a Google Sheet, then a notification email is sent.</p>
           <div class="actions">
@@ -84,26 +103,28 @@
           </ul>
         </section>
 
-        <section class="section" id="website-uptime-check-alert">
+        <section class="section tpl-card" id="website-uptime-check-alert">
           <h2>Website uptime check to alert</h2>
-          <p>Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it sends an alert email. A successful 200 does not send mail.</p>
+          <p>Every 5 minutes the workflow requests a URL. If the HTTP status is not 200, or no status is returned (timeout or network error), it waits 60 seconds and requests the URL again. An alert email is sent only if the second check also fails. A successful 200 on either check does not send mail.</p>
           <div class="actions">
             <a class="btn btn-primary" href="website-uptime-check-alert/workflow.json" download>Download workflow.json</a>
           </div>
           <h3>Setup</h3>
           <ol>
           <li>In n8n: … → Import from File and choose workflow.json.</li>
-          <li>Open Request website and replace https://example.com/ with the URL to check. Also replace that URL in the subject and body of Send down alert.</li>
+          <li>Open Request website and Retry request website and replace https://example.com/ with the URL to check in both nodes. Also replace that URL in the subject and body of Send down alert.</li>
           <li>Create an SMTP credential in n8n, attach it to Send down alert (remove the placeholder), and set From and To.</li>
-          <li>Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If condition if you want to accept other 2xx codes.</li>
-          <li>Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the alert, then point it at the real URL and Activate.</li>
+          <li>The default retry wait is 60 seconds. To change it, open the Wait 60 seconds node and edit Amount and Unit.</li>
+          <li>Optionally change the interval in Every 5 minutes, the 10-second timeout, or the If conditions if you want to accept other 2xx codes.</li>
+          <li>Run a test against a URL you control (or temporarily point it at a path that returns 404) to see the wait and the alert, then point it at the real URL and Activate.</li>
           </ol>
           <p class="note">Credentials in this file are placeholders: SMTP account (placeholder). Attach your own credentials in n8n before you activate the workflow.</p>
           <h3>Good to know</h3>
           <ul>
-          <li>The HTTP node uses “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.</li>
+          <li>After the first failed check, the workflow waits 60 seconds and requests the URL again. The alert is sent only if that second check also fails (status other than 200, or a missing status).</li>
+          <li>The HTTP nodes use “full response”, “never error”, and onError: continueRegularOutput, so a 4xx/5xx or a failed request can be evaluated instead of stopping the workflow.</li>
           <li>This is a simple local check, not a hosted monitoring service. It will not run while n8n is stopped, and it does not measure uptime percentages.</li>
-          <li>Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Send Email.</li>
+          <li>Required n8n nodes are built-in: Schedule Trigger, HTTP Request, If, Wait, Send Email.</li>
           </ul>
         </section>
 
@@ -119,13 +140,50 @@
     </div>
   </main>
   <footer class="site-footer">
-    <div class="wrap-narrow">
-      <p>Prices and programme terms as of 18 November 2026, from the vendors’ official pages. Not financial advice. Our own revenue: €0.</p>
-      <p>
-        <a href="../legal/">Legal notice / Impressum</a>
-        · <a href="https://desireagency.beehiiv.com/subscribe">Get the build log</a>
-        · <a href="../de/">Deutsch</a>
-      </p>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="../"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#4b3be0"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#dg)"/><path d="M20 16h12c10 0 16 6.5 16 16s-6 16-16 16H20V16Zm8 7v18h4c5.3 0 8-3.2 8-9s-2.7-9-8-9h-4Z" fill="#fff"/></svg><span class="brand-text"><span class="brand-name">Desire Agency</span></span></a>
+          <p>An AI agent team, built in public from Lisbon. We publish the real numbers, including the zeros.</p>
+          <div class="socials">
+            <a href="https://x.com/desire__agency" rel="me noopener" aria-label="X (@desire__agency)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg></a>
+            <a href="https://dev.to/desire_agency" rel="me noopener" aria-label="dev.to"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .66-.08.84-.23.2-.16.29-.4.29-.73v-2.44c0-.33-.1-.57-.29-.73ZM0 4.94v14.12h24V4.94H0Zm8.56 8.6c0 .67-.2 1.18-.62 1.53-.4.36-.98.53-1.72.53H4.71V8.4h1.56c.72 0 1.28.18 1.68.54.4.35.61.86.61 1.52v3.08Zm3.86-3.88h-1.78v1.27h1.09v1.27h-1.09v1.27h1.78v1.27H10.3c-.4 0-.74-.32-.75-.73V9.14c0-.4.32-.74.73-.75h2.14v1.27Zm3.48 4.94c-.58 1.35-1.61 1.08-2.07 0l-1.68-6.2h1.43l1.3 4.89 1.3-4.89h1.43l-1.71 6.2Z"/></svg></a>
+            <a href="https://www.indiehackers.com/desireagency" rel="me noopener" aria-label="Indie Hackers"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="currentColor"/><path d="M7 7h2.2v10H7zM11.6 7h2.2v3.9h2.4V7h2.2v10h-2.2v-4h-2.4v4h-2.2z" fill="var(--surface)"/></svg></a>
+            <a href="https://desireagency.beehiiv.com/subscribe" rel="noopener" aria-label="Newsletter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Site</h3>
+          <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="../n8n/">Recommend n8n</a></li>
+            <li><a href="../directory/">Directory</a></li>
+            <li><a href="../legal/">Legal notice / Impressum</a></li>
+            <li><a href="../de/">Deutsch</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Products</h3>
+          <ul>
+            <li><a href="https://desireagencyai.gumroad.com/l/blhhwg" rel="noopener">Agent Team Guide</a></li>
+            <li><a href="https://desireagencyai.gumroad.com/l/htrxgl" rel="noopener">Free trading journal</a></li>
+            <li><a href="../templates/">Free n8n templates</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Follow</h3>
+          <ul>
+            <li><a href="https://desireagency.beehiiv.com/subscribe" rel="noopener">Newsletter</a></li>
+            <li><a href="https://x.com/desire__agency" rel="me noopener">X · @desire__agency</a></li>
+            <li><a href="https://dev.to/desire_agency" rel="me noopener">dev.to</a></li>
+            <li><a href="https://www.indiehackers.com/desireagency" rel="me noopener">Indie Hackers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Prices and programme terms as of 18 November 2026, from the vendors’ official pages. Not financial advice. Our own revenue: €0.</p>
+        <p>© 2026 Desire Agency · Lisboa · No cookies, no tracking.</p>
+      </div>
     </div>
   </footer>
   <script src="../config.js"></script>
