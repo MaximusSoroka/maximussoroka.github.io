@@ -828,12 +828,12 @@ CONTACT_EMAIL = "desire.studio.agency@gmail.com"
 WEBSITES = {
     "en": {
         "title": "Websites for small businesses — Desire Agency",
-        "description": "Fast, mobile-first websites for small businesses, built by Desire Agency in Lisbon. Vitrine from €390, Atelier from €750, Maison from €1,190, Care €29/month (plus VAT). No builder subscription, no tracking unless you want it.",
+        "description": "Fast, mobile-first websites for small businesses, built by Desire Agency in Lisbon. Vitrine from €390, Atelier from €750, Maison from €1,190, Care €29/month. Final prices, no VAT charged. No builder subscription, no tracking unless you want it.",
         "kicker": "Websites", "h1": "Fast, honest websites for small businesses",
         "lede": "A clean site that works on the phone, brings enquiries and belongs to you. No builder subscription and no tracking unless you want it. Built by the same team that runs this site.",
         "status": "Projects start after a short call. You get a written quote first, then the invoice.",
-        "vat": "Net prices plus 23% VAT.",
-        "from": "from", "per_month": "/ month", "plus_vat": "+ VAT",
+        "vat": "Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal).",
+        "from": "from", "per_month": "/ month",
         "delivery": "Delivery", "revisions": "Revisions",
         "ask": "Ask about {name}", "subject": "Enquiry {name}",
         "common_title": "Included in every package",
@@ -851,12 +851,12 @@ WEBSITES = {
     },
     "de": {
         "title": "Websites für kleine Betriebe — Desire Agency",
-        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut von Desire Agency in Lissabon. Vitrine ab 390 €, Atelier ab 750 €, Maison ab 1.190 €, Care 29 €/Monat (zzgl. MwSt.). Kein Baukasten-Abo, kein Tracking, wenn du keines willst.",
+        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut von Desire Agency in Lissabon. Vitrine ab 390 €, Atelier ab 750 €, Maison ab 1.190 €, Care 29 €/Monat. Endpreise, keine MwSt. Kein Baukasten-Abo, kein Tracking, wenn du keines willst.",
         "kicker": "Websites", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
         "lede": "Eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dir gehört. Kein Baukasten-Abo und kein Tracking, wenn du keines willst. Gebaut vom selben Team, das diese Seite betreibt.",
         "status": "Projektstart nach einem kurzen Gespräch. Du bekommst zuerst ein schriftliches Angebot, danach die Rechnung.",
-        "vat": "Nettopreise zzgl. 23 % MwSt. (IVA).",
-        "from": "ab", "per_month": "/ Monat", "plus_vat": "zzgl. MwSt.",
+        "vat": "Endpreise. Keine MwSt. – Steuerbefreiung nach Art. 53 CIVA (Portugal).",
+        "from": "ab", "per_month": "/ Monat",
         "delivery": "Lieferzeit", "revisions": "Korrekturen",
         "ask": "{name} anfragen", "subject": "Anfrage {name}",
         "common_title": "In jedem Paket enthalten",
@@ -891,7 +891,7 @@ def websites_body(lang: str) -> str:
             meta = (f'<dl class="pkg-meta"><div><dt>{esc(t["delivery"])}</dt><dd>{esc(delivery)}</dd></div>'
                     f'<div><dt>{esc(t["revisions"])}</dt><dd>{esc(revs)}</dd></div></dl>')
         pre = "" if monthly else f'<span class="price-from">{esc(t["from"])}</span>'
-        post = f'<span class="price-sub">{esc(t["per_month"])} · {esc(t["plus_vat"])}</span>' if monthly else f'<span class="price-sub">{esc(t["plus_vat"])}</span>'
+        post = f'<span class="price-sub">{esc(t["per_month"])}</span>' if monthly else ""
         btn = "btn btn-primary" if i == 1 else "btn btn-ghost"
         cards.append(f"""
           <article class="product pkg{" is-featured" if i == 1 else ""}">
@@ -1852,7 +1852,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
-- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Net prices plus 23% VAT. Delivery times count from the complete briefing. Enquiries by email only; no online payment.
+- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by email only; no online payment.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
 
@@ -1886,9 +1886,11 @@ def write_sitemap() -> None:
         ("/llms.txt", "0.5", "weekly"),
         ("/tools.json", "0.6", "weekly"),
     ]
-    lastmod = "2026-11-21"
+    lastmod_default = "2026-11-21"
+    lastmod_today = "2026-11-22"
     urls = []
     for path, prio, freq in paths:
+        lastmod = lastmod_today if path in ("/websites/", "/de/websites/", "/llms.txt") else lastmod_default
         urls.append(
             "  <url>\n"
             f"    <loc>{esc(site_url(path))}</loc>\n"
