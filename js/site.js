@@ -123,27 +123,59 @@
     counters.forEach(function (el) { zeroed(el); cio.observe(el); });
   }
 
-  /* ---------- Cursor-follow spotlight + hero glow ---------- */
+  /* ---------- Cursor-follow spotlight + hero glow ----------
+     Coordinates: client pointer position minus the element's visual centre (getBoundingClientRect)
+     plus half its layout size (offsetWidth/Height). Measured inside each animation frame, so scroll,
+     reveal/translate and small tilt rotations never shift the light. Magnetic buttons use a box frozen
+     on pointerenter so their own movement does not feed back.
+     Updates are batched with requestAnimationFrame. Off for touch and prefers-reduced-motion. */
   var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  function isTouch(e) { return e.pointerType === "touch"; }
+  function pageBox(el) {
+    var r = el.getBoundingClientRect();
+    // If a tilt transform is active, fall back to layout size centred on the visual box.
+    var w = el.offsetWidth || r.width, h = el.offsetHeight || r.height;
+    return { x: r.left + window.scrollX + (r.width - w) / 2, y: r.top + window.scrollY + (r.height - h) / 2, w: w, h: h };
+  }
+  function tracker(el, onFrame, frozen) {
+    var box = null, lx = 0, ly = 0, raf = 0;
+    function frame() { raf = 0; if (!box) return; if (!frozen) box = pageBox(el); onFrame(lx + window.scrollX - box.x, ly + window.scrollY - box.y, box); }
+    function queue() { if (!raf) raf = requestAnimationFrame(frame); }
+    el.addEventListener("pointerenter", function (e) { if (isTouch(e)) return; box = pageBox(el); lx = e.clientX; ly = e.clientY; queue(); });
+    el.addEventListener("pointermove", function (e) { if (isTouch(e)) return; if (!box) box = pageBox(el); lx = e.clientX; ly = e.clientY; queue(); }, { passive: true });
+    el.addEventListener("pointerleave", function () { box = null; });
+    window.addEventListener("resize", function () { if (box) box = pageBox(el); }, { passive: true });
+    window.addEventListener("scroll", function () { if (box) queue(); }, { passive: true });
+    return function () { return !!box; };
+  }
   if (fine && !reduce) {
     $all(".product, .card, .fact, .panel, .stat, .tpl-card").forEach(function (el) {
       el.classList.add("spot");
-      el.addEventListener("pointermove", function (e) {
-        var r = el.getBoundingClientRect();
-        el.style.setProperty("--mx", (e.clientX - r.left) + "px");
-        el.style.setProperty("--my", (e.clientY - r.top) + "px");
+      tracker(el, function (x, y) {
+        el.style.setProperty("--mx", x.toFixed(1) + "px");
+        el.style.setProperty("--my", y.toFixed(1) + "px");
       });
     });
     var hero = doc.querySelector(".home-hero");
     if (hero) {
-      var glow = doc.createElement("div");
+      var glow = doc.createElement("span"); // not a div: ".home-hero > div" gets the parallax transform
       glow.className = "hero-glow"; glow.setAttribute("aria-hidden", "true");
       hero.appendChild(glow);
-      hero.addEventListener("pointermove", function (e) {
-        var r = hero.getBoundingClientRect();
-        glow.style.setProperty("--gx", (e.clientX - r.left) + "px");
-        glow.style.setProperty("--gy", (e.clientY - r.top) + "px");
+      var gx = 0, gy = 0, tx = 0, ty = 0, gl = 0, started = false;
+      function glowStep() {
+        gl = 0;
+        gx += (tx - gx) * 0.28; gy += (ty - gy) * 0.28;
+        glow.style.setProperty("--gx", gx.toFixed(1) + "px");
+        glow.style.setProperty("--gy", gy.toFixed(1) + "px");
+        if (Math.abs(tx - gx) > 0.4 || Math.abs(ty - gy) > 0.4) gl = requestAnimationFrame(glowStep);
+      }
+      tracker(hero, function (x, y) {
+        tx = x; ty = y;
+        if (!started) { gx = x; gy = y; started = true; }
+        glow.classList.add("is-on");
+        if (!gl) gl = requestAnimationFrame(glowStep);
       });
+      hero.addEventListener("pointerleave", function () { glow.classList.remove("is-on"); started = false; });
     }
   }
 
@@ -334,19 +366,17 @@
       // magnetic buttons
       $all(".btn-primary, .btn-light, .btn-ad, .nav-cta, .btn-outline-light").forEach(function (b) {
         b.classList.add("mag");
-        b.addEventListener("pointermove", function (e) {
-          var r = b.getBoundingClientRect();
-          b.style.setProperty("--bx", ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + "px");
-          b.style.setProperty("--by", ((e.clientY - r.top - r.height / 2) * .3 - 1).toFixed(1) + "px");
-        });
+        tracker(b, function (x, y, box) {
+          b.style.setProperty("--bx", ((x - box.w / 2) * .22).toFixed(1) + "px");
+          b.style.setProperty("--by", ((y - box.h / 2) * .3 - 1).toFixed(1) + "px");
+        }, true);
         b.addEventListener("pointerleave", function () { b.style.removeProperty("--bx"); b.style.removeProperty("--by"); });
       });
       // tilt cards
       $all(".product, .pkg, .tpl-card, .stat, .process li, .step").forEach(function (el) {
         el.classList.add("tilt");
-        el.addEventListener("pointermove", function (e) {
-          var r = el.getBoundingClientRect();
-          var px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
+        tracker(el, function (x, y, box) {
+          var px = Math.max(-.5, Math.min(.5, x / box.w - .5)), py = Math.max(-.5, Math.min(.5, y / box.h - .5));
           el.style.setProperty("--ry", (px * 6).toFixed(2) + "deg");
           el.style.setProperty("--rx", (-py * 6).toFixed(2) + "deg");
           el.classList.add("is-tilting");
@@ -356,7 +386,7 @@
     }
     // hero parallax
     if (hero) {
-      var content = hero.querySelector(":scope > div");
+      var content = hero.querySelector(":scope > div:not(.aurora)");
       var pt = false;
       var par = function () {
         pt = false;

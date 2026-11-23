@@ -64,18 +64,18 @@ def status_class(status: str) -> str:
 NAV = {
     "en": [
         ("home", "Home"),
+        ("websites", "Websites"),
         ("n8n", "Recommend n8n"),
         ("templates", "Templates"),
         ("directory", "Directory"),
-        ("websites", "Websites"),
         ("legal", "Legal notice"),
     ],
     "de": [
         ("home", "Start"),
+        ("websites", "Websites"),
         ("n8n", "n8n-Empfehlung"),
         ("templates", "Templates"),
         ("directory", "Verzeichnis"),
-        ("websites", "Websites"),
         ("legal", "Impressum"),
     ],
 }
@@ -186,7 +186,36 @@ JOURNAL_URL = "https://desireagencyai.gumroad.com/l/htrxgl"
 X_URL = "https://x.com/desire__agency"
 DEVTO_URL = "https://dev.to/desire_agency"
 IH_URL = "https://www.indiehackers.com/desireagency"
-NUMBERS_AS_OF = {"en": "21 Nov 2026, 19:25 Lisbon", "de": "21.11.2026, 19:25 Lissabon"}
+GUIDE_EARLY_URL = GUIDE_URL + "/EARLYBIRD"
+
+# Ledger numbers come from data/ledger.json (real sources only; see "sources" in that file).
+LEDGER = json.loads((DATA / "ledger.json").read_text())
+_MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def _asof(lang: str) -> str:
+    d, t = LEDGER["as_of"].split("T")
+    y, m, dd = (int(x) for x in d.split("-"))
+    if lang == "de":
+        return f"{dd:02d}.{m:02d}.{y}, {t} Lissabon"
+    return f"{dd} {_MON[m - 1]} {y}, {t} Lisbon"
+
+
+def _money(v: float, cur: str, lang: str, signed: bool = False) -> str:
+    sign = "−" if v < 0 else ""
+    a = f"{abs(v):,.2f}"
+    if lang == "de":
+        a = a.replace(",", "X").replace(".", ",").replace("X", ".")
+        return f"{sign}{a} {cur}"
+    return f"{sign}{cur}{a}"
+
+
+NUMBERS_AS_OF = {"en": _asof("en"), "de": _asof("de")}
+L_PNL = LEDGER["paper_closed_pnl_usd"]
+L_PNL_CLS = "neg" if L_PNL < 0 else ""
+L_TRADES = str(LEDGER["paper_closed_trades"])
+L_DESKS = {"en": {4: "four", 3: "three", 2: "two"}.get(LEDGER["paper_desks"], str(LEDGER["paper_desks"])),
+           "de": {4: "vier", 3: "drei", 2: "zwei"}.get(LEDGER["paper_desks"], str(LEDGER["paper_desks"]))}
 
 LOGO_SVG = (
     '<svg class="brand-mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
@@ -265,6 +294,10 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
             continue  # legal lives in the footer
         href = paths[key]
         cur = ' aria-current="page"' if key == page else ""
+        if key == "websites":
+            frm = "from €390" if lang == "en" else "ab 390 €"
+            nav.append(f'<a class="nav-hot" href="{href}"{cur}>{esc(label)} <small>{frm}</small></a>')
+            continue
         nav.append(f'<a href="{href}"{cur}>{esc(label)}</a>')
     other = "Deutsch" if lang == "en" else "English"
     other_href = lang_href(lang, page, depth)
@@ -423,17 +456,20 @@ HOME = {
         "h1_b": "Every number in public.",
         "lede": "We are building an autonomous AI agent team and writing down what actually happens: what ships, what breaks, and what it earns. Right now that is €0, and we say so.",
         "cta_news": "Get the build log",
-        "cta_guide": "Read the guide — $19",
+        "cta_web": "Get a website — from €390",
+        "cta_guide": "Guide: $9 early bird",
+        "guide_note": "Early bird $9 instead of $19 for the first 50 (code EARLYBIRD).",
+        "web_line": "We build fast, mobile-first websites for small businesses. Final prices, written quote first.",
         "link_tpl": "Free n8n templates",
         "link_journal": "Free trading journal",
         "link_n8n": "Why we recommend n8n",
         "hero_note": "No earnings promises. Not financial advice.",
         "ledger_title": "Ledger",
         "ledger": [
-            ("Real revenue", "€0.00", ""),
-            ("Sales so far", "0", ""),
-            ("Server cost", "€6.14 / mo", ""),
-            ("Paper-trading P&amp;L (simulated)", "−$53.68", "neg"),
+            ("Real revenue", _money(LEDGER["revenue_eur"], "€", "en"), ""),
+            ("Sales so far", str(LEDGER["sales"]), ""),
+            ("Server cost", _money(LEDGER["server_cost_eur_month"], "€", "en") + " / mo", ""),
+            ("Paper-trading P&amp;L (simulated)", _money(L_PNL, "$", "en"), L_PNL_CLS),
         ],
         "ledger_foot": "Paper trading uses simulated money only. It is not income.",
         "bip_kicker": "Build in public",
@@ -441,7 +477,7 @@ HOME = {
         "bip_text": "No vanity metrics and no testimonials we don’t have. These are the figures from our own logs.",
         "stats": [
             ("11", "AI agents", "10 specialist bots and one chief of staff, coordinated by one person."),
-            ("83", "Closed paper trades", "Across four paper-trading desks. Closed P&amp;L −$53.68, simulated money."),
+            (L_TRADES, "Closed paper trades", f"Across {L_DESKS['en']} paper-trading desks. Closed P&amp;L {_money(L_PNL, '$', 'en')}, simulated money."),
             ("3", "Free n8n templates", "Importable workflow.json files with placeholder credentials."),
             (str(N_TOOLS), "Tools sourced", f"Automation and AI-agent tools, prices from official pages ({PRUEF_EN})."),
         ],
@@ -467,8 +503,8 @@ HOME = {
                 "icon": "book", "pill": "Guide", "featured": True,
                 "title": "How I Built a Self-Improving AI Agent Team",
                 "text": "A field report, not a demo: how one person works with ten AI agents, what each one does, and what went wrong.",
-                "price": "$19", "price_sub": "$9 with code <code>EARLYBIRD</code>",
-                "cta": "Get the guide", "url": GUIDE_URL,
+                "price": "$19", "price_sub": "$9 early bird for the first 50, code <code>EARLYBIRD</code>",
+                "cta": "Get the guide", "url": GUIDE_EARLY_URL,
             },
             {
                 "icon": "sheet", "pill": "Free", "featured": False,
@@ -514,17 +550,20 @@ HOME = {
         "h1_b": "Jede Zahl öffentlich.",
         "lede": "Wir bauen ein autonomes KI-Agenten-Team und schreiben auf, was wirklich passiert: was live geht, was kaputtgeht und was es einbringt. Im Moment sind das 0 €, und das sagen wir auch.",
         "cta_news": "Build-Log abonnieren",
-        "cta_guide": "Zum Guide — 19 $",
+        "cta_web": "Website anfragen — ab 390 €",
+        "cta_guide": "Guide: 9 $ Early Bird",
+        "guide_note": "Early Bird 9 $ statt 19 $ für die ersten 50 (Code EARLYBIRD). Guide auf Englisch.",
+        "web_line": "Wir bauen schnelle, mobilfreundliche Websites für kleine Betriebe. Endpreise, erst ein schriftliches Angebot.",
         "link_tpl": "Kostenlose n8n-Vorlagen",
         "link_journal": "Kostenloses Trading-Journal",
         "link_n8n": "Warum wir n8n empfehlen",
         "hero_note": "Kein Gewinnversprechen. Keine Finanzberatung.",
         "ledger_title": "Kassenbuch",
         "ledger": [
-            ("Echter Ertrag", "0,00 €", ""),
-            ("Verkäufe bisher", "0", ""),
-            ("Serverkosten", "6,14 € / Monat", ""),
-            ("Papier-Trading (simuliert)", "−53,68 $", "neg"),
+            ("Echter Ertrag", _money(LEDGER["revenue_eur"], "€", "de"), ""),
+            ("Verkäufe bisher", str(LEDGER["sales"]), ""),
+            ("Serverkosten", _money(LEDGER["server_cost_eur_month"], "€", "de") + " / Monat", ""),
+            ("Papier-Trading (simuliert)", _money(L_PNL, "$", "de"), L_PNL_CLS),
         ],
         "ledger_foot": "Papier-Trading nutzt nur Spielgeld. Es ist kein Einkommen.",
         "bip_kicker": "Build in Public",
@@ -532,7 +571,7 @@ HOME = {
         "bip_text": "Keine Schönwetter-Kennzahlen und keine Kundenstimmen, die wir nicht haben. Das sind die Werte aus unseren eigenen Logs.",
         "stats": [
             ("11", "KI-Agenten", "10 spezialisierte Bots und ein Chief of Staff, koordiniert von einer Person."),
-            ("83", "Geschlossene Papier-Trades", "Auf vier Papier-Desks. Ergebnis −53,68 $, nur Spielgeld."),
+            (L_TRADES, "Geschlossene Papier-Trades", f"Auf {L_DESKS['de']} Papier-Desks. Ergebnis {_money(L_PNL, '$', 'de')}, nur Spielgeld."),
             ("3", "Kostenlose n8n-Vorlagen", "Importierbare workflow.json-Dateien mit Platzhaltern für Zugangsdaten."),
             (str(N_TOOLS), "Tools mit Quellen", f"Automatisierungs- und KI-Agenten-Tools, Preise von offiziellen Seiten ({PRUEF})."),
         ],
@@ -558,8 +597,8 @@ HOME = {
                 "icon": "book", "pill": "Guide · EN", "featured": True,
                 "title": "How I Built a Self-Improving AI Agent Team",
                 "text": "Ein Praxisbericht statt einer Demo: wie eine Person mit zehn KI-Agenten arbeitet, was jeder davon macht und was schiefging. Auf Englisch.",
-                "price": "19 $", "price_sub": "9 $ mit Code <code>EARLYBIRD</code>",
-                "cta": "Zum Guide", "url": GUIDE_URL,
+                "price": "19 $", "price_sub": "9 $ Early Bird für die ersten 50, Code <code>EARLYBIRD</code>",
+                "cta": "Zum Guide", "url": GUIDE_EARLY_URL,
             },
             {
                 "icon": "sheet", "pill": "Kostenlos", "featured": False,
@@ -966,10 +1005,12 @@ def home_body(lang: str, paths: dict) -> str:
           <h1>{esc(t["h1_a"])} <span class="grad">{esc(t["h1_b"])}</span></h1>
           <p class="lede">{esc(t["lede"])}</p>
           <div class="actions">
-            <a class="btn btn-light" href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(t["cta_news"])} <span class="arrow" aria-hidden="true">→</span></a>
-            <a class="btn btn-outline-light" href="{GUIDE_URL}" rel="noopener">{esc(t["cta_guide"])}</a>
+            <a class="btn btn-light" href="{paths["websites"]}">{esc(t["cta_web"])} <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-outline-light" href="{GUIDE_EARLY_URL}" rel="noopener">{esc(t["cta_guide"])}</a>
           </div>
+          <p class="hero-sub">{esc(t["web_line"])}</p>
           <div class="hero-links">
+            <a href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(t["cta_news"])}</a>
             <a href="{paths["templates"]}">{esc(t["link_tpl"])}</a>
             <a href="{JOURNAL_URL}" rel="noopener">{esc(t["link_journal"])}</a>
             <a href="{paths["n8n"]}">{esc(t["link_n8n"])}</a>
