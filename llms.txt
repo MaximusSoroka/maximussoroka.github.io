@@ -22,8 +22,10 @@ This is a static site with no cookies, tracking or analytics.
 - [Free n8n templates (English)](https://maximussoroka.github.io/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)](https://maximussoroka.github.io/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)](https://maximussoroka.github.io/de/legal/): The same legal notice in German.
-- [Websites (English)](https://maximussoroka.github.io/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by email only; no online payment.
+- [Websites (English)](https://maximussoroka.github.io/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
 - [Websites (German)](https://maximussoroka.github.io/de/websites/): The same service page in German.
+- [Websites (European Portuguese)](https://maximussoroka.github.io/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
+- [Demos](https://maximussoroka.github.io/demos/): Three example one-page sites for fictional Lisbon businesses (barbearia, tasca, sapateiro), clearly labelled as demos.
 - [Desire Agency newsletter](https://desireagency.beehiiv.com/subscribe): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
