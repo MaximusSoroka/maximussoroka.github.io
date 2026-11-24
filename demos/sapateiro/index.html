@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <title>Sapataria Meia-Sola (demo – negócio fictício)</title>
+  <meta name="description" content="Exemplo de site de uma página para um sapateiro em Lisboa (negócio fictício).">
+  <link rel="canonical" href="https://maximussoroka.github.io/demos/sapateiro/">
+  <meta name="theme-color" content="#5a3522">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+.demo-bar{position:sticky;top:0;z-index:50;background:#06060c;color:#f4f4f7;font:600 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:.55rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center;justify-content:center;text-align:center;border-bottom:2px solid #ff5ee6}
+.demo-bar b{color:#3fe6f2;letter-spacing:.04em;text-transform:uppercase}
+.demo-bar a{color:#ff9cf0}
+.demo-cta{background:#06060c;color:#f4f4f7;text-align:center;padding:2.5rem 1.2rem;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.demo-cta h2{margin:0 0 .5rem;font-size:1.35rem}
+.demo-cta p{margin:.3rem auto;max-width:620px;color:#c9c4e0;font-size:.95rem}
+.demo-cta a.go{display:inline-block;margin-top:1rem;padding:.8rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);color:#14041a;font-weight:700;text-decoration:none}
+.demo-cta small{display:block;margin-top:1rem;color:#8f89ab}
+
+*{box-sizing:border-box}body{margin:0;background:#f6efe6;color:#2b1d14;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.w{max-width:980px;margin:0 auto;padding:0 1.2rem}
+header.h{background:#5a3522;color:#f6efe6;padding:3rem 0;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 9px)}
+.h .w{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;align-items:center}
+.h small{color:#f0b46a;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+h1{font-family:Georgia,serif;font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.05;margin:.5rem 0}
+.btn{display:inline-block;padding:.8rem 1.2rem;border-radius:999px;background:#f0b46a;color:#2b1d14;font-weight:800;text-decoration:none;margin:.3rem .4rem .3rem 0}
+.btn.o{background:transparent;color:#f6efe6;border:2px solid #f0b46a}
+section{padding:2.6rem 0}h2{font-family:Georgia,serif;color:#5a3522;font-size:1.8rem;margin:0 0 1rem}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.it{background:#fff;border-radius:14px;padding:1.1rem;box-shadow:0 2px 0 #e3d5c3}
+.it b{display:block;font-size:1.05rem}.it span{color:#8a5a3c;font-weight:800;font-size:1.2rem}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.steps div{background:#fff;border-radius:14px;padding:1.1rem 1.1rem 1.1rem 3.4rem;position:relative}
+.steps div::before{counter-increment:s;content:counter(s);position:absolute;left:1rem;top:1rem;width:1.8rem;height:1.8rem;border-radius:50%;background:#5a3522;color:#f6efe6;display:grid;place-items:center;font-weight:800}
+.hours{background:#fff;border-radius:14px;padding:1.2rem;max-width:520px}
+.hours p{display:flex;justify-content:space-between;margin:.3rem 0;border-bottom:1px dashed #e3d5c3}
+@media(max-width:760px){.h .w,.grid,.steps{grid-template-columns:1fr}.h svg{max-width:240px;margin:0 auto;display:block}}
+</style>
+</head>
+<body>
+<div class="demo-bar" role="note"><b>Exemplo / demo – negócio fictício</b><span>Nome, morada, contactos, preços e horários são inventados. Site de demonstração da <a href="../../pt/websites/">Desire Agency</a>.</span></div>
+
+<header class="h"><div class="w">
+  <div>
+    <small>Campo de Ourique · Lisboa (fictício)</small>
+    <h1>Sapataria Meia-Sola</h1>
+    <p>Arranjos de calçado, malas e cintos feitos à mão. A maioria fica pronta em 48 horas.</p>
+    <a class="btn" href="#contacto-demo">Pedir orçamento por foto</a><a class="btn o" href="#arranjos">Ver preços</a>
+  </div>
+  <svg viewBox="0 0 240 160" role="img" aria-label="Ilustração: sapato e martelo de sapateiro">
+<path d="M20 110 C20 80 40 70 70 72 L110 74 C130 76 140 60 150 50 L175 52 C178 80 200 92 222 98 C232 101 232 122 222 124 L30 124 C22 124 20 118 20 110Z" fill="#f0b46a"/>
+<path d="M20 124 L222 124 L222 132 L20 132Z" fill="#2b1d14"/>
+<path d="M150 50 C160 70 168 82 190 90" fill="none" stroke="#5a3522" stroke-width="3" stroke-dasharray="5 5"/>
+<g transform="translate(70 20) rotate(25)"><rect x="0" y="0" width="12" height="70" rx="5" fill="#d9c3a5"/><rect x="-14" y="-10" width="40" height="16" rx="4" fill="#cfd6dd"/></g>
+</svg>
+</div></header>
+<main class="w">
+<section id="arranjos"><h2>Arranjos e preços</h2><div class="grid">
+  <div class="it"><b>Meias-solas</b>sola de couro ou borracha<br><span>desde 18 €</span></div>
+  <div class="it"><b>Tacões</b>senhora ou homem<br><span>desde 8 €</span></div>
+  <div class="it"><b>Fechos de botas</b>substituição completa<br><span>desde 15 €</span></div>
+  <div class="it"><b>Costuras</b>sapatos, malas, cintos<br><span>desde 6 €</span></div>
+  <div class="it"><b>Alargar calçado</b>com forma, 24 h<br><span>7 €</span></div>
+  <div class="it"><b>Limpeza e graxa</b>couro e camurça<br><span>desde 5 €</span></div>
+</div><p style="font-size:.85rem;color:#8a5a3c">Preços de exemplo. O preço final é confirmado ao ver a peça.</p></section>
+<section><h2>Como funciona</h2><div class="steps">
+  <div><b>Envie uma foto</b><br>pelo WhatsApp, com o que precisa de arranjar.</div>
+  <div><b>Receba o preço</b><br>respondemos no mesmo dia útil.</div>
+  <div><b>Deixe e levante</b><br>a maioria dos arranjos fica pronta em 48 h.</div>
+</div></section>
+<section id="contacto-demo"><h2>Horário e contacto</h2><div class="hours">
+  <p><span>Segunda a sexta</span><b>09:00 – 19:00</b></p><p><span>Sábado</span><b>09:30 – 13:00</b></p><p><span>Domingo</span><b>Fechado</b></p>
+  <p style="border:0;display:block;margin-top:.8rem">Rua Imaginária, 00 – Campo de Ourique, Lisboa<br>WhatsApp +351 9XX XXX XXX <small>(demo: número fictício)</small></p>
+</div></section>
+</main>
+
+<section class="demo-cta" aria-label="Desire Agency">
+  <h2>Quer um site assim para o seu negócio?</h2>
+  <p>Este exemplo corresponde ao pacote <strong>Vitrine</strong>: uma página, pensada para o telemóvel, a partir de 390 €.</p>
+  <p>Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA. Pagamento só após conclusão.</p>
+  <a class="go" href="../../pt/websites/#contacto">Pedir orçamento sem compromisso →</a>
+  <small>Exemplo / demo – negócio fictício · Ilustrações em SVG/CSS próprias, sem fotografias de banco de imagens · <a href="../" style="color:#ff9cf0">Ver todas as demos</a></small>
+</section>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <title>Barbearia Navalha d'Ouro (demo – negócio fictício)</title>
+  <meta name="description" content="Exemplo de site de uma página para uma barbearia em Lisboa (negócio fictício).">
+  <link rel="canonical" href="https://maximussoroka.github.io/demos/barbearia/">
+  <meta name="theme-color" content="#111111">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+.demo-bar{position:sticky;top:0;z-index:50;background:#06060c;color:#f4f4f7;font:600 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:.55rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center;justify-content:center;text-align:center;border-bottom:2px solid #ff5ee6}
+.demo-bar b{color:#3fe6f2;letter-spacing:.04em;text-transform:uppercase}
+.demo-bar a{color:#ff9cf0}
+.demo-cta{background:#06060c;color:#f4f4f7;text-align:center;padding:2.5rem 1.2rem;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.demo-cta h2{margin:0 0 .5rem;font-size:1.35rem}
+.demo-cta p{margin:.3rem auto;max-width:620px;color:#c9c4e0;font-size:.95rem}
+.demo-cta a.go{display:inline-block;margin-top:1rem;padding:.8rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);color:#14041a;font-weight:700;text-decoration:none}
+.demo-cta small{display:block;margin-top:1rem;color:#8f89ab}
+
+*{box-sizing:border-box}body{margin:0;background:#111;color:#eee;font:16px/1.6 Georgia,"Times New Roman",serif}
+a{color:#e0b45c}.w{max-width:1000px;margin:0 auto;padding:0 1.2rem}
+header.h{background:radial-gradient(circle at 80% 20%,#3a2a10 0,#111 60%);padding:3.5rem 0 3rem}
+.h .w{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;align-items:center}
+.h small{letter-spacing:.3em;text-transform:uppercase;color:#e0b45c;font:700 .75rem/1 system-ui,sans-serif}
+.h h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.05;margin:.6rem 0}
+.h p{color:#cfc6b4;max-width:34ch}
+.btn{display:inline-block;padding:.85rem 1.3rem;border-radius:4px;background:#e0b45c;color:#111;font:700 1rem system-ui,sans-serif;text-decoration:none;margin:.3rem .5rem .3rem 0}
+.btn.o{background:transparent;color:#e0b45c;border:1px solid #e0b45c}
+section{padding:3rem 0;border-top:1px solid #2a2a2a}
+h2{font-size:1.8rem;margin:0 0 1.2rem;color:#e0b45c}
+.price{display:grid;grid-template-columns:1fr auto;gap:.2rem 1rem;max-width:560px}
+.price div{border-bottom:1px dotted #555;padding:.55rem 0}.price span{font-family:system-ui,sans-serif;color:#aaa;font-size:.85rem;display:block}
+.price b{padding:.55rem 0;border-bottom:1px dotted #555;text-align:right}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+table{border-collapse:collapse;width:100%;font-family:system-ui,sans-serif}td{padding:.45rem 0;border-bottom:1px solid #2a2a2a}td+td{text-align:right}
+.map{height:200px;border-radius:6px;background:repeating-linear-gradient(45deg,#1c1c1c 0 14px,#222 14px 28px);display:grid;place-items:center;color:#888;font-family:system-ui,sans-serif;font-size:.9rem}
+.rev{background:#1a1a1a;border-left:3px solid #e0b45c;padding:1rem;font-style:italic;color:#bbb}
+.fab{position:fixed;right:1rem;bottom:1rem;z-index:40;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+@media(max-width:720px){.h .w,.cols{grid-template-columns:1fr}.h svg{max-width:220px;margin:0 auto;display:block}}
+</style>
+</head>
+<body>
+<div class="demo-bar" role="note"><b>Exemplo / demo – negócio fictício</b><span>Nome, morada, contactos, preços e horários são inventados. Site de demonstração da <a href="../../pt/websites/">Desire Agency</a>.</span></div>
+
+<header class="h"><div class="w">
+  <div>
+    <small>Arroios · Lisboa · desde 2012 (fictício)</small>
+    <h1>Barbearia Navalha d'Ouro</h1>
+    <p>Cortes clássicos, barba à navalha com toalha quente e conversa boa. Marque em 30 segundos pelo WhatsApp.</p>
+    <a class="btn" href="#marcar">Marcar pelo WhatsApp</a><a class="btn o" href="#precos">Ver preços</a>
+  </div>
+  <svg viewBox="0 0 200 240" role="img" aria-label="Ilustração: poste de barbeiro e tesoura">
+<rect x="70" y="10" width="60" height="16" rx="8" fill="#e0b45c"/><rect x="70" y="214" width="60" height="16" rx="8" fill="#e0b45c"/>
+<clipPath id="c"><rect x="78" y="26" width="44" height="188" rx="22"/></clipPath>
+<g clip-path="url(#c)"><rect x="78" y="26" width="44" height="188" fill="#f4f1ea"/>
+<g fill="#b3261e"><path d="M78 40 l44 -30 v14 l-44 30z"/><path d="M78 74 l44 -30 v14 l-44 30z"/><path d="M78 108 l44 -30 v14 l-44 30z"/><path d="M78 142 l44 -30 v14 l-44 30z"/><path d="M78 176 l44 -30 v14 l-44 30z"/><path d="M78 210 l44 -30 v14 l-44 30z"/><path d="M78 244 l44 -30 v14 l-44 30z"/></g>
+<g fill="#1f3c88"><path d="M78 57 l44 -30 v7 l-44 30z"/><path d="M78 91 l44 -30 v7 l-44 30z"/><path d="M78 125 l44 -30 v7 l-44 30z"/><path d="M78 159 l44 -30 v7 l-44 30z"/><path d="M78 193 l44 -30 v7 l-44 30z"/><path d="M78 227 l44 -30 v7 l-44 30z"/></g></g>
+<g transform="translate(150 150) rotate(-30)" fill="none" stroke="#e0b45c" stroke-width="5"><circle cx="-10" cy="40" r="12"/><circle cx="14" cy="40" r="12"/><path d="M-4 30 L10 -40 M8 30 L-6 -40"/></g>
+</svg>
+</div></header>
+<main class="w">
+<section id="precos"><h2>Serviços e preços</h2>
+  <div class="price">
+    <div>Corte clássico<span>tesoura e máquina, 30 min</span></div><b>14 €</b>
+    <div>Barba à navalha<span>toalha quente, 25 min</span></div><b>12 €</b>
+    <div>Corte + barba<span>45 min</span></div><b>23 €</b>
+    <div>Corte criança<span>até aos 12 anos</span></div><b>10 €</b>
+    <div>Pigmentação de barba<span>20 min</span></div><b>8 €</b>
+  </div>
+  <p style="font-family:system-ui,sans-serif;font-size:.85rem;color:#999">Preços de exemplo.</p>
+</section>
+<section class="cols" id="marcar">
+  <div><h2>Horário</h2><table>
+    <tr><td>Segunda</td><td>Fechado</td></tr><tr><td>Terça a sexta</td><td>10:00 – 20:00</td></tr>
+    <tr><td>Sábado</td><td>09:00 – 18:00</td></tr><tr><td>Domingo</td><td>Fechado</td></tr></table></div>
+  <div><h2>Marcações</h2>
+    <p>Envie mensagem com o dia e a hora que prefere – respondemos no próprio dia.</p>
+    <a class="btn" href="#marcar" title="Demo: botão sem ligação">WhatsApp +351 9XX XXX XXX</a>
+    <p style="font-family:system-ui,sans-serif;font-size:.85rem;color:#999">Demo: número e botão fictícios.</p></div>
+</section>
+<section class="cols">
+  <div><h2>Onde estamos</h2><p>Rua Inventada, 00 – Arroios, Lisboa<br>Metro Arroios (linha verde), 3 min a pé</p>
+    <div class="map" role="img" aria-label="Espaço para o mapa">Aqui entra o mapa do Google</div></div>
+  <div><h2>O que dizem os clientes</h2>
+    <p class="rev">Aqui aparecem as suas avaliações reais do Google, com ligação para o perfil.</p>
+    <p style="font-family:system-ui,sans-serif;font-size:.85rem;color:#999">Nesta demo não mostramos avaliações inventadas.</p></div>
+</section>
+</main>
+<a class="btn fab" href="#marcar" aria-label="Marcar pelo WhatsApp (demo)">WhatsApp</a>
+
+<section class="demo-cta" aria-label="Desire Agency">
+  <h2>Quer um site assim para o seu negócio?</h2>
+  <p>Este exemplo corresponde ao pacote <strong>Vitrine</strong>: uma página, pensada para o telemóvel, a partir de 390 €.</p>
+  <p>Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA. Pagamento só após conclusão.</p>
+  <a class="go" href="../../pt/websites/#contacto">Pedir orçamento sem compromisso →</a>
+  <small>Exemplo / demo – negócio fictício · Ilustrações em SVG/CSS próprias, sem fotografias de banco de imagens · <a href="../" style="color:#ff9cf0">Ver todas as demos</a></small>
+</section>
+</body>
+</html>

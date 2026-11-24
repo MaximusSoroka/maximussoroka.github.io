@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <title>Tasca do Pátio Azul (demo – negócio fictício)</title>
+  <meta name="description" content="Exemplo de site de uma página para uma tasca em Lisboa (negócio fictício).">
+  <link rel="canonical" href="https://maximussoroka.github.io/demos/tasca/">
+  <meta name="theme-color" content="#1f4e9c">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <style>
+.demo-bar{position:sticky;top:0;z-index:50;background:#06060c;color:#f4f4f7;font:600 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:.55rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center;justify-content:center;text-align:center;border-bottom:2px solid #ff5ee6}
+.demo-bar b{color:#3fe6f2;letter-spacing:.04em;text-transform:uppercase}
+.demo-bar a{color:#ff9cf0}
+.demo-cta{background:#06060c;color:#f4f4f7;text-align:center;padding:2.5rem 1.2rem;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.demo-cta h2{margin:0 0 .5rem;font-size:1.35rem}
+.demo-cta p{margin:.3rem auto;max-width:620px;color:#c9c4e0;font-size:.95rem}
+.demo-cta a.go{display:inline-block;margin-top:1rem;padding:.8rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);color:#14041a;font-weight:700;text-decoration:none}
+.demo-cta small{display:block;margin-top:1rem;color:#8f89ab}
+
+*{box-sizing:border-box}body{margin:0;background:#fbf8f1;color:#1d2433;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.w{max-width:980px;margin:0 auto;padding:0 1.2rem}
+.azul{background-color:#1f4e9c;background-image:radial-gradient(circle at 50% 50%,transparent 9px,#fbf8f1 10px,#fbf8f1 12px,transparent 13px),linear-gradient(45deg,transparent 45%,rgba(255,255,255,.35) 46% 54%,transparent 55%),linear-gradient(-45deg,transparent 45%,rgba(255,255,255,.35) 46% 54%,transparent 55%);background-size:48px 48px}
+header.h{padding:3rem 0}
+.card{background:#fbf8f1;border-radius:10px;padding:2rem;max-width:620px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.card small{color:#1f4e9c;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+h1{font-family:Georgia,serif;font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.05;margin:.5rem 0;color:#1f4e9c}
+.btn{display:inline-block;padding:.8rem 1.2rem;border-radius:8px;background:#c8442d;color:#fff;font-weight:700;text-decoration:none;margin:.3rem .4rem .3rem 0}
+.btn.o{background:#fff;color:#1f4e9c;border:2px solid #1f4e9c}
+section{padding:2.6rem 0}h2{font-family:Georgia,serif;color:#1f4e9c;font-size:1.8rem;margin:0 0 1rem}
+.dia{background:#fff;border:2px dashed #c8442d;border-radius:10px;padding:1.2rem 1.4rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;align-items:center}
+.dia b{font-size:1.2rem}.dia span{color:#c8442d;font-weight:800;font-size:1.3rem}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.menu h3{margin:.2rem 0 .6rem;font-size:1rem;text-transform:uppercase;letter-spacing:.12em;color:#c8442d}
+.menu li{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px solid #e6dfd0}.menu ul{list-style:none;margin:0;padding:0}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.info div{background:#fff;border-radius:10px;padding:1.1rem;border-top:4px solid #1f4e9c}
+.lang{float:right;font-size:.85rem;background:#fff;border-radius:999px;padding:.2rem .7rem;color:#1f4e9c;font-weight:700}
+@media(max-width:720px){.menu,.info{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="demo-bar" role="note"><b>Exemplo / demo – negócio fictício</b><span>Nome, morada, contactos, preços e horários são inventados. Site de demonstração da <a href="../../pt/websites/">Desire Agency</a>.</span></div>
+
+<header class="h azul"><div class="w"><div class="card">
+  <span class="lang" title="No pacote Maison: PT/EN">PT · EN</span>
+  <small>Graça · Lisboa (fictício)</small>
+  <h1>Tasca do Pátio Azul</h1>
+  <p>Comida portuguesa de sempre, feita todos os dias. Prato do dia ao almoço, petiscos ao jantar e vinho da casa a copo.</p>
+  <a class="btn" href="#reservar">Ligar para reservar</a><a class="btn o" href="#ementa">Ver ementa</a>
+</div></div></header>
+<main class="w">
+<section><h2>Prato do dia</h2>
+  <div class="dia"><div><b>Terça: Bacalhau à Brás</b><br>com salada e pão · bebida e café incluídos</div><span>11,50 €</span></div>
+  <p style="font-size:.85rem;color:#6b6457">Atualizado todas as manhãs – o dono muda o texto em 1 minuto, sem programador.</p>
+</section>
+<section id="ementa"><h2>Ementa</h2><div class="menu">
+  <div><h3>Petiscos</h3><ul><li>Pica-pau do lombo<b>8,50 €</b></li><li>Peixinhos da horta<b>5,00 €</b></li><li>Queijo de Azeitão com tostas<b>7,50 €</b></li><li>Caldo verde<b>3,00 €</b></li></ul></div>
+  <div><h3>Pratos</h3><ul><li>Bitoque com ovo<b>10,50 €</b></li><li>Polvo à lagareiro<b>17,00 €</b></li><li>Arroz de pato<b>12,00 €</b></li><li>Sardinhas assadas (época)<b>12,50 €</b></li></ul></div>
+  <div><h3>Sobremesas</h3><ul><li>Arroz doce<b>3,50 €</b></li><li>Baba de camelo<b>3,50 €</b></li></ul></div>
+  <div><h3>Bebidas</h3><ul><li>Vinho da casa (copo)<b>2,50 €</b></li><li>Imperial<b>1,80 €</b></li></ul></div>
+</div><p style="font-size:.85rem;color:#6b6457">Pratos e preços de exemplo.</p></section>
+<section id="reservar"><h2>Horário e reservas</h2><div class="info">
+  <div><b>Almoço</b><br>Terça a sábado<br>12:00 – 15:00</div>
+  <div><b>Jantar</b><br>Quinta a sábado<br>19:30 – 23:00</div>
+  <div><b>Reservas</b><br>Telefone +351 21X XXX XXX<br><small>(demo: número fictício)</small></div>
+</div>
+<p style="margin-top:1rem">Largo Inventado, 00 – Graça, Lisboa · Elétrico 28, paragem a 2 minutos.</p></section>
+</main>
+
+<section class="demo-cta" aria-label="Desire Agency">
+  <h2>Quer um site assim para o seu negócio?</h2>
+  <p>Este exemplo corresponde ao pacote <strong>Vitrine</strong>: uma página, pensada para o telemóvel, a partir de 390 €.</p>
+  <p>Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA. Pagamento só após conclusão.</p>
+  <a class="go" href="../../pt/websites/#contacto">Pedir orçamento sem compromisso →</a>
+  <small>Exemplo / demo – negócio fictício · Ilustrações em SVG/CSS próprias, sem fotografias de banco de imagens · <a href="../" style="color:#ff9cf0">Ver todas as demos</a></small>
+</section>
+</body>
+</html>
