@@ -1,1 +1,42 @@
-$file:/workspace/website/redesign/repo/demos/credits.txt
+Credits / licences for /demos/ (Desire Agency demo sites)
+All businesses shown in the demos are fictional.
+
+PHOTOS - all CC0 1.0 via StockSnap.io (free for commercial use, no attribution required; credited anyway).
+Downloaded 2026-11-25, resized, compressed to WebP and embedded in SVG wrapper files.
+
+- demos/barbearia/img/hero*.svg (WebP inside SVG): "Barbershop Chair" by Skitter Photo - https://stocksnap.io/photo/barbershop-chair-7M505B7MYV
+- demos/barbearia/img/g1*.svg (WebP inside SVG): "Barbershop Brush" by Nick Demou - https://stocksnap.io/photo/barbershop-brush-GZP9ZEQPFL
+- demos/barbearia/img/g2*.svg (WebP inside SVG): "Barbershop Scissors" by Nick Demou - https://stocksnap.io/photo/barbershop-scissors-R9YRHH2JQY
+- demos/barbearia/img/g3*.svg (WebP inside SVG): "Barber Window" by Robin Vanden Berghe - https://stocksnap.io/photo/barber-window-5EDKE1CZWR
+- demos/barbearia/img/g4*.svg (WebP inside SVG): "Barber Razor" by Nick Demou - https://stocksnap.io/photo/barber-razor-06HGN8LMUX
+- demos/tasca/img/hero*.svg (WebP inside SVG): "Restaurant Tavern" by Skitter Photo - https://stocksnap.io/photo/restaurant-tavern-IWUAHEIBSE
+- demos/tasca/img/g1*.svg (WebP inside SVG): "Seafood Octopus" by Alex Knight - https://stocksnap.io/photo/seafood-octopus-43523WB3KI
+- demos/tasca/img/g2*.svg (WebP inside SVG): "Platter Food" by Tim Savage - https://stocksnap.io/photo/platter-food-DQ8XPSSTCB
+- demos/tasca/img/g3*.svg (WebP inside SVG): "Wine Beer" by Leeroy - https://stocksnap.io/photo/wine-beer-C2988083A4
+- demos/tasca/img/g4*.svg (WebP inside SVG): "City Architecture" by Sergei Gussev - https://stocksnap.io/photo/city-architecture-AFJ2YJAZUK
+- demos/sapateiro/img/hero*.svg (WebP inside SVG): "Guy Man" by Caio Resende - https://stocksnap.io/photo/guy-man-DJ7F99AVL7
+- demos/sapateiro/img/g1*.svg (WebP inside SVG): "Leather Shoes" by Markus Spiske - https://stocksnap.io/photo/leather-shoes-DC246EC89C
+- demos/sapateiro/img/g2*.svg (WebP inside SVG): "Brown Leather" by Piotr Lohunko - https://stocksnap.io/photo/brown-leather-DFDGN6Q757
+- demos/sapateiro/img/g3*.svg (WebP inside SVG): "Bag Leather" by %C1lvaro%20Serrano - https://stocksnap.io/photo/bag-leather-DQCQ6W96UC
+- demos/sapateiro/img/g4*.svg (WebP inside SVG): "Leather Shoes" by Caio Resende - https://stocksnap.io/photo/leather-shoes-I1GV6WICCT
+- demos/handyman/img/hero*.svg (WebP inside SVG): "Floorplan Workshop" by JESHOOTS.com - https://stocksnap.io/photo/floorplan-workshop-N3BPNPN0FY
+- demos/handyman/img/g1*.svg (WebP inside SVG): "Tools People" by m0851 - https://stocksnap.io/photo/tools-people-ERNYCFWP8I
+- demos/handyman/img/g2*.svg (WebP inside SVG): "Tools Workshop" by Barn Images - https://stocksnap.io/photo/tools-workshop-KD30XPQR0A
+- demos/handyman/img/g3*.svg (WebP inside SVG): "Construction Tools" by The World is a Stage - https://stocksnap.io/photo/construction-tools-EJZBX7UMTV
+- demos/handyman/img/g4*.svg (WebP inside SVG): "Wood Tools" by Todd Quackenbush - https://stocksnap.io/photo/wood-tools-00F7DB5857
+- demos/cafe/img/hero*.svg (WebP inside SVG): "Coffee Cafe" by Jeff Sheldon - https://stocksnap.io/photo/coffee-cafe-8C35014CE3
+- demos/cafe/img/g1*.svg (WebP inside SVG): "Coffee Cup" by phatonlaphat thongsriphong - https://stocksnap.io/photo/coffee-cup-CQQMILRZPU
+- demos/cafe/img/g2*.svg (WebP inside SVG): "Coffee Cafe" by Chevanon - https://stocksnap.io/photo/coffee-cafe-8PJPE1TJ8X
+- demos/cafe/img/g3*.svg (WebP inside SVG): "Coffee Cafe" by Chevanon - https://stocksnap.io/photo/coffee-cafe-O8DPBEPOY6
+- demos/cafe/img/g4*.svg (WebP inside SVG): "Coffee Cafe" by Lesly Juarez - https://stocksnap.io/photo/coffee-cafe-VQ7MOYUFIE
+- demos/cafe/img/bake*.svg (WebP inside SVG): "Cookies Chocolatechipcookies" by Suzy Hazelwood - https://stocksnap.io/photo/cookies-chocolatechipcookies-S4T2FDBYCN
+
+FONTS - SIL Open Font License 1.1, latin subset from Google Fonts, embedded as base64 (demos/assets/fonts/*.css):
+- Oswald (Vernon Adams et al.) - barbearia
+- Fraunces (Undercase Type) - tasca
+- DM Serif Display (Colophon Foundry) - sapateiro
+- Barlow Condensed (Jeremy Tribby) - handyman
+- Young Serif (Bastien Sozeau) - cafe
+  Licence text: https://openfontlicense.org
+
+Maps are stylised SVG illustrations, not real map data. Icons are inline SVG drawn for this site.

@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-PT" data-theme="dark">
+<html lang="pt-PT">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <title>Demos de sites para pequenos negócios — Desire Agency</title>
-  <meta name="description" content="Três exemplos de sites de uma página para negócios fictícios de Lisboa: barbearia, tasca e sapateiro. Pacote Vitrine a partir de 390 €.">
+  <meta name="description" content="Cinco exemplos de sites para negócios fictícios: barbearia, tasca, sapateiro (Lisboa), café (Dublin) e faz-tudo (Bristol). Pacote Vitrine a partir de 390 €.">
   <link rel="canonical" href="https://maximussoroka.github.io/demos/">
   <meta name="theme-color" content="#06060c">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <style>
   *{box-sizing:border-box}body{margin:0;background:#06060c;color:#f4f4f7;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-  .w{max-width:1040px;margin:0 auto;padding:2.5rem 1.2rem}a{color:#ff9cf0}
-  .top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.9rem}
+  img{display:block;max-width:100%;height:auto}h1,h2{text-wrap:balance}
+  .w{max-width:1140px;margin:0 auto;padding:2.5rem clamp(1.1rem,4vw,2rem)}a{color:#ff9cf0}
+  .top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.95rem}
+  .top a{min-height:44px;display:inline-flex;align-items:center}
   .brand{font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);-webkit-background-clip:text;background-clip:text;color:transparent;text-decoration:none}
-  h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1;margin:2rem 0 .6rem;text-shadow:0 0 24px rgba(255,94,230,.35)}
-  .lede{color:#b0abc9;max-width:60ch}
-  .g{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem}
-  .d{display:block;border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#0e0e1c;transition:transform .2s,border-color .2s}
-  .d:hover{transform:translateY(-3px);border-color:#ff5ee6}
-  .sw{height:120px;display:grid;place-items:center;font:700 1.1rem Georgia,serif}
-  .t{padding:1rem 1.1rem 1.2rem}.t h2{margin:.5rem 0;font-size:1.2rem}
-  .pill{font-size:.72rem;font-weight:700;color:#3fe6f2;border:1px solid rgba(63,230,242,.4);border-radius:999px;padding:.15rem .55rem}
-  .go{color:#ff9cf0;font-weight:600}.note{color:#8f89ab;font-size:.85rem;margin-top:2rem}
-  .cta{display:inline-block;margin-top:1.5rem;padding:.8rem 1.3rem;border-radius:999px;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);color:#14041a;font-weight:700;text-decoration:none}
-  @media(max-width:760px){.g{grid-template-columns:1fr}}
+  h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;margin:2rem 0 .6rem}
+  .lede{color:#c4bfdc;max-width:64ch}
+  .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;margin-top:2rem}
+  .d{display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;text-decoration:none;color:inherit;background:#0e0e1c;transition:transform .2s,border-color .2s}
+  .d:hover,.d:focus-visible{transform:translateY(-3px);border-color:#ff5ee6}
+  .d img{width:100%;aspect-ratio:16/10;object-fit:cover}
+  .t{padding:1rem 1.15rem 1.3rem}.t h2{margin:.55rem 0 .2rem;font-size:1.3rem}.t p{margin:0 0 .6rem;color:#c4bfdc;font-size:.95rem}
+  .pill{font-size:.75rem;font-weight:700;color:#3fe6f2;border:1px solid rgba(63,230,242,.4);border-radius:999px;padding:.15rem .6rem}
+  .go{color:#ff9cf0;font-weight:600}.note{color:#a29cbf;font-size:.88rem;margin-top:2rem}
+  .cta{display:inline-flex;align-items:center;min-height:48px;margin-top:1.8rem;padding:0 1.4rem;border-radius:999px;background:linear-gradient(90deg,#ff5ee6,#b45cff,#3fe6f2);color:#14041a;font-weight:700;text-decoration:none}
+  @media (prefers-reduced-motion:reduce){.d{transition:none}}
   </style>
 </head>
 <body><main class="w">
   <div class="top"><a class="brand" href="../">Desire Agency</a><span><a href="../pt/websites/">PT</a> · <a href="../websites/">EN</a> · <a href="../de/websites/">DE</a></span></div>
-  <h1>Demos: sites de uma página</h1>
-  <p class="lede">Três exemplos para negócios típicos de Lisboa. Os negócios são fictícios: nomes, moradas, contactos, preços e horários são inventados. Mostram como pode ficar um site <strong>Vitrine</strong> (a partir de 390 €) no telemóvel.<br><span lang="en">Three example sites for fictional Lisbon businesses.</span> · <span lang="de">Drei Beispielseiten für fiktive Lissabonner Betriebe.</span></p>
+  <h1>Demos: sites para pequenos negócios</h1>
+  <p class="lede">Cinco exemplos, cada um com o seu próprio estilo. Os negócios são fictícios: nomes, moradas, contactos, preços, horários e avaliações são inventados. Mostram como pode ficar o seu site no telemóvel – pacote <strong>Vitrine</strong> a partir de 390 €, bilingue com <strong>Maison</strong> a partir de 1190 €.<br><span lang="en">Five example sites for fictional businesses in Lisbon, Dublin and Bristol.</span> · <span lang="de">Fünf Beispielseiten für fiktive Betriebe in Lissabon, Dublin und Bristol.</span></p>
   <div class="g">
-    <a class="d" href="./barbearia/"><div class="sw" style="background:#111;color:#e0b45c">Barbearia</div>
-      <div class="t"><span class="pill">Exemplo / demo – negócio fictício</span><h2>Barbearia Navalha d'Ouro</h2><span class="go">Ver demo →</span></div></a>
-    <a class="d" href="./tasca/"><div class="sw" style="background:#1f4e9c;color:#fbf8f1">Restaurante / tasca</div>
-      <div class="t"><span class="pill">Exemplo / demo – negócio fictício</span><h2>Tasca do Pátio Azul</h2><span class="go">Ver demo →</span></div></a>
-    <a class="d" href="./sapateiro/"><div class="sw" style="background:#5a3522;color:#f0b46a">Sapateiro / oficina</div>
-      <div class="t"><span class="pill">Exemplo / demo – negócio fictício</span><h2>Sapataria Meia-Sola</h2><span class="go">Ver demo →</span></div></a>
+    <a class="d" href="./barbearia/">
+      <img src="./barbearia/img/hero-560.svg" width="560" height="372" alt="" loading="eager" decoding="async">
+      <div class="t"><span class="pill">PT · Vitrine · a partir de 390 €</span><h2>Barbearia Navalha d&#x27;Ouro</h2><p>Barbearia · Lisboa<br><span lang="en">Barbershop · Lisbon</span></p><span class="go">Ver demo / Open demo →</span></div></a>
+    <a class="d" href="./tasca/">
+      <img src="./tasca/img/hero-560.svg" width="560" height="372" alt="" loading="eager" decoding="async">
+      <div class="t"><span class="pill">PT + EN · Maison · a partir de 1190 €</span><h2>Tasca do Pátio Azul</h2><p>Tasca / restaurante · Lisboa<br><span lang="en">Tavern / restaurant · Lisbon</span></p><span class="go">Ver demo / Open demo →</span></div></a>
+    <a class="d" href="./sapateiro/">
+      <img src="./sapateiro/img/hero-560.svg" width="560" height="372" alt="" loading="lazy" decoding="async">
+      <div class="t"><span class="pill">PT · Vitrine · a partir de 390 €</span><h2>Sapataria Meia-Sola</h2><p>Sapateiro & chaves · Lisboa<br><span lang="en">Shoe repair & keys · Lisbon</span></p><span class="go">Ver demo / Open demo →</span></div></a>
+    <a class="d" href="./cafe/">
+      <img src="./cafe/img/hero-560.svg" width="560" height="420" alt="" loading="lazy" decoding="async">
+      <div class="t"><span class="pill">EN · Vitrine · a partir de 390 €</span><h2>Linden &amp; Oat</h2><p>Café · Dublin<br><span lang="en">Café · Dublin</span></p><span class="go">Ver demo / Open demo →</span></div></a>
+    <a class="d" href="./handyman/">
+      <img src="./handyman/img/hero-560.svg" width="560" height="373" alt="" loading="lazy" decoding="async">
+      <div class="t"><span class="pill">EN · Vitrine · a partir de 390 €</span><h2>Tidy Joist</h2><p>Faz-tudo · Bristol<br><span lang="en">Handyman / trades · Bristol</span></p><span class="go">Ver demo / Open demo →</span></div></a>
   </div>
   <a class="cta" href="../pt/websites/#contacto">Pedir orçamento sem compromisso →</a>
-  <p class="note">Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA. Pagamento só após conclusão. Ilustrações em SVG/CSS feitas para este site; sem fotografias de banco de imagens nem logótipos de terceiros.</p>
+  <p class="note">Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA. Pagamento só após conclusão. Fotografias CC0 (StockSnap.io) e tipos de letra SIL OFL – <a href="credits.txt">créditos</a>.</p>
 </main></body>
 </html>
