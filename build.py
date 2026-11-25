@@ -302,6 +302,11 @@ def split_h1(doc: str) -> str:
     return _re.sub(r"<h1([^>]*)>(.*?)</h1>", fix, doc, count=1, flags=_re.S)
 
 
+# Google Search Console ownership verification (meta tag on the home page + HTML file in the root).
+GSC_TOKEN = "7efVrNpaPgdMJ_xsJqjmeh-chbtEHijNOpQQIeTPqA0"
+GSC_FILE = "google20671475e05eab02.html"
+
+
 def shell(lang: str, page: str, depth: int, title: str, description: str, body: str, extra_js: str = "", extra_head: str = "") -> str:
     paths = page_paths(lang, depth)
     root = paths["css"][: -len("css/site.css")]
@@ -365,12 +370,13 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     else:
         lang_links = (f'\n          <a href="{other_href if lang == "de" else "#"}"{en_cur} hreflang="en">EN</a>'
                       f'\n          <a href="{other_href if lang == "en" else "#"}"{de_cur} hreflang="de">DE</a>')
+    gsc = ('\n  <meta name="google-site-verification" content="' + GSC_TOKEN + '" />') if (page == "home" and lang == "en") else ""
     return f"""<!DOCTYPE html>
 <html lang="{"pt-PT" if lang == "pt" else lang}" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow">{gsc}
   <meta name="description" content="{esc(description)}">
   <title>{esc(title)}</title>
   <link rel="canonical" href="{canon}">
@@ -973,17 +979,21 @@ def _mailto(subject: str) -> str:
 
 
 DEMOS = [
-    ("barbearia", {"en": "Barbershop", "de": "Barbershop", "pt": "Barbearia"}, "Barbearia Navalha d'Ouro",
-     {"en": "Services and prices, opening hours, WhatsApp booking button.", "de": "Leistungen und Preise, Öffnungszeiten, WhatsApp-Buchungsbutton.", "pt": "Serviços e preços, horário, botão de marcação pelo WhatsApp."}),
-    ("tasca", {"en": "Restaurant / tasca", "de": "Restaurant / Tasca", "pt": "Restaurante / tasca"}, "Tasca do Pátio Azul",
-     {"en": "Daily menu, dishes with prices, opening hours, call to book.", "de": "Tagesmenü, Gerichte mit Preisen, Öffnungszeiten, Anruf zum Reservieren.", "pt": "Prato do dia, ementa com preços, horário, ligar para reservar."}),
-    ("sapateiro", {"en": "Shoe repair / workshop", "de": "Schuhmacher / Werkstatt", "pt": "Sapateiro / oficina"}, "Sapataria Meia-Sola",
-     {"en": "Repair price list, how it works in 3 steps, opening hours.", "de": "Preisliste für Reparaturen, Ablauf in 3 Schritten, Öffnungszeiten.", "pt": "Tabela de arranjos, como funciona em 3 passos, horário."}),
+    ("barbearia", {"en": "Barbershop · Lisbon (PT)", "de": "Barbershop · Lissabon (PT)", "pt": "Barbearia · Lisboa (PT)"}, "Barbearia Navalha d'Ouro",
+     {"en": "Dark, classic look: prices, gallery, reviews, opening hours, sticky booking button.", "de": "Dunkler, klassischer Look: Preise, Galerie, Bewertungen, Öffnungszeiten, fixierter Buchungsbutton.", "pt": "Visual clássico e escuro: preços, galeria, avaliações, horário, botão de marcação fixo."}),
+    ("tasca", {"en": "Restaurant / tasca · Lisbon (PT + EN)", "de": "Restaurant / Tasca · Lissabon (PT + EN)", "pt": "Restaurante / tasca · Lisboa (PT + EN)"}, "Tasca do Pátio Azul",
+     {"en": "Bilingual (Maison): dish of the day, menu, gallery, reviews, hours, call to book.", "de": "Zweisprachig (Maison): Tagesgericht, Speisekarte, Galerie, Bewertungen, Öffnungszeiten.", "pt": "Bilingue (Maison): prato do dia, ementa, galeria, avaliações, horário, ligar para reservar."}),
+    ("sapateiro", {"en": "Shoe repair & keys · Lisbon (PT)", "de": "Schuhmacher & Schlüssel · Lissabon (PT)", "pt": "Sapateiro & chaves · Lisboa (PT)"}, "Sapataria Meia-Sola",
+     {"en": "Repair price list, quote by photo in 3 steps, reviews, opening hours.", "de": "Preisliste für Reparaturen, Angebot per Foto in 3 Schritten, Bewertungen, Öffnungszeiten.", "pt": "Tabela de arranjos, orçamento por foto em 3 passos, avaliações, horário."}),
+    ("cafe", {"en": "Café · Dublin (EN)", "de": "Café · Dublin (EN)", "pt": "Café · Dublin (EN)"}, "Linden & Oat",
+     {"en": "Menu board, daily bake the owner edits, gallery, reviews, opening hours.", "de": "Menütafel, Tagesgebäck zum Selbst-Ändern, Galerie, Bewertungen, Öffnungszeiten.", "pt": "Quadro de ementa, bolo do dia editável pelo dono, galeria, avaliações, horário."}),
+    ("handyman", {"en": "Handyman / trades · Bristol (EN)", "de": "Handwerker · Bristol (EN)", "pt": "Faz-tudo / ofícios · Bristol (EN)"}, "Tidy Joist",
+     {"en": "Services with starting prices, quote by photo, service area, reviews, sticky call button.", "de": "Leistungen mit Ab-Preisen, Angebot per Foto, Einsatzgebiet, Bewertungen, fixierter Anruf-Button.", "pt": "Serviços com preços base, orçamento por foto, zona de serviço, avaliações, botão de chamada fixo."}),
 ]
 
 WEB_EXTRA = {
     "en": {
-        "demos_h": "Demos", "demos_p": "Three example one-pagers for typical Lisbon businesses. The businesses are fictional; the pages show what a Vitrine site can look like on your phone.",
+        "demos_h": "Demos", "demos_p": "Five example sites for typical small businesses in Lisbon, Dublin and Bristol, each with its own look. The businesses are fictional; the pages show what your site can look like on your phone.",
         "demo_label": "Demo – fictional business", "demo_open": "Open demo",
         "form_h": "Send an enquiry", "form_p": "Tell us a little about your business. We reply by email with questions or a written quote. No obligation.",
         "f_name": "Name", "f_email": "Email", "f_biz": "Business name or current website (optional)", "f_pkg": "Package",
@@ -993,7 +1003,7 @@ WEB_EXTRA = {
         "subject": "New enquiry (EN) – Websites",
     },
     "de": {
-        "demos_h": "Demos", "demos_p": "Drei Beispiel-Onepager für typische Lissabonner Betriebe. Die Betriebe sind erfunden; die Seiten zeigen, wie eine Vitrine-Seite auf dem Handy aussehen kann.",
+        "demos_h": "Demos", "demos_p": "Fünf Beispielseiten für typische kleine Betriebe in Lissabon, Dublin und Bristol, jede mit eigenem Look. Die Betriebe sind erfunden; die Seiten zeigen, wie deine Seite auf dem Handy aussehen kann.",
         "demo_label": "Demo – fiktiver Betrieb", "demo_open": "Demo öffnen",
         "form_h": "Anfrage senden", "form_p": "Erzähl uns kurz von deinem Betrieb. Wir antworten per E-Mail mit Rückfragen oder einem schriftlichen Angebot. Unverbindlich.",
         "f_name": "Name", "f_email": "E-Mail", "f_biz": "Name des Betriebs oder aktuelle Website (optional)", "f_pkg": "Paket",
@@ -1003,7 +1013,7 @@ WEB_EXTRA = {
         "subject": "Neue Anfrage (DE) – Websites",
     },
     "pt": {
-        "demos_h": "Demos", "demos_p": "Três exemplos de sites de uma página para negócios típicos de Lisboa. Os negócios são fictícios; as páginas mostram como um site Vitrine pode ficar no telemóvel.",
+        "demos_h": "Demos", "demos_p": "Cinco exemplos para pequenos negócios típicos em Lisboa, Dublin e Bristol, cada um com o seu estilo. Os negócios são fictícios; as páginas mostram como o seu site pode ficar no telemóvel.",
         "demo_label": "Exemplo / demo – negócio fictício", "demo_open": "Ver demo",
         "form_h": "Pedir orçamento", "form_p": "Conte-nos um pouco sobre o seu negócio. Respondemos por e-mail com perguntas ou um orçamento por escrito. Sem compromisso.",
         "f_name": "Nome", "f_email": "E-mail", "f_biz": "Nome do negócio ou site atual (opcional)", "f_pkg": "Pacote",
@@ -1085,7 +1095,7 @@ def websites_body(lang: str) -> str:
         post = f'<span class="price-sub">{esc(t["per_month"])}</span>' if monthly else ""
         btn = "btn btn-primary" if i == 1 else "btn btn-ghost"
         cards.append(f"""
-          <article class="product pkg{" is-featured" if i == 1 else ""}">
+          <article class="product pkg{" is-featured" if i == 1 else ""}" id="pkg-{name.lower()}">
             <span class="pill">{esc(sub)}</span>
             <h3>{esc(name)}</h3>
             <p>{esc(who)}</p>
@@ -2052,7 +2062,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Websites (European Portuguese)]({SITE_URL}/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
-- [Demos]({SITE_URL}/demos/): Three example one-page sites for fictional Lisbon businesses (barbearia, tasca, sapateiro), clearly labelled as demos.
+- [Demos]({SITE_URL}/demos/): Five example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
@@ -2088,10 +2098,10 @@ def write_sitemap() -> None:
         ("/tools.json", "0.6", "weekly"),
     ]
     lastmod_default = "2026-11-21"
-    lastmod_today = "2026-11-24"
+    lastmod_today = "2026-11-25"
     urls = []
     for path, prio, freq in paths:
-        lastmod = lastmod_today if path in ("/websites/", "/de/websites/", "/pt/websites/", "/demos/", "/llms.txt") else lastmod_default
+        lastmod = lastmod_today if path in ("/", "/websites/", "/de/websites/", "/pt/websites/", "/demos/", "/llms.txt") else lastmod_default
         urls.append(
             "  <url>\n"
             f"    <loc>{esc(site_url(path))}</loc>\n"
@@ -2143,6 +2153,7 @@ def build() -> None:
         html_out = split_h1(shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head))
         write(path, html_out)
     write(ROOT / "404.html", not_found())
+    write(ROOT / GSC_FILE, f"google-site-verification: {GSC_FILE}")
     import demos as _demos
     for rel, html_doc in _demos.pages(SITE_URL).items():
         write(ROOT / rel, html_doc)
