@@ -67,4 +67,21 @@
 
   apply("n8n", n8n || n8nOfficial, n8nOfficial, !!n8n);
   apply("make", make || makeOfficial, makeOfficial, !!make);
+
+  /* Discreet footer line only on pages that actually have live affiliate links. */
+  if (document.querySelector("a.is-affiliate")) {
+    var bottom = document.querySelector(".footer-bottom");
+    if (bottom && !bottom.querySelector(".aff-foot")) {
+      var lang = (document.documentElement.lang || "en").toLowerCase();
+      var p = document.createElement("p");
+      p.className = "aff-foot";
+      p.textContent =
+        lang.indexOf("de") === 0
+          ? "Einige Links auf dieser Seite sind Affiliate-Links und als #ad / Anzeige gekennzeichnet."
+          : lang.indexOf("pt") === 0
+            ? "Alguns links nesta página são de afiliados e estão identificados como #ad / Anzeige."
+            : "Some links on this page are affiliate links and are labelled #ad / Anzeige.";
+      bottom.insertBefore(p, bottom.firstChild);
+    }
+  }
 })();

@@ -99,34 +99,16 @@ SUBSCRIBE_LABEL = {
     "pt": "Receber o build log",
 }
 
-BANNER = {
-    "en": (
-        "This page may contain affiliate links in the future. Those links will be labelled "
-        "<strong>#ad / Anzeige</strong>. No earnings promises. Prices checked on {d}. "
-        "Our own revenue so far: €0."
-    ).format(d=PRUEF_EN),
-    "de": (
-        "Diese Seite kann in Zukunft Affiliate-Links enthalten. Solche Links werden als "
-        "<strong>#ad / Anzeige</strong> gekennzeichnet. Kein Gewinnversprechen. Preise geprüft am {d}. "
-        "Unser eigener Ertrag bisher: 0&nbsp;€."
-    ).format(d=PRUEF),
-    "pt": (
-        "Esta página poderá conter links de afiliados no futuro. Esses links serão identificados como "
-        "<strong>#ad / Anzeige</strong>. Sem promessas de ganhos. "
-        "Receita própria até agora: 0&nbsp;€."
-    ),
-}
-
 FOOT = {
     "en": (
         f"Prices and programme terms as of {PRUEF_EN}, from the vendors’ official pages. "
-        "Not financial advice. Our own revenue: €0."
+        "Not financial advice."
     ),
     "de": (
         f"Stand der Preise und Programmbedingungen: {PRUEF}, offizielle Seiten der Anbieter. "
-        "Keine Finanzberatung. Eigener Ertrag: 0 €."
+        "Keine Finanzberatung."
     ),
-    "pt": "Não é aconselhamento financeiro. Receita própria: 0 €.",
+    "pt": "Não é aconselhamento financeiro.",
 }
 
 
@@ -430,9 +412,6 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
       <button type="button" class="theme-toggle" aria-label="{T3(lang, "Toggle theme", "Design wechseln", "Mudar tema")}">{THEME_ICONS}</button>
     </div>
   </header>{progress}
-  <div class="ad-banner">
-    <div class="wrap">{BANNER[lang]}</div>
-  </div>
   <main id="content">
     <div class="{wrap}">
 {body}
@@ -1694,11 +1673,11 @@ LEGAL = {
             f"Published on 19 November 2026 without an n8n partner link "
             f"(N8N_AFFILIATE_URL in config.js is empty; buttons go to the official n8n site). "
             f"The n8n partner application was declined on 19 November 2026; a later reapplication is planned. "
-            f"Source date for prices: {PRUEF_EN}. Own revenue: €0."
+            f"Source date for prices: {PRUEF_EN}."
         ),
         "ad": (
-            "Advertising: there are no active affiliate links on this site at the moment. "
-            "This page may contain affiliate links in the future; those will be labelled #ad / Anzeige."
+            "Some links on this site may be affiliate links. Those are labelled #ad / Anzeige. "
+            "There are currently no active affiliate links."
         ),
         "privacy": (
             "Privacy: this is a static website. We do not use cookies, tracking pixels or analytics, "
@@ -1723,11 +1702,11 @@ LEGAL = {
             f"Veröffentlicht am 19.11.2026 ohne n8n-Partner-Link "
             f"(N8N_AFFILIATE_URL in config.js ist leer; die Buttons führen auf die offizielle n8n-Seite). "
             f"Die n8n-Partner-Bewerbung wurde am 19.11.2026 abgelehnt; eine spätere erneute Bewerbung ist geplant. "
-            f"Quellenstand der Preise: {PRUEF}. Eigener Ertrag: 0 €."
+            f"Quellenstand der Preise: {PRUEF}."
         ),
         "ad": (
-            "Werbung: Auf dieser Seite sind derzeit keine Affiliate-Links aktiv. "
-            "Diese Seite kann in Zukunft Affiliate-Links enthalten; diese werden als #ad / Anzeige gekennzeichnet."
+            "Einige Links auf dieser Website können Affiliate-Links sein. Diese werden als #ad / Anzeige gekennzeichnet. "
+            "Derzeit sind keine Affiliate-Links aktiv."
         ),
         "privacy": (
             "Datenschutz: Dies ist eine statische Website. Wir verwenden keine Cookies, Tracking-Pixel oder Analysedienste "
