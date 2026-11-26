@@ -20,7 +20,7 @@ Live URL: [https://maximussoroka.github.io/](https://maximussoroka.github.io/)
 
 ## Affiliate links
 
-There are **no active affiliate links** at the moment. `N8N_AFFILIATE_URL` and `MAKE_AFFILIATE_URL` in `config.js` are empty, so product buttons go to the official vendor sites (`https://n8n.io/`, `https://www.make.com/`). The n8n partner application was declined on 19 November 2026; a later reapplication is planned.
+There are **no active affiliate links** at the moment. `N8N_AFFILIATE_URL` and `MAKE_AFFILIATE_URL` in `config.js` are empty, so product buttons go to the official vendor sites (`https://n8n.io/`, `https://www.make.com/`).
 
 To add an official partner URL later, set it in `config.js` and redeploy that file. A rebuild (`python3 build.py`) is not required for the link switch. Links then get `rel="sponsored nofollow"` and are labelled **#ad / Anzeige**. Do not invent links.
 
@@ -38,7 +38,7 @@ python3 -m http.server 8080
 
 Then open `http://127.0.0.1:8080/` (English) or `http://127.0.0.1:8080/de/` (German).
 
-Prices and programme figures come from official public pages checked on 18 November 2026. No figures were invented. Own revenue: €0. The free Desire Agency newsletter sign-up is https://desireagency.beehiiv.com/subscribe (button label: “Get the build log”). This is a static site with no cookies, tracking or analytics.
+Prices and programme figures come from official public pages checked on 18 November 2026. No figures were invented. The free Desire Agency newsletter sign-up is https://desireagency.beehiiv.com/subscribe (button label: “Get the build log”). This is a static site with no cookies, tracking or analytics.
 
 The directory pages include schema.org JSON-LD (`ItemList` of `SoftwareApplication`). `/tools.json` is the canonical machine-readable copy of those entries; it does not include affiliate URLs or unpublished placeholder slots.
 

@@ -198,34 +198,9 @@ DEVTO_URL = "https://dev.to/desire_agency"
 IH_URL = "https://www.indiehackers.com/desireagency"
 GUIDE_EARLY_URL = GUIDE_URL + "/EARLYBIRD"
 
-# Ledger numbers come from data/ledger.json (real sources only; see "sources" in that file).
-LEDGER = json.loads((DATA / "ledger.json").read_text())
-_MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-
-def _asof(lang: str) -> str:
-    d, t = LEDGER["as_of"].split("T")
-    y, m, dd = (int(x) for x in d.split("-"))
-    if lang == "de":
-        return f"{dd:02d}.{m:02d}.{y}, {t} Lissabon"
-    return f"{dd} {_MON[m - 1]} {y}, {t} Lisbon"
-
-
-def _money(v: float, cur: str, lang: str, signed: bool = False) -> str:
-    sign = "−" if v < 0 else ""
-    a = f"{abs(v):,.2f}"
-    if lang == "de":
-        a = a.replace(",", "X").replace(".", ",").replace("X", ".")
-        return f"{sign}{a} {cur}"
-    return f"{sign}{cur}{a}"
-
-
-NUMBERS_AS_OF = {"en": _asof("en"), "de": _asof("de")}
-L_PNL = LEDGER["paper_closed_pnl_usd"]
-L_PNL_CLS = "neg" if L_PNL < 0 else ""
-L_TRADES = str(LEDGER["paper_closed_trades"])
-L_DESKS = {"en": {4: "four", 3: "three", 2: "two"}.get(LEDGER["paper_desks"], str(LEDGER["paper_desks"])),
-           "de": {4: "vier", 3: "drei", 2: "zwei"}.get(LEDGER["paper_desks"], str(LEDGER["paper_desks"]))}
+# The public site no longer publishes the cash ledger (revenue, sales, paper P&L).
+# data/ledger.json and /workspace/website/tools/update_ledger.py are internal only.
+# Do not wire those figures back into any generated page.
 
 LOGO_SVG = (
     '<svg class="brand-mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">'
@@ -254,19 +229,19 @@ CANONICAL = {
 
 FOOTER_TEXT = {
     "en": {
-        "about": "An AI agent team, built in public from Lisbon. We publish the real numbers, including the zeros.",
+        "about": "Desire Agency in Lisbon. Fast, mobile-first websites for small businesses, in Portuguese, English and German. Payment after completion.",
         "site": "Site", "products": "Products", "follow": "Follow",
         "guide": "Agent Team Guide", "journal": "Free trading journal", "templates": "Free n8n templates",
         "newsletter": "Newsletter",
     },
     "de": {
-        "about": "Ein KI-Agenten-Team, öffentlich aufgebaut in Lissabon. Wir zeigen die echten Zahlen, auch die Nullen.",
+        "about": "Desire Agency in Lissabon. Schnelle, mobilfreundliche Websites für kleine Betriebe, auf Portugiesisch, Englisch und Deutsch. Zahlung erst nach Fertigstellung.",
         "site": "Seite", "products": "Produkte", "follow": "Folgen",
         "guide": "Agent-Team-Guide (EN)", "journal": "Kostenloses Trading-Journal", "templates": "Kostenlose n8n-Vorlagen",
         "newsletter": "Newsletter",
     },
     "pt": {
-        "about": "Uma equipa de agentes de IA, construída em público a partir de Lisboa. Publicamos os números reais, incluindo os zeros.",
+        "about": "Desire Agency em Lisboa. Sites rápidos, pensados para o telemóvel, para pequenos negócios, em português, inglês e alemão. Pagamento só após conclusão.",
         "site": "Site", "products": "Produtos", "follow": "Seguir",
         "guide": "Agent Team Guide (EN)", "journal": "Trading journal gratuito (EN)", "templates": "Templates n8n gratuitos (EN)",
         "newsletter": "Newsletter",
@@ -485,12 +460,12 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 
 HOME = {
     "en": {
-        "title": "Desire Agency — an AI agent team, built in public",
-        "description": "One person and a team of AI agents, built in public from Lisbon. Real numbers including the zeros, free n8n templates, a sourced tool directory and an honest guide.",
-        "eyebrow": "Building in public from Lisbon",
+        "title": "Desire Agency — websites for small businesses, from Lisbon",
+        "description": "Fast, mobile-first websites for small businesses, built in Lisbon. Packages Vitrine, Atelier and Maison in Portuguese, English or German. Payment after completion. Free n8n templates and a sourced tool directory.",
+        "eyebrow": "From Lisbon · PT, EN, DE",
         "h1_a": "One person. A team of AI agents.",
-        "h1_b": "Every number in public.",
-        "lede": "We are building an autonomous AI agent team and writing down what actually happens: what ships, what breaks, and what it earns. Right now that is €0, and we say so.",
+        "h1_b": "Websites for small businesses.",
+        "lede": "We design fast, mobile-first websites for cafés, shops and local businesses, and run them with a small AI agent team. You get a written quote first and pay only after completion.",
         "cta_news": "Get the build log",
         "cta_web": "Get a website — from €390",
         "cta_guide": "Guide: $9 early bird",
@@ -499,21 +474,22 @@ HOME = {
         "link_tpl": "Free n8n templates",
         "link_journal": "Free trading journal",
         "link_n8n": "Why we recommend n8n",
-        "hero_note": "No earnings promises. Not financial advice.",
-        "ledger_title": "Ledger",
-        "ledger": [
-            ("Real revenue", _money(LEDGER["revenue_eur"], "€", "en"), ""),
-            ("Sales so far", str(LEDGER["sales"]), ""),
-            ("Server cost", _money(LEDGER["server_cost_eur_month"], "€", "en") + " / mo", ""),
-            ("Paper-trading P&amp;L (simulated)", _money(L_PNL, "$", "en"), L_PNL_CLS),
+        "hero_note": "Portuguese, English and German. Based in Lisbon.",
+        "offer_title": "What you get",
+        "offer_meta": "Lisbon · PT, EN, DE",
+        "offer": [
+            ("Vitrine", "from 390 €"),
+            ("Atelier", "from 750 €"),
+            ("Maison", "from 1,190 €"),
         ],
-        "ledger_foot": "Paper trading uses simulated money only. It is not income.",
-        "bip_kicker": "Build in public",
-        "bip_title": "The honest numbers",
-        "bip_text": "No vanity metrics and no testimonials we don’t have. These are the figures from our own logs.",
+        "offer_foot": "Payment after completion. Written quote first.",
+        "offer_link": "See packages",
+        "bip_kicker": "The studio",
+        "bip_title": "What we work with",
+        "bip_text": "A small AI agent team in Lisbon, demo sites you can click through, and free starting points for your own automation.",
         "stats": [
             ("11", "AI agents", "10 specialist bots and one chief of staff, coordinated by one person."),
-            (L_TRADES, "Closed paper trades", f"Across {L_DESKS['en']} paper-trading desks. Closed P&amp;L {_money(L_PNL, '$', 'en')}, simulated money."),
+            ("6", "Demo sites", "Fictional example businesses, clearly labelled as demos."),
             ("3", "Free n8n templates", "Importable workflow.json files with placeholder credentials."),
             (str(N_TOOLS), "Tools sourced", f"Automation and AI-agent tools, prices from official pages ({PRUEF_EN})."),
         ],
@@ -524,10 +500,10 @@ HOME = {
             ("21 Nov", "A free trading journal and risk sheet."),
             ("21 Nov", "Profiles on dev.to and Indie Hackers."),
         ],
-        "rules_title": "House rules",
+        "rules_title": "How we work with you",
         "rules": [
-            "Real numbers only, including the zeros.",
-            "No earnings promises, no coin tips, no financial advice.",
+            "Written quote first, payment only after completion.",
+            "Sites in Portuguese, English or German, from Lisbon.",
             "Affiliate links, if any, are labelled #ad / Anzeige.",
             "This site sets no cookies and runs no tracking.",
         ],
@@ -538,7 +514,7 @@ HOME = {
             {
                 "icon": "book", "pill": "Guide", "featured": True,
                 "title": "How I Built a Self-Improving AI Agent Team",
-                "text": "A field report, not a demo: how one person works with ten AI agents, what each one does, and what went wrong.",
+                "text": "A field report: how one person works with ten AI agents, what each one does, and how the day-to-day workflow is set up.",
                 "price": "$19", "price_sub": "$9 early bird for the first 50, code <code>EARLYBIRD</code>",
                 "cta": "Get the guide", "url": GUIDE_EARLY_URL,
             },
@@ -572,19 +548,19 @@ HOME = {
         "dir_title": "Tool directory",
         "dir_text": f"A sourced directory of {N_TOOLS} automation and AI-agent tools. Prices come only from official public pages dated {PRUEF_EN}. Where a figure was not readable, it is marked unknown. n8n is listed first on purpose.",
         "dir_cta": "Open the directory",
-        "rev": "This is not financial advice and not a trading product. Our own revenue from these pages so far: €0.",
+        "rev": "A sourced look at the automation tools we use, with prices taken from official pages.",
         "news_title": "The build log",
-        "news_text": "A short, free newsletter from Desire Agency about what we are actually building — including these templates, the site, and the rest of the system. No earnings promises. Our own revenue so far: €0.",
+        "news_text": "A short, free newsletter from Desire Agency about the websites, templates and tools we are building in Lisbon.",
         "news_cta": "Get the build log",
         "follow_text": "Or follow along:",
     },
     "de": {
-        "title": "Desire Agency — ein KI-Agenten-Team, öffentlich gebaut",
-        "description": "Eine Person und ein Team aus KI-Agenten, öffentlich aufgebaut in Lissabon. Echte Zahlen inklusive der Nullen, kostenlose n8n-Vorlagen, ein Tool-Verzeichnis mit Quellen und ein ehrlicher Guide.",
-        "eyebrow": "Öffentlich gebaut in Lissabon",
+        "title": "Desire Agency — Websites für kleine Betriebe, aus Lissabon",
+        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut in Lissabon. Pakete Vitrine, Atelier und Maison auf Portugiesisch, Englisch oder Deutsch. Zahlung erst nach Fertigstellung. Kostenlose n8n-Vorlagen und ein Tool-Verzeichnis mit Quellen.",
+        "eyebrow": "Aus Lissabon · PT, EN, DE",
         "h1_a": "Eine Person. Ein Team aus KI-Agenten.",
-        "h1_b": "Jede Zahl öffentlich.",
-        "lede": "Wir bauen ein autonomes KI-Agenten-Team und schreiben auf, was wirklich passiert: was live geht, was kaputtgeht und was es einbringt. Im Moment sind das 0 €, und das sagen wir auch.",
+        "h1_b": "Websites für kleine Betriebe.",
+        "lede": "Wir gestalten schnelle, mobilfreundliche Websites für Cafés, Läden und lokale Betriebe und betreiben sie mit einem kleinen KI-Agenten-Team. Du bekommst zuerst ein schriftliches Angebot und zahlst erst nach Fertigstellung.",
         "cta_news": "Build-Log abonnieren",
         "cta_web": "Website anfragen — ab 390 €",
         "cta_guide": "Guide: 9 $ Early Bird",
@@ -593,21 +569,22 @@ HOME = {
         "link_tpl": "Kostenlose n8n-Vorlagen",
         "link_journal": "Kostenloses Trading-Journal",
         "link_n8n": "Warum wir n8n empfehlen",
-        "hero_note": "Kein Gewinnversprechen. Keine Finanzberatung.",
-        "ledger_title": "Kassenbuch",
-        "ledger": [
-            ("Echter Ertrag", _money(LEDGER["revenue_eur"], "€", "de"), ""),
-            ("Verkäufe bisher", str(LEDGER["sales"]), ""),
-            ("Serverkosten", _money(LEDGER["server_cost_eur_month"], "€", "de") + " / Monat", ""),
-            ("Papier-Trading (simuliert)", _money(L_PNL, "$", "de"), L_PNL_CLS),
+        "hero_note": "Portugiesisch, Englisch und Deutsch. Sitz in Lissabon.",
+        "offer_title": "Was du bekommst",
+        "offer_meta": "Lissabon · PT, EN, DE",
+        "offer": [
+            ("Vitrine", "ab 390 €"),
+            ("Atelier", "ab 750 €"),
+            ("Maison", "ab 1.190 €"),
         ],
-        "ledger_foot": "Papier-Trading nutzt nur Spielgeld. Es ist kein Einkommen.",
-        "bip_kicker": "Build in Public",
-        "bip_title": "Die ehrlichen Zahlen",
-        "bip_text": "Keine Schönwetter-Kennzahlen und keine Kundenstimmen, die wir nicht haben. Das sind die Werte aus unseren eigenen Logs.",
+        "offer_foot": "Zahlung erst nach Fertigstellung. Zuerst ein schriftliches Angebot.",
+        "offer_link": "Pakete ansehen",
+        "bip_kicker": "Das Studio",
+        "bip_title": "Womit wir arbeiten",
+        "bip_text": "Ein kleines KI-Agenten-Team in Lissabon, Demo-Seiten zum Durchklicken und kostenlose Einstiege für deine eigene Automatisierung.",
         "stats": [
             ("11", "KI-Agenten", "10 spezialisierte Bots und ein Chief of Staff, koordiniert von einer Person."),
-            (L_TRADES, "Geschlossene Papier-Trades", f"Auf {L_DESKS['de']} Papier-Desks. Ergebnis {_money(L_PNL, '$', 'de')}, nur Spielgeld."),
+            ("6", "Demo-Seiten", "Fiktive Beispielbetriebe, klar als Demos gekennzeichnet."),
             ("3", "Kostenlose n8n-Vorlagen", "Importierbare workflow.json-Dateien mit Platzhaltern für Zugangsdaten."),
             (str(N_TOOLS), "Tools mit Quellen", f"Automatisierungs- und KI-Agenten-Tools, Preise von offiziellen Seiten ({PRUEF})."),
         ],
@@ -618,10 +595,10 @@ HOME = {
             ("21.11.", "Ein kostenloses Trading-Journal mit Risiko-Rechner."),
             ("21.11.", "Profile auf dev.to und Indie Hackers."),
         ],
-        "rules_title": "Unsere Regeln",
+        "rules_title": "So arbeiten wir mit dir",
         "rules": [
-            "Nur echte Zahlen, auch die Nullen.",
-            "Kein Gewinnversprechen, keine Coin-Tipps, keine Finanzberatung.",
+            "Zuerst ein schriftliches Angebot, Zahlung erst nach Fertigstellung.",
+            "Websites auf Portugiesisch, Englisch oder Deutsch, aus Lissabon.",
             "Affiliate-Links, falls es welche gibt, sind als #ad / Anzeige markiert.",
             "Diese Seite setzt keine Cookies und hat kein Tracking.",
         ],
@@ -632,7 +609,7 @@ HOME = {
             {
                 "icon": "book", "pill": "Guide · EN", "featured": True,
                 "title": "How I Built a Self-Improving AI Agent Team",
-                "text": "Ein Praxisbericht statt einer Demo: wie eine Person mit zehn KI-Agenten arbeitet, was jeder davon macht und was schiefging. Auf Englisch.",
+                "text": "Ein Praxisbericht: wie eine Person mit zehn KI-Agenten arbeitet, was jeder davon macht und wie der Arbeitsalltag aufgebaut ist. Auf Englisch.",
                 "price": "19 $", "price_sub": "9 $ Early Bird für die ersten 50, Code <code>EARLYBIRD</code>",
                 "cta": "Zum Guide", "url": GUIDE_EARLY_URL,
             },
@@ -666,9 +643,9 @@ HOME = {
         "dir_title": "Tool-Verzeichnis",
         "dir_text": f"Ein quellenbelegtes Verzeichnis mit {N_TOOLS} Automatisierungs- und KI-Agenten-Tools. Preise nur aus öffentlichen offiziellen Seiten vom {PRUEF}. Wo ein Betrag nicht ablesbar war, steht unbekannt. n8n steht absichtlich zuerst.",
         "dir_cta": "Zum Verzeichnis",
-        "rev": "Keine Finanzberatung, kein Trading-Produkt. Unser eigener Ertrag aus diesen Seiten bisher: 0 €.",
+        "rev": "Ein quellenbelegter Blick auf die Automatisierungs-Tools, die wir nutzen, mit Preisen von offiziellen Seiten.",
         "news_title": "Das Build-Log",
-        "news_text": "Ein kurzer, kostenloser Newsletter von Desire Agency über das, was wir tatsächlich bauen — Vorlagen, die Website und den Rest des Systems. Kein Gewinnversprechen. Unser eigener Ertrag bisher: 0 €.",
+        "news_text": "Ein kurzer, kostenloser Newsletter von Desire Agency über die Websites, Vorlagen und Tools, die wir in Lissabon bauen.",
         "news_cta": "Build-Log abonnieren",
         "follow_text": "Oder folge uns:",
     },
@@ -684,13 +661,13 @@ TEAM = {
     "en": {
         "kicker": "The team", "title": "Who does what",
         "text": "One human owner, one chief of staff, and ten specialist agents. Hover or tap an agent to see its job.",
-        "trade": "Trading desk (paper money)", "growth": "Growth & products", "lead_grp": "Coordination", "human_grp": "Owner",
+        "trade": "Research & markets", "growth": "Growth & products", "lead_grp": "Coordination", "human_grp": "Owner",
         "hint": "Lines show who reports to the chief of staff.",
         "human": ("Desire", "Human owner", "Sets the goals and approves anything involving real money, purchases or deals."),
         "lead": ("Jojo", "Chief of staff", "Plans the day, hands out work, checks results and writes the morning and evening reports."),
         "trade_agents": [
-            ("Chef", "Desk manager", "Runs the paper-trading desks and proposes rule changes."),
-            ("Scout", "Candidate scout", "Looks for new candidates for the paper-trading desks."),
+            ("Chef", "Desk manager", "Runs the internal market-research desks and proposes rule changes."),
+            ("Scout", "Candidate scout", "Looks for new candidates for the research desks."),
             ("News", "News watch", "Tracks news that could matter for the desks."),
             ("Charts", "Chart reader", "Reads price charts and market structure."),
             ("Skeptiker", "The skeptic", "Argues against ideas before they ship and looks for the weak spot."),
@@ -706,13 +683,13 @@ TEAM = {
     "de": {
         "kicker": "Das Team", "title": "Wer macht was",
         "text": "Ein menschlicher Owner, ein Chief of Staff und zehn spezialisierte Agenten. Fahr über einen Agenten oder tippe ihn an, um seine Aufgabe zu sehen.",
-        "trade": "Trading-Desk (Spielgeld)", "growth": "Wachstum & Produkte", "lead_grp": "Koordination", "human_grp": "Owner",
+        "trade": "Recherche & Märkte", "growth": "Wachstum & Produkte", "lead_grp": "Koordination", "human_grp": "Owner",
         "hint": "Die Linien zeigen, wer an den Chief of Staff berichtet.",
         "human": ("Desire", "Owner (Mensch)", "Setzt die Ziele und gibt alles frei, was echtes Geld, Käufe oder Deals betrifft."),
         "lead": ("Jojo", "Chief of Staff", "Plant den Tag, verteilt Aufgaben, prüft Ergebnisse und schreibt den Morgen- und Abendbericht."),
         "trade_agents": [
-            ("Chef", "Desk-Manager", "Führt die Papier-Trading-Desks und schlägt Regeländerungen vor."),
-            ("Scout", "Kandidaten-Scout", "Sucht neue Kandidaten für die Papier-Desks."),
+            ("Chef", "Desk-Manager", "Führt die internen Markt-Recherche-Desks und schlägt Regeländerungen vor."),
+            ("Scout", "Kandidaten-Scout", "Sucht neue Kandidaten für die Recherche-Desks."),
             ("News", "Nachrichten", "Verfolgt Nachrichten, die für die Desks wichtig sein könnten."),
             ("Charts", "Chart-Leser", "Liest Kurscharts und Marktstruktur."),
             ("Skeptiker", "Der Skeptiker", "Hält dagegen, bevor etwas live geht, und sucht die Schwachstelle."),
@@ -729,22 +706,22 @@ TEAM = {
 
 FAQ = {
     "en": {
-        "kicker": "FAQ", "title": "Fair questions",
+        "kicker": "FAQ", "title": "Questions",
         "items": [
-            ("Why publish €0 in revenue?", "Because it is the real number. Build in public only means something if the zeros are shown too. We update the figures as they change."),
-            ("What is paper trading?", "The trading desks use simulated money to test rules. The results are not income, not a product and not financial advice. We publish them because they are part of the system."),
+            ("How does payment work?", "You get a written quote by email first. You pay only after completion, with no deposit."),
+            ("Which languages do you work in?", "Portuguese, English and German. The studio is based in Lisbon."),
+            ("Can I see examples?", "Yes. The demo sites are fictional example businesses and are clearly labelled as demos. This website itself is a live example of the same approach."),
             ("Are the n8n templates really free?", "Yes. You download the workflow.json, import it into your own n8n and add your own credentials. The files only contain placeholders."),
-            ("Do you use AI to write this?", "Yes. The agents draft most of the work and a human owner approves anything involving money. We say so wherever a platform asks for it."),
             ("Does this site track me?", "No. There are no cookies, analytics or third-party requests. The theme toggle saves your choice in your own browser only."),
         ],
     },
     "de": {
-        "kicker": "FAQ", "title": "Berechtigte Fragen",
+        "kicker": "FAQ", "title": "Häufige Fragen",
         "items": [
-            ("Warum zeigt ihr 0 € Ertrag?", "Weil es die echte Zahl ist. Build in Public bedeutet nur etwas, wenn auch die Nullen sichtbar sind. Wir aktualisieren die Zahlen, wenn sie sich ändern."),
-            ("Was ist Papier-Trading?", "Die Trading-Desks testen Regeln mit Spielgeld. Die Ergebnisse sind kein Einkommen, kein Produkt und keine Finanzberatung. Wir zeigen sie, weil sie Teil des Systems sind."),
+            ("Wie funktioniert die Zahlung?", "Du bekommst zuerst ein schriftliches Angebot per E-Mail. Du zahlst erst nach Fertigstellung, ohne Anzahlung."),
+            ("In welchen Sprachen arbeitet ihr?", "Auf Portugiesisch, Englisch und Deutsch. Das Studio sitzt in Lissabon."),
+            ("Kann ich Beispiele sehen?", "Ja. Die Demo-Seiten sind fiktive Beispielbetriebe und klar als Demos gekennzeichnet. Diese Website selbst ist ein live laufendes Beispiel für denselben Ansatz."),
             ("Sind die n8n-Vorlagen wirklich kostenlos?", "Ja. Du lädst die workflow.json herunter, importierst sie in dein eigenes n8n und trägst deine eigenen Zugangsdaten ein. Die Dateien enthalten nur Platzhalter."),
-            ("Schreibt ihr das mit KI?", "Ja. Die Agenten entwerfen den Großteil der Arbeit, und ein menschlicher Owner gibt alles frei, was Geld betrifft. Wo eine Plattform es verlangt, legen wir das offen."),
             ("Trackt mich diese Seite?", "Nein. Es gibt keine Cookies, keine Analytics und keine Anfragen an Dritte. Der Design-Schalter speichert deine Wahl nur in deinem eigenen Browser."),
         ],
     },
@@ -804,26 +781,26 @@ def faq_section(lang: str) -> str:
 
 
 PROCESS = {
-    "en": {"kicker": "How we work", "title": "From idea to public numbers",
-           "text": "The same loop runs every day. Nothing that costs real money skips the human step.",
+    "en": {"kicker": "How we work", "title": "From brief to launch",
+           "text": "Clear steps, a written quote first, and payment only after completion.",
            "steps": [
-               ("01", "Plan", "Jojo, the chief of staff, sets the day's priorities from yesterday's results and hands out work."),
-               ("02", "Build", "Specialist agents draft the work: posts, products, templates, research, paper trades."),
-               ("03", "Check", "Results are reviewed before they ship. Money, purchases and deals need the owner’s explicit OK."),
-               ("04", "Publish & measure", "What ships goes live, and the numbers, including the zeros, go into the reports and onto this site."),
+               ("01", "Brief", "You send texts, photos and your logo. We reply with a written quote by email."),
+               ("02", "Build", "We design a fast, mobile-first site in Portuguese, English or German."),
+               ("03", "Review", "You go through the revision rounds included in the package."),
+               ("04", "Launch", "The site goes live. You pay only after completion, with no deposit."),
            ]},
-    "de": {"kicker": "So arbeiten wir", "title": "Von der Idee zur öffentlichen Zahl",
-           "text": "Jeden Tag läuft dieselbe Schleife. Nichts, was echtes Geld kostet, überspringt den menschlichen Schritt.",
+    "de": {"kicker": "So arbeiten wir", "title": "Vom Briefing zur fertigen Seite",
+           "text": "Klare Schritte, zuerst ein schriftliches Angebot, Zahlung erst nach Fertigstellung.",
            "steps": [
-               ("01", "Planen", "Jojo, der Chief of Staff, setzt die Prioritäten des Tages anhand der Ergebnisse von gestern und verteilt die Arbeit."),
-               ("02", "Bauen", "Spezialisierte Agenten entwerfen die Arbeit: Posts, Produkte, Vorlagen, Recherche, Papier-Trades."),
-               ("03", "Prüfen", "Ergebnisse werden geprüft, bevor sie live gehen. Geld, Käufe und Deals brauchen das ausdrückliche OK des Owners."),
-               ("04", "Veröffentlichen & messen", "Was fertig ist, geht live, und die Zahlen, auch die Nullen, landen in den Berichten und auf dieser Seite."),
+               ("01", "Briefing", "Du schickst Texte, Fotos und dein Logo. Du bekommst ein schriftliches Angebot per E-Mail."),
+               ("02", "Umsetzung", "Wir gestalten eine schnelle, mobilfreundliche Seite auf Portugiesisch, Englisch oder Deutsch."),
+               ("03", "Korrektur", "Du gehst die Korrekturrunden durch, die im Paket enthalten sind."),
+               ("04", "Launch", "Die Seite geht live. Du zahlst erst nach Fertigstellung, ohne Anzahlung."),
            ]},
 }
 
 STACK = {
-    "en": {"kicker": "Built with", "title": "A small, boring stack", "text": "Static files, no trackers, no build server. These are the tools the system actually runs on."},
+    "en": {"kicker": "Built with", "title": "A small, lean stack", "text": "Static files, no trackers, no build server. These are the tools the system actually runs on."},
     "de": {"kicker": "Gebaut mit", "title": "Ein kleiner, solider Stack", "text": "Statische Dateien, keine Tracker, kein Build-Server. Das sind die Werkzeuge, auf denen das System wirklich läuft."},
     "items": [
         ("Python", "build.py, desks, reports", '<path d="M12 3c-4 0-4 1.7-4 1.7V7h4v1H6.3S3 7.6 3 12s2.9 4.2 2.9 4.2H8v-2.1s-.1-2.9 2.8-2.9h3.8s2.7 0 2.7-2.6V4.9S17.7 3 12 3Zm-2 1.4a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z"/><path d="M12 21c4 0 4-1.7 4-1.7V17h-4v-1h5.7s3.3.4 3.3-4-2.9-4.2-2.9-4.2H16v2.1s.1 2.9-2.8 2.9H9.4s-2.7 0-2.7 2.6v3.7S6.3 21 12 21Zm2-1.4a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6Z" opacity=".6"/>'),
@@ -837,20 +814,20 @@ STACK = {
 
 CASE = {
     "en": {"kicker": "Case study", "title": "This website, rebuilt in one evening",
-           "text": "Our own site is the first project. Same content, same honest numbers. New design system, motion, a team diagram and EN/DE, still static and tracker-free.",
+           "text": "Our own site is the first project. New design system, motion, a team diagram and EN/DE, still static and tracker-free.",
            "before": "Before · 20 Nov 2026", "after": "After · 21 Nov 2026",
-           "points": ["Self-hosted font, no third-party requests", "Light and dark theme, reduced-motion support", "Canonical, hreflang, Open Graph, sitemap and llms.txt", "Hosted on GitHub Pages: server cost for the site €0"],
-           "alt_before": "Screenshot of the old Desire Agency home page: serif headings on a beige background", "alt_after": "Screenshot of the new Desire Agency home page: dark hero with the ledger card", "cta": "Want a site like this?"},
+           "points": ["Self-hosted font, no third-party requests", "Light and dark theme, reduced-motion support", "Canonical, hreflang, Open Graph, sitemap and llms.txt", "Hosted on GitHub Pages, no hosting fee for the public site"],
+           "alt_before": "Screenshot of the old Desire Agency home page: serif headings on a beige background", "alt_after": "Screenshot of the new Desire Agency home page: dark redesigned hero", "cta": "Want a site like this?"},
     "de": {"kicker": "Fallstudie", "title": "Diese Website, an einem Abend neu gebaut",
-           "text": "Unsere eigene Seite ist das erste Projekt. Gleicher Inhalt, gleiche ehrliche Zahlen. Neues Design-System, Animationen, ein Team-Schaubild und EN/DE, weiterhin statisch und ohne Tracker.",
+           "text": "Unsere eigene Seite ist das erste Projekt. Neues Design-System, Animationen, ein Team-Schaubild und EN/DE, weiterhin statisch und ohne Tracker.",
            "before": "Vorher · 20.11.2026", "after": "Nachher · 21.11.2026",
-           "points": ["Schrift selbst gehostet, keine Anfragen an Dritte", "Helles und dunkles Design, Rücksicht auf reduzierte Bewegung", "Canonical, hreflang, Open Graph, Sitemap und llms.txt", "Gehostet auf GitHub Pages: Serverkosten für die Seite 0 €"],
-           "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler Hero mit dem Kassenbuch", "cta": "Auch so eine Website?"},
+           "points": ["Schrift selbst gehostet, keine Anfragen an Dritte", "Helles und dunkles Design, Rücksicht auf reduzierte Bewegung", "Canonical, hreflang, Open Graph, Sitemap und llms.txt", "Gehostet auf GitHub Pages, ohne Hosting-Gebühr für die öffentliche Seite"],
+           "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler, neu gestalteter Hero", "cta": "Auch so eine Website?"},
     "pt": {"kicker": "Caso real", "title": "Este site, refeito numa noite",
-           "text": "O nosso próprio site é o primeiro projeto. O mesmo conteúdo, os mesmos números honestos. Novo sistema de design, animações e EN/DE, continua estático e sem rastreio.",
+           "text": "O nosso próprio site é o primeiro projeto. Novo sistema de design, animações e EN/DE, continua estático e sem rastreio.",
            "before": "Antes · 20.11.2026", "after": "Depois · 21.11.2026",
-           "points": ["Tipo de letra alojado no próprio site, sem pedidos a terceiros", "Tema claro e escuro, respeita a preferência por menos movimento", "Canonical, hreflang, Open Graph, sitemap e llms.txt", "Alojado no GitHub Pages: custo de servidor do site 0 €"],
-           "alt_before": "Captura de ecrã da antiga página inicial da Desire Agency: títulos com serifa sobre fundo bege", "alt_after": "Captura de ecrã da nova página inicial da Desire Agency: topo escuro com o livro de contas", "cta": "Quer um site assim?"},
+           "points": ["Tipo de letra alojado no próprio site, sem pedidos a terceiros", "Tema claro e escuro, respeita a preferência por menos movimento", "Canonical, hreflang, Open Graph, sitemap e llms.txt", "Alojado no GitHub Pages, sem taxa de alojamento para o site público"],
+           "alt_before": "Captura de ecrã da antiga página inicial da Desire Agency: títulos com serifa sobre fundo bege", "alt_after": "Captura de ecrã da nova página inicial da Desire Agency: topo escuro redesenhado", "cta": "Quer um site assim?"},
 }
 COMPARE = {
     "en": {"label": "Before and after comparison. Move the slider to show more of the old or the new site.", "hint": "Drag to compare", "vt": "{n}% old site visible"},
@@ -1162,9 +1139,9 @@ def websites_body(lang: str) -> str:
 
 def home_body(lang: str, paths: dict) -> str:
     t = HOME[lang]
-    ledger = "\n".join(
-        f'<div class="ledger-row"><span>{label}</span><b class="{cls}" data-count>{val}</b></div>'
-        for label, val, cls in t["ledger"]
+    offer = "\n".join(
+        f'<div class="ledger-row"><span>{esc(label)}</span><b>{esc(val)}</b></div>'
+        for label, val in t["offer"]
     )
     stats = "\n".join(
         f'<div class="stat"><div class="value" data-count>{esc(v)}</div><div class="label">{lab}</div><div class="sub">{sub}</div></div>'
@@ -1213,10 +1190,10 @@ def home_body(lang: str, paths: dict) -> str:
           </div>
           <p class="hero-note">{esc(t["hero_note"])}</p>
         </div>
-        <aside class="ledger" aria-label="{esc(t["ledger_title"])}">
-          <div class="ledger-head"><strong>{esc(t["ledger_title"])}</strong><span>{esc(NUMBERS_AS_OF[lang])}</span></div>
-          {ledger}
-          <p class="ledger-foot">{esc(t["ledger_foot"])}</p>
+        <aside class="ledger" aria-label="{esc(t["offer_title"])}">
+          <div class="ledger-head"><strong>{esc(t["offer_title"])}</strong><span>{esc(t["offer_meta"])}</span></div>
+          {offer}
+          <p class="ledger-foot">{esc(t["offer_foot"])} <a href="{paths["websites"]}">{esc(t["offer_link"])}</a></p>
         </aside>
       </section>
 
@@ -1227,7 +1204,6 @@ def home_body(lang: str, paths: dict) -> str:
             <h2>{esc(t["bip_title"])}</h2>
             <p>{esc(t["bip_text"])}</p>
           </div>
-          <p class="note" style="margin:0">{esc(NUMBERS_AS_OF[lang])}</p>
         </div>
         <div class="stats">
           {stats}
@@ -1308,8 +1284,7 @@ ARTICLE = {
         "intro": (
             "This article is an honest, sourced recommendation of n8n. There are no active affiliate links on this site at the moment; "
             "product buttons go to the official vendor pages. This page may contain affiliate links in the future; those will be labelled "
-            "<strong>#ad / Anzeige</strong>. There is no earnings promise and no revenue of our own (so far €0). "
-            "Not financial advice, not a trading product."
+            "<strong>#ad / Anzeige</strong>. This is a sourced tool recommendation, not financial advice."
         ),
         "context": "It is about tools that connect recurring workflows between apps, or that build agent workflows.",
         "s1": "The recommendation in one sentence",
@@ -1360,8 +1335,8 @@ ARTICLE = {
             "Not “always n8n, never Make”.",
             "Not a comparison of the user interface as a taste judgement without a source.",
         ],
-        "s5": "Affiliate programmes — for context only, not an earnings promise",
-        "aff_intro": "Both vendors have an official partner programme. The rates below are the vendors’ figures, not our own revenue.",
+        "s5": "Affiliate programmes — official terms, for context",
+        "aff_intro": "Both vendors have an official partner programme. The rates below are the vendors’ published figures.",
         "th": ("", "n8n", "Make"),
         "rows": [
             ("Commission", "30% of net cloud revenue", "35% of subscription payments"),
@@ -1388,7 +1363,7 @@ ARTICLE = {
         "see_make": "See Make",
         "passive": (
             "Make advertises its programme page with “passive income”. That is a marketing phrase, not evidence that money arrives without ongoing work. "
-            "Our own revenue from this: so far €0."
+            "We describe the official terms; we do not treat them as a personal earnings forecast."
         ),
         "s6": "A practical start (no account is created for you here)",
         "steps": [
@@ -1407,8 +1382,7 @@ ARTICLE = {
         "intro": (
             "Dieser Text ist eine ehrliche, quellenbelegte Empfehlung für n8n. Auf dieser Seite sind derzeit keine Affiliate-Links aktiv; "
             "die Produkt-Buttons führen auf die offiziellen Anbieterseiten. Diese Seite kann in Zukunft Affiliate-Links enthalten; "
-            "diese werden als <strong>#ad / Anzeige</strong> gekennzeichnet. Es gibt kein Gewinnversprechen und keinen eigenen Umsatz (bisher 0 €). "
-            "Keine Finanzberatung, kein Trading-Produkt."
+            "diese werden als <strong>#ad / Anzeige</strong> gekennzeichnet. Das ist eine quellenbelegte Tool-Empfehlung, keine Finanzberatung."
         ),
         "context": "Es geht um Werkzeuge, mit denen man wiederkehrende Abläufe zwischen Apps verbindet oder Agenten-Workflows baut.",
         "s1": "Empfehlung in einem Satz",
@@ -1459,7 +1433,7 @@ ARTICLE = {
             "Kein „immer n8n, nie Make“.",
             "Kein Vergleich der Benutzeroberfläche als Geschmacksurteil ohne Quelle.",
         ],
-        "s5": "Affiliate-Programme — nur zur Einordnung, kein Verdienstversprechen",
+        "s5": "Affiliate-Programme — offizielle Konditionen, zur Einordnung",
         "aff_intro": "Beide Anbieter haben ein offizielles Partnerprogramm. Die Sätze unten sind die der Anbieter, kein eigener Umsatz.",
         "th": ("", "n8n", "Make"),
         "rows": [
@@ -1487,7 +1461,7 @@ ARTICLE = {
         "see_make": "Make ansehen",
         "passive": (
             "Make wirbt auf der Programmseite mit „passive income“. Das ist eine Werbeformel, kein Beleg dafür, dass ohne laufende Arbeit Geld fließt. "
-            "Unser eigener Ertrag daraus: bisher 0 €."
+            "Wir geben die offiziellen Konditionen wieder und machen daraus keine eigene Ertragsprognose."
         ),
         "s6": "Praktischer Einstieg (ohne Kontozwang in diesem Text)",
         "steps": [
@@ -1566,7 +1540,7 @@ DIR = {
         "description": f"A sourced directory of {N_TOOLS} automation and AI-agent tools. Prices from official public pages dated {PRUEF_EN}.",
         "h1": "Directory of automation and AI-agent tools",
         "lede": (
-            f"Sources checked on {PRUEF_EN}. {N_TOOLS} entries, n8n first. Our own revenue: €0. "
+            f"Sources checked on {PRUEF_EN}. {N_TOOLS} entries, n8n first. "
             "There are no active affiliate links at the moment. This page may contain affiliate links in the future; "
             "those will be labelled #ad / Anzeige. "
             "Where a figure was not reliably readable, it is marked unknown."
@@ -1585,7 +1559,7 @@ DIR = {
         "programme": "Programme page",
         "see": "See {name}",
         "empty": "No tools match this filter.",
-        "note": "Prices can change. Check the official page before you buy. No earnings promises.",
+        "note": "Prices can change. Check the official page before you buy.",
         "machine": "A machine-readable copy of this directory is at /tools.json. A short site map for language models is at /llms.txt.",
     },
     "de": {
@@ -1593,7 +1567,7 @@ DIR = {
         "description": f"Quellenbelegtes Verzeichnis mit {N_TOOLS} Automatisierungs- und KI-Agenten-Tools. Preise aus offiziellen öffentlichen Seiten vom {PRUEF}.",
         "h1": "Verzeichnis für Automatisierungs- und KI-Agenten-Tools",
         "lede": (
-            f"Quellenstand: {PRUEF}. {N_TOOLS} Einträge, n8n zuerst. Eigener Ertrag: 0 €. "
+            f"Quellenstand: {PRUEF}. {N_TOOLS} Einträge, n8n zuerst. "
             "Derzeit sind keine Affiliate-Links aktiv. Diese Seite kann in Zukunft Affiliate-Links enthalten; "
             "diese werden als #ad / Anzeige gekennzeichnet. "
             "Wo ein Betrag nicht zuverlässig ablesbar war, steht unbekannt."
@@ -1612,7 +1586,7 @@ DIR = {
         "programme": "Programmseite",
         "see": "{name} ansehen",
         "empty": "Kein Eintrag passt zu diesem Filter.",
-        "note": "Preise können sich ändern. Vor einem Kauf die offizielle Seite prüfen. Kein Gewinnversprechen.",
+        "note": "Preise können sich ändern. Vor einem Kauf die offizielle Seite prüfen.",
         "machine": "Eine maschinenlesbare Fassung dieses Verzeichnisses liegt unter /tools.json. Eine kurze Seitenübersicht für Sprachmodelle liegt unter /llms.txt.",
     },
 }
@@ -1714,9 +1688,8 @@ LEGAL = {
             ("VAT ID, if required", "Not provided"),
         ],
         "status": (
-            f"Published on 19 November 2026 without an n8n partner link "
-            f"(N8N_AFFILIATE_URL in config.js is empty; buttons go to the official n8n site). "
-            f"The n8n partner application was declined on 19 November 2026; a later reapplication is planned. "
+            f"Product buttons on the n8n recommendation go to the official n8n site "
+            f"(N8N_AFFILIATE_URL in config.js is empty; there are no active affiliate links). "
             f"Source date for prices: {PRUEF_EN}."
         ),
         "ad": (
@@ -1743,9 +1716,8 @@ LEGAL = {
             ("USt-IdNr., falls erforderlich", "Nicht angegeben"),
         ],
         "status": (
-            f"Veröffentlicht am 19.11.2026 ohne n8n-Partner-Link "
-            f"(N8N_AFFILIATE_URL in config.js ist leer; die Buttons führen auf die offizielle n8n-Seite). "
-            f"Die n8n-Partner-Bewerbung wurde am 19.11.2026 abgelehnt; eine spätere erneute Bewerbung ist geplant. "
+            f"Die Produkt-Buttons auf der n8n-Empfehlung führen auf die offizielle n8n-Seite "
+            f"(N8N_AFFILIATE_URL in config.js ist leer; es sind keine Affiliate-Links aktiv). "
             f"Quellenstand der Preise: {PRUEF}."
         ),
         "ad": (
@@ -1889,7 +1861,7 @@ def templates_body() -> str:
     parts.append(f"""
         <section class="section">
           <h2>Get the build log</h2>
-          <p>We write about what we actually build — including these templates — in the Desire Agency newsletter. No earnings promises. Our own revenue so far: €0.</p>
+          <p>We write about the websites, templates and tools we are building in Lisbon in the Desire Agency newsletter.</p>
           <div class="actions">
             <a class="btn btn-primary" href="{esc(SUBSCRIBE_URL)}">{esc(SUBSCRIBE_LABEL['en'])}</a>
           </div>
@@ -2018,20 +1990,19 @@ def public_tools_payload() -> dict:
         "url_de": site_url("/de/directory/"),
         "checked_on": TOOLS["pruefdatum"],
         "timezone": TOOLS["timezone_pruefung"],
-        "own_revenue_eur": TOOLS["eigener_ertrag_eur"],
         "affiliate_links_active": False,
         "n_entries": N_TOOLS,
         "note": (
             "Prices come only from official public vendor pages on the checked date. "
             "Where a figure was not reliably readable, price_status is unknown or partial. "
             "There are no active affiliate links on this site. "
-            "This is not financial advice. No earnings promises. Own revenue: €0."
+            "Prices can change; check the official page before you buy."
         ),
         "note_de": (
             "Preise nur aus offiziellen öffentlichen Anbieterseiten vom Prüfdatum. "
             "Wo ein Betrag nicht zuverlässig ablesbar war, ist price_status unbekannt oder teilweise. "
             "Auf dieser Seite sind keine Affiliate-Links aktiv. "
-            "Keine Finanzberatung. Kein Gewinnversprechen. Eigener Ertrag: 0 €."
+            "Preise können sich ändern; prüfe die offizielle Seite vor dem Kauf."
         ),
         "pages": {
             "home_en": site_url("/"),
@@ -2076,7 +2047,6 @@ def write_llms_txt() -> None:
 Live site: {SITE_URL}/
 Operator: Saveliy Soroka, Lisboa. Contact: desire.studio.agency@gmail.com (see /legal/).
 Prices and programme terms: official public vendor pages, checked on {PRUEF_EN} ({TOOLS["timezone_pruefung"]}).
-Own revenue so far: €0. No earnings promises. Not financial advice.
 Products: Agent Team Guide ({GUIDE_URL}, $19), free Trading Journal + Risk Sheet ({JOURNAL_URL}).
 Elsewhere: X {X_URL} · dev.to {DEVTO_URL} · Indie Hackers {IH_URL}.
 There are no active affiliate links. Future affiliate links, if any, will be labelled #ad / Anzeige.
@@ -2084,9 +2054,9 @@ This is a static site with no cookies, tracking or analytics.
 
 ## Pages
 
-- [Home (English)]({SITE_URL}/): Desire Agency, an AI agent team built in public from Lisbon. Real numbers including the zeros (revenue so far €0), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of {PRUEF_EN}.
+- [Home (English)]({SITE_URL}/): Desire Agency, websites for small businesses from Lisbon, built with an AI agent team. Packages Vitrine, Atelier and Maison (payment after completion), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of {PRUEF_EN}.
 - [Home (German)]({SITE_URL}/de/): The same start page in German.
-- [n8n recommendation (English)]({SITE_URL}/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site; the n8n partner application was declined on 19 November 2026.
+- [n8n recommendation (English)]({SITE_URL}/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site.
 - [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
 - [Tool directory (English)]({SITE_URL}/directory/): {N_TOOLS} sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)]({SITE_URL}/de/directory/): The same directory in German, with the same JSON-LD in German wording.
@@ -2097,7 +2067,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Websites (European Portuguese)]({SITE_URL}/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
 - [Demos]({SITE_URL}/demos/): Six example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, Christmas campaign tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
-- [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
+- [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter.
 
 ## Machine-readable
 
@@ -2135,7 +2105,7 @@ def write_sitemap() -> None:
     lastmod_today = "2026-11-26"
     urls = []
     for path, prio, freq in paths:
-        lastmod = lastmod_today if path in ("/", "/websites/", "/de/websites/", "/pt/websites/", "/demos/", "/llms.txt") else lastmod_default
+        lastmod = lastmod_today if path in ("/", "/de/", "/n8n/", "/de/n8n/", "/templates/", "/directory/", "/de/directory/", "/legal/", "/de/legal/", "/websites/", "/de/websites/", "/pt/websites/", "/demos/", "/llms.txt", "/tools.json") else lastmod_default
         urls.append(
             "  <url>\n"
             f"    <loc>{esc(site_url(path))}</loc>\n"
