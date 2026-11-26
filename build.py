@@ -128,11 +128,11 @@ def page_paths(lang: str, depth: int) -> dict:
             "js_aff": p + "js/affiliate.js",
             "js_dir": p + "js/directory.js",
         }
-    if lang == "pt":  # only /pt/websites/ exists; other pages link to English
+    if lang == "pt":  # only /pt/websites/ exists; that page is the PT home
         return {
-            "home": "../../", "n8n": "../../n8n/", "templates": "../../templates/",
-            "directory": "../../directory/", "websites": "../websites/", "legal": "../../legal/",
-            "other_lang": "../../", "config": "../../config.js", "css": "../../css/site.css",
+            "home": "./", "n8n": "../../n8n/", "templates": "../../templates/",
+            "directory": "../../directory/", "websites": "./", "legal": "../../legal/",
+            "other_lang": "../../websites/", "config": "../../config.js", "css": "../../css/site.css",
             "js_aff": "../../js/affiliate.js", "js_dir": "../../js/directory.js",
         }
     # German lives under /de/
@@ -166,13 +166,31 @@ def page_paths(lang: str, depth: int) -> dict:
     }
 
 
+def lang_switch_hrefs(lang: str, page: str, depth: int) -> dict:
+    """Relative EN / DE / PT hrefs from the current page. PT lands on the offer page
+    when a Portuguese translation of this page does not exist."""
+    if page == "websites":
+        return {
+            "en": {"en": "#", "de": "../de/websites/", "pt": "../pt/websites/"},
+            "de": {"en": "../../websites/", "de": "#", "pt": "../../pt/websites/"},
+            "pt": {"en": "../../websites/", "de": "../../de/websites/", "pt": "#"},
+        }[lang]
+    pt = {0: "pt/websites/", 1: "../pt/websites/", 2: "../../pt/websites/"}[depth]
+    other = lang_href(lang, page, depth)
+    if lang == "en":
+        return {"en": "#", "de": other, "pt": pt}
+    if lang == "de":
+        return {"en": other, "de": "#", "pt": pt}
+    return {"en": "../../websites/", "de": "../../de/websites/", "pt": "#"}
+
+
 def lang_href(lang: str, page: str, depth: int) -> str:
     """URL of the same page in the other language."""
     # Templates exist in English only; the DE language switch goes to the German home.
     if page == "websites":
         return "../de/websites/" if lang == "en" else "../../websites/"
     if lang == "pt":
-        return "../../"
+        return "../../websites/"
     if page == "templates":
         if lang == "en":
             return "../de/" if depth >= 1 else "de/"
@@ -312,6 +330,16 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
             f'  <link rel="alternate" hreflang="pt-PT" href="{site_url(CANONICAL[("pt", page)])}">\n'
             f'  <link rel="alternate" hreflang="x-default" href="{site_url(CANONICAL[("en", page)])}">\n'
         )
+    elif page == "home":
+        en_url = site_url(CANONICAL[("en", page)])
+        de_url = site_url(CANONICAL[("de", page)])
+        pt_url = site_url(CANONICAL[("pt", "websites")])
+        alt = (
+            f'  <link rel="alternate" hreflang="en" href="{en_url}">\n'
+            f'  <link rel="alternate" hreflang="de" href="{de_url}">\n'
+            f'  <link rel="alternate" hreflang="pt-PT" href="{pt_url}">\n'
+            f'  <link rel="alternate" hreflang="x-default" href="{en_url}">\n'
+        )
     elif page != "templates":
         en_url = site_url(CANONICAL[("en", page)])
         de_url = site_url(CANONICAL[("de", page)])
@@ -335,16 +363,10 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
     f = FOOTER_TEXT[lang]
     sub_label = SUBSCRIBE_LABEL[lang]
     cur_attr = ' aria-current="true"'
-    if page == "websites":
-        sw = {"en": {"en": "#", "de": "../de/websites/", "pt": "../pt/websites/"},
-              "de": {"en": "../../websites/", "de": "#", "pt": "../../pt/websites/"},
-              "pt": {"en": "../../websites/", "de": "../../de/websites/", "pt": "#"}}[lang]
-        lang_links = "".join(
-            f'\n          <a href="{sw[c]}"{cur_attr if c == lang else ""} hreflang="{hl}" lang="{hl}">{c.upper()}</a>'
-            for c, hl in (("en", "en"), ("de", "de"), ("pt", "pt-PT")))
-    else:
-        lang_links = (f'\n          <a href="{other_href if lang == "de" else "#"}"{en_cur} hreflang="en">EN</a>'
-                      f'\n          <a href="{other_href if lang == "en" else "#"}"{de_cur} hreflang="de">DE</a>')
+    sw = lang_switch_hrefs(lang, page, depth)
+    lang_links = "".join(
+        f'\n          <a href="{sw[c]}"{cur_attr if c == lang else ""} hreflang="{hl}" lang="{hl}">{c.upper()}</a>'
+        for c, hl in (("en", "en"), ("de", "de"), ("pt", "pt-PT")))
     gsc = ('\n  <meta name="google-site-verification" content="' + GSC_TOKEN + '" />') if (page == "home" and lang == "en") else ""
     return f"""<!DOCTYPE html>
 <html lang="{"pt-PT" if lang == "pt" else lang}" data-theme="dark">
@@ -381,13 +403,13 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
         {LOGO_SVG}
         <span class="brand-text">
           <span class="brand-name">Desire<span class="wm-2"> Agency</span></span>
-          <span class="brand-tag">{T3(lang, "An AI agent team, built in public", "KI-Agenten-Team, öffentlich gebaut", "Equipa de agentes de IA, construída em público")}</span>
+          <span class="brand-tag">{T3(lang, "Websites for small businesses, from Lisbon", "Websites für kleine Betriebe, aus Lissabon", "Sites para pequenos negócios em Lisboa")}</span>
         </span>
       </a>
       <nav aria-label="{T3(lang, "Main", "Hauptnavigation", "Navegação principal")}">
         {''.join(nav)}
-        <a class="btn btn-primary btn-sm nav-cta" href="{esc(SUBSCRIBE_URL)}">{esc(sub_label)}</a>
-        <span class="lang{" lang-3" if page == "websites" else ""}" aria-label="Language">{lang_links}
+        <a class="btn btn-primary btn-sm nav-cta" href="{paths['websites']}#contacto">{T3(lang, "Get a written quote", "Angebot anfragen", "Pedir orçamento")}</a>
+        <span class="lang lang-3" aria-label="Language">{lang_links}
         </span>
       </nav>
       <button type="button" class="theme-toggle" aria-label="{T3(lang, "Toggle theme", "Design wechseln", "Mudar tema")}">{THEME_ICONS}</button>
@@ -415,9 +437,9 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
           <h3>{esc(f["site"])}</h3>
           <ul>
             <li><a href="{paths['home']}">{esc(NAV[lang][0][1])}</a></li>
-            <li><a href="{paths['n8n']}">{esc(NAV[lang][1][1])}</a></li>
-            <li><a href="{paths['directory']}">{esc(NAV[lang][3][1])}</a></li>
-            <li><a href="{paths['websites']}">Websites</a></li>
+            <li><a href="{paths['websites']}">{esc(NAV[lang][1][1])}</a></li>
+            <li><a href="{paths['n8n']}">{esc(NAV[lang][2][1])}</a></li>
+            <li><a href="{paths['directory']}">{esc(NAV[lang][4][1])}</a></li>
             <li><a href="{paths['legal']}">{T3(lang, "Legal notice / Impressum", "Impressum / Kontakt", "Aviso legal / Impressum (EN)")}</a></li>
             <li><a href="{other_href}">{other}</a></li>
           </ul>
@@ -460,21 +482,22 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
 
 HOME = {
     "en": {
-        "title": "Desire Agency — websites for small businesses, from Lisbon",
-        "description": "Fast, mobile-first websites for small businesses, built in Lisbon. Packages Vitrine, Atelier and Maison in Portuguese, English or German. Payment after completion. Free n8n templates and a sourced tool directory.",
+        "title": "Websites for small businesses in Lisbon — Desire Agency",
+        "description": "Fast, mobile-first websites for small businesses, built in Lisbon. Packages Vitrine, Atelier and Maison in Portuguese, English or German. Written quote first, payment after completion, no deposit.",
         "eyebrow": "From Lisbon · PT, EN, DE",
-        "h1_a": "One person. A team of AI agents.",
-        "h1_b": "Websites for small businesses.",
-        "lede": "We design fast, mobile-first websites for cafés, shops and local businesses, and run them with a small AI agent team. You get a written quote first and pay only after completion.",
+        "h1_a": "Fast, honest websites for small businesses",
+        "h1_b": "in Lisbon.",
+        "lede": "A clean site that works on the phone, brings enquiries and belongs to you. Written quote first. You only pay after the site is finished — no deposit.",
         "cta_news": "Get the build log",
-        "cta_web": "Get a website — from €390",
+        "cta_web": "Get a written quote",
+        "cta_secondary": "See packages and demos",
         "cta_guide": "Guide: $9 early bird",
         "guide_note": "Early bird $9 instead of $19 for the first 50 (code EARLYBIRD).",
         "web_line": "We build fast, mobile-first websites for small businesses. Final prices, written quote first.",
         "link_tpl": "Free n8n templates",
         "link_journal": "Free trading journal",
         "link_n8n": "Why we recommend n8n",
-        "hero_note": "Portuguese, English and German. Based in Lisbon.",
+        "hero_note": "Written quote first · Pay after completion, no deposit",
         "offer_title": "What you get",
         "offer_meta": "Lisbon · PT, EN, DE",
         "offer": [
@@ -555,21 +578,22 @@ HOME = {
         "follow_text": "Or follow along:",
     },
     "de": {
-        "title": "Desire Agency — Websites für kleine Betriebe, aus Lissabon",
-        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut in Lissabon. Pakete Vitrine, Atelier und Maison auf Portugiesisch, Englisch oder Deutsch. Zahlung erst nach Fertigstellung. Kostenlose n8n-Vorlagen und ein Tool-Verzeichnis mit Quellen.",
+        "title": "Websites für kleine Betriebe in Lissabon — Desire Agency",
+        "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut in Lissabon. Pakete Vitrine, Atelier und Maison auf Portugiesisch, Englisch oder Deutsch. Zuerst ein schriftliches Angebot, Zahlung erst nach Fertigstellung, keine Anzahlung.",
         "eyebrow": "Aus Lissabon · PT, EN, DE",
-        "h1_a": "Eine Person. Ein Team aus KI-Agenten.",
-        "h1_b": "Websites für kleine Betriebe.",
-        "lede": "Wir gestalten schnelle, mobilfreundliche Websites für Cafés, Läden und lokale Betriebe und betreiben sie mit einem kleinen KI-Agenten-Team. Du bekommst zuerst ein schriftliches Angebot und zahlst erst nach Fertigstellung.",
+        "h1_a": "Schnelle, ehrliche Websites für kleine Betriebe",
+        "h1_b": "aus Lissabon.",
+        "lede": "Eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dir gehört. Zuerst ein schriftliches Angebot. Zahlung erst nach Fertigstellung — keine Anzahlung.",
         "cta_news": "Build-Log abonnieren",
-        "cta_web": "Website anfragen — ab 390 €",
+        "cta_web": "Schriftliches Angebot anfragen",
+        "cta_secondary": "Pakete und Demos",
         "cta_guide": "Guide: 9 $ Early Bird",
         "guide_note": "Early Bird 9 $ statt 19 $ für die ersten 50 (Code EARLYBIRD). Guide auf Englisch.",
         "web_line": "Wir bauen schnelle, mobilfreundliche Websites für kleine Betriebe. Endpreise, erst ein schriftliches Angebot.",
         "link_tpl": "Kostenlose n8n-Vorlagen",
         "link_journal": "Kostenloses Trading-Journal",
         "link_n8n": "Warum wir n8n empfehlen",
-        "hero_note": "Portugiesisch, Englisch und Deutsch. Sitz in Lissabon.",
+        "hero_note": "Zuerst schriftliches Angebot · Zahlung erst nach Fertigstellung, keine Anzahlung",
         "offer_title": "Was du bekommst",
         "offer_meta": "Lissabon · PT, EN, DE",
         "offer": [
@@ -907,11 +931,14 @@ CONTACT_EMAIL = "desire.studio.agency@gmail.com"
 
 WEBSITES = {
     "en": {
-        "title": "Websites for small businesses — Desire Agency",
+        "title": "Websites for small businesses in Lisbon — Desire Agency",
         "description": "Fast, mobile-first websites for small businesses, built by Desire Agency in Lisbon. Vitrine from €390, Atelier from €750, Maison from €1,190, Care €29/month. Final prices, no VAT charged. No builder subscription, no tracking unless you want it.",
-        "kicker": "Websites", "h1": "Fast, honest websites for small businesses",
+        "kicker": "Websites", "h1": "Fast, honest websites for small businesses in Lisbon",
         "lede": "A clean site that works on the phone, brings enquiries and belongs to you. No builder subscription and no tracking unless you want it. Built by the same team that runs this site.",
         "status": "Send the form or an email and you get a written quote by email first. Payment after completion – no deposit.",
+        "cta_quote": "Get a written quote",
+        "cta_demos": "See packages and demos",
+        "trust": "Written quote first · Pay after completion, no deposit · Example demos, clearly labelled as fictional",
         "vat": "Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal).",
         "from": "from", "per_month": "/ month",
         "delivery": "Delivery", "revisions": "Revisions",
@@ -920,7 +947,7 @@ WEBSITES = {
         "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless you ask for it", "Hosting on GitHub Pages with HTTPS in the first year; you own the files", "Domain set up in your name (registry fee paid by you or passed on 1:1)"],
         "packages": [
             ("Vitrine", "One-page site", "For a local business or a single offer.", ["One long page, one language (PT, EN or DE)", "WhatsApp button and/or contact form", "Basic SEO and preview image"], "390 €", False, "5–7 working days", "2 rounds"),
-            ("Atelier", "Business site, 3–5 pages", "For businesses that need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and links to your profiles"], "750 €", False, "10–14 working days", "2 rounds"),
+            ("Atelier", "Business site, 3–5 pages", "A good fit if you need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and links to your profiles"], "750 €", False, "10–14 working days", "2 rounds"),
             ("Maison", "Up to 8 pages, two languages", "For international or tourist audiences.", ["Everything in Atelier", "Up to 8 pages, two languages with switcher", "SEO per language with hreflang"], "1,190 €", False, "14–21 working days", "3 rounds"),
             ("Care", "Monthly care (optional)", "Keeps the site running after launch. Cancel with 30 days’ notice.", ["Hosting and HTTPS", "Uptime check and a heads-up if the site goes down", "Backups via Git history", "Small content changes, up to 30 minutes a month"], "29 €", True, "", ""),
         ],
@@ -930,11 +957,14 @@ WEBSITES = {
         "contact": "Questions first? Write to us",
     },
     "de": {
-        "title": "Websites für kleine Betriebe — Desire Agency",
+        "title": "Websites für kleine Betriebe in Lissabon — Desire Agency",
         "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut von Desire Agency in Lissabon. Vitrine ab 390 €, Atelier ab 750 €, Maison ab 1.190 €, Care 29 €/Monat. Endpreise, keine MwSt. Kein Baukasten-Abo, kein Tracking, wenn du keines willst.",
-        "kicker": "Websites", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
+        "kicker": "Websites", "h1": "Schnelle, ehrliche Websites für kleine Betriebe in Lissabon",
         "lede": "Eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dir gehört. Kein Baukasten-Abo und kein Tracking, wenn du keines willst. Gebaut vom selben Team, das diese Seite betreibt.",
         "status": "Formular oder E-Mail genügt: Du bekommst zuerst ein schriftliches Angebot per E-Mail. Zahlung erst nach Fertigstellung – keine Anzahlung.",
+        "cta_quote": "Schriftliches Angebot anfragen",
+        "cta_demos": "Pakete und Demos",
+        "trust": "Zuerst schriftliches Angebot · Zahlung erst nach Fertigstellung, keine Anzahlung · Beispiel-Demos, eindeutig als fiktiv gekennzeichnet",
         "vat": "Endpreise. Keine MwSt. – Steuerbefreiung nach Art. 53 CIVA (Portugal).",
         "from": "ab", "per_month": "/ Monat",
         "delivery": "Lieferzeit", "revisions": "Korrekturen",
@@ -943,7 +973,7 @@ WEBSITES = {
         "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer du wünschst es", "Hosting auf GitHub Pages mit HTTPS im ersten Jahr; die Dateien gehören dir", "Domain auf deinen Namen eingerichtet (Registry-Gebühr zahlst du oder sie wird 1:1 weitergegeben)"],
         "packages": [
             ("Vitrine", "Onepager", "Für einen lokalen Betrieb oder ein einzelnes Angebot.", ["Eine lange Seite, eine Sprache (PT, EN oder DE)", "WhatsApp-Button und/oder Kontaktformular", "Grundlegendes SEO und Vorschaubild"], "390 €", False, "5–7 Werktage", "2 Runden"),
-            ("Atelier", "Firmenwebsite, 3–5 Seiten", "Für Betriebe, die mehr als eine Seite brauchen.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Links zu deinen Profilen"], "750 €", False, "10–14 Werktage", "2 Runden"),
+            ("Atelier", "Firmenwebsite, 3–5 Seiten", "Passt, wenn eine Seite nicht reicht.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Links zu deinen Profilen"], "750 €", False, "10–14 Werktage", "2 Runden"),
             ("Maison", "Bis 8 Seiten, zwei Sprachen", "Für internationales oder touristisches Publikum.", ["Alles aus Atelier", "Bis zu 8 Seiten, zwei Sprachen mit Umschalter", "SEO je Sprache mit hreflang"], "1.190 €", False, "14–21 Werktage", "3 Runden"),
             ("Care", "Monatliche Betreuung (optional)", "Hält die Seite nach dem Start am Laufen. Kündbar mit 30 Tagen Vorlauf.", ["Hosting und HTTPS", "Erreichbarkeitsprüfung mit Hinweis, wenn die Seite ausfällt", "Sicherung über die Git-Historie", "Kleine Inhaltsänderungen, bis 30 Minuten pro Monat"], "29 €", True, "", ""),
         ],
@@ -955,9 +985,12 @@ WEBSITES = {
     "pt": {
         "title": "Sites para pequenos negócios em Lisboa — Desire Agency",
         "description": "Sites rápidos, pensados para o telemóvel, para pequenos negócios em Lisboa. Vitrine a partir de 390 €, Atelier a partir de 750 €, Maison a partir de 1190 €, Care 29 €/mês. Preços finais, IVA isento. Sem mensalidade de construtor de sites.",
-        "kicker": "Sites", "h1": "Sites rápidos e honestos para pequenos negócios",
-        "lede": "Um site limpo, que funciona bem no telemóvel, traz contactos de clientes e é seu. Sem mensalidade de construtor de sites e sem rastreio, a não ser que o queira. Feito pela mesma equipa que gere este site, a partir de Lisboa.",
+        "kicker": "Sites", "h1": "Sites rápidos e honestos para pequenos negócios em Lisboa",
+        "lede": "Um site claro no telemóvel, que traz contactos e fica a ser vosso. Sem mensalidade de construtor de sites e sem rastreio, a não ser que o queira. Feito pela mesma equipa que gere este site, a partir de Lisboa.",
         "status": "Basta o formulário ou um e-mail: recebe primeiro um orçamento por escrito, por e-mail. Pagamento só após conclusão – sem sinal.",
+        "cta_quote": "Pedir orçamento",
+        "cta_demos": "Ver pacotes e demos",
+        "trust": "Orçamento por escrito primeiro · Pagamento só após conclusão, sem sinal · Demos de exemplo, claramente assinaladas como fictícias",
         "vat": "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA.",
         "from": "a partir de", "per_month": "/ mês",
         "delivery": "Prazo", "revisions": "Revisões",
@@ -966,7 +999,7 @@ WEBSITES = {
         "common": ["Design cuidado, pensado primeiro para o telemóvel, no estilo deste site", "Uma ação principal clara: WhatsApp, chamada ou formulário", "SEO técnico: títulos, descrições, sitemap, robots.txt, imagem de pré-visualização", "Páginas legais básicas; sem rastreio, a não ser que o peça", "Alojamento no GitHub Pages com HTTPS no primeiro ano; os ficheiros são seus", "Domínio registado em seu nome (a taxa do registo é paga por si ou cobrada ao preço de custo)"],
         "packages": [
             ("Vitrine", "Site de uma página", "Para um negócio local ou uma única oferta.", ["Uma página longa, num idioma (PT, EN ou DE)", "Botão de WhatsApp e/ou formulário de contacto", "SEO básico e imagem de pré-visualização"], "390 €", False, "5–7 dias úteis", "2 rondas"),
-            ("Atelier", "Site de empresa, 3–5 páginas", "Para negócios que precisam de mais do que uma página.", ["Tudo o que o Vitrine inclui", "Até 5 páginas, num idioma", "Navegação, página 404 e rodapé comum", "Mapa incorporado e ligações aos seus perfis (opcional)"], "750 €", False, "10–14 dias úteis", "2 rondas"),
+            ("Atelier", "Site de empresa, 3–5 páginas", "Indicado se precisa de mais do que uma página.", ["Tudo o que o Vitrine inclui", "Até 5 páginas, num idioma", "Navegação, página 404 e rodapé comum", "Mapa incorporado e ligações aos seus perfis (opcional)"], "750 €", False, "10–14 dias úteis", "2 rondas"),
             ("Maison", "Até 8 páginas, dois idiomas", "Para público internacional ou turístico.", ["Tudo o que o Atelier inclui", "Até 8 páginas, dois idiomas com seletor", "SEO por idioma com hreflang"], "1190 €", False, "14–21 dias úteis", "3 rondas"),
             ("Care", "Manutenção mensal (opcional)", "Mantém o site a funcionar depois do lançamento. Pode cancelar com 30 dias de aviso prévio.", ["Alojamento e HTTPS", "Monitorização e aviso se o site for abaixo", "Cópias de segurança através do histórico Git", "Pequenas alterações de conteúdo, até 30 minutos por mês"], "29 €", True, "", ""),
         ],
@@ -1070,7 +1103,7 @@ def contact_form(lang: str) -> str:
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="{esc(nxt)}">
           <input type="hidden" name="origem" value="{lang}" id="origem">
-          <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+          <div class="hp"><label><span class="visually-hidden">Leave empty</span><input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"></label></div>
           <div class="form-row">
             <label>{esc(x["f_name"])}<input type="text" name="name" required autocomplete="name" maxlength="120"></label>
             <label>{esc(x["f_email"])}<input type="email" name="email" required autocomplete="email" maxlength="160"></label>
@@ -1082,15 +1115,14 @@ def contact_form(lang: str) -> str:
           <div class="actions"><button class="btn btn-primary" type="submit">{esc(x["f_send"])} <span class="arrow" aria-hidden="true">→</span></button></div>
           <p class="note">{esc(x["fallback"])} <a href="{esc(_mailto(WEBSITES[lang]["subject"].format(name="Website")))}">{CONTACT_EMAIL}</a>.</p>
         </form>
-        <script>(function(){{try{{var q=new URLSearchParams(location.search),o=document.getElementById("origem"),u=["utm_source","utm_medium","utm_campaign","utm_content"].map(function(k){{return q.get(k)?k+"="+q.get(k):""}}).filter(Boolean).join("&");if(o&&u)o.value=o.value+" | "+u.slice(0,200)}}catch(e){{}}}})();</script>
+        <script>(function(){{try{{var q=new URLSearchParams(location.search),o=document.getElementById("origem"),s=document.querySelector("select[name=pacote]"),u=["utm_source","utm_medium","utm_campaign","utm_content"].map(function(k){{return q.get(k)?k+"="+q.get(k):""}}).filter(Boolean).join("&");if(o&&u)o.value=o.value+" | "+u.slice(0,200);if(s&&q.get("pacote")){{for(var i=0;i<s.options.length;i++){{if(s.options[i].value===q.get("pacote"))s.selectedIndex=i}}}};}}catch(e){{}}}})();</script>
       </section>"""
 
 
 def websites_body(lang: str) -> str:
     t = WEBSITES[lang]
     paths = page_paths(lang, 1 if lang == "en" else 2)
-    if lang == "pt":
-        paths = dict(paths, home="../../")
+    # PT home is the offer page itself (see page_paths).
     cards = []
     for i, (name, sub, who, feats, price, monthly, delivery, revs) in enumerate(t["packages"]):
         fl = "".join(f"<li>{esc(f)}</li>" for f in feats)
@@ -1109,7 +1141,7 @@ def websites_body(lang: str) -> str:
             <div class="price-line">{pre}<span class="price-big">{esc(price)}</span>{post}</div>
             <ul class="checks checks-sm">{fl}</ul>
             {meta}
-            <div class="actions"><a class="{btn}" href="{esc(_mailto(t["subject"].format(name=name)))}">{esc(t["ask"].format(name=name))} <span class="arrow" aria-hidden="true">→</span></a></div>
+            <div class="actions"><a class="{btn}" href="?pacote={esc(name)}#contacto">{esc(t["ask"].format(name=name))} <span class="arrow" aria-hidden="true">→</span></a></div>
           </article>""")
     common = "".join(f"<li>{esc(c)}</li>" for c in t["common"])
     rl, rw = WEB_ROT[lang]
@@ -1121,7 +1153,11 @@ def websites_body(lang: str) -> str:
         <h1 class="page-title">{esc(t["h1"])}</h1>
         <p class="rotator">{esc(rl)} <span class="rot" aria-hidden="true">{rot}</span><span class="visually-hidden">{esc(", ".join(rw))}</span></p>
         <p class="lede">{esc(t["lede"])}</p>
-        <p class="notice notice-info" role="note">{esc(t["status"])}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contacto">{esc(t["cta_quote"])} <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <p class="hero-links"><a href="#demos">{esc(t["cta_demos"])}</a></p>
+        <p class="hero-trust" role="note">{esc(t["trust"])}</p>
       </header>
       <h2 class="visually-hidden">{T3(lang, "Packages", "Pakete", "Pacotes")}</h2>
       <div class="products products-4">{''.join(cards)}
@@ -1178,16 +1214,9 @@ def home_body(lang: str, paths: dict) -> str:
           <h1>{esc(t["h1_a"])} <span class="grad">{esc(t["h1_b"])}</span></h1>
           <p class="lede">{esc(t["lede"])}</p>
           <div class="actions">
-            <a class="btn btn-light" href="{paths["websites"]}">{esc(t["cta_web"])} <span class="arrow" aria-hidden="true">→</span></a>
-            <a class="btn btn-outline-light" href="{GUIDE_EARLY_URL}" rel="noopener">{esc(t["cta_guide"])}</a>
+            <a class="btn btn-light" href="{paths["websites"]}#contacto">{esc(t["cta_web"])} <span class="arrow" aria-hidden="true">→</span></a>
           </div>
-          <p class="hero-sub">{esc(t["web_line"])}</p>
-          <div class="hero-links">
-            <a href="{esc(SUBSCRIBE_URL)}" rel="noopener">{esc(t["cta_news"])}</a>
-            <a href="{paths["templates"]}">{esc(t["link_tpl"])}</a>
-            <a href="{JOURNAL_URL}" rel="noopener">{esc(t["link_journal"])}</a>
-            <a href="{paths["n8n"]}">{esc(t["link_n8n"])}</a>
-          </div>
+          <p class="hero-links"><a href="{paths["websites"]}#demos">{esc(t["cta_secondary"])}</a></p>
           <p class="hero-note">{esc(t["hero_note"])}</p>
         </div>
         <aside class="ledger" aria-label="{esc(t["offer_title"])}">
@@ -2054,7 +2083,7 @@ This is a static site with no cookies, tracking or analytics.
 
 ## Pages
 
-- [Home (English)]({SITE_URL}/): Desire Agency, websites for small businesses from Lisbon, built with an AI agent team. Packages Vitrine, Atelier and Maison (payment after completion), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of {PRUEF_EN}.
+- [Home (English)]({SITE_URL}/): Websites for small businesses in Lisbon. Written quote first, payment after completion, no deposit. Packages Vitrine, Atelier and Maison, demo sites labelled as fictional, products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of {PRUEF_EN}.
 - [Home (German)]({SITE_URL}/de/): The same start page in German.
 - [n8n recommendation (English)]({SITE_URL}/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site.
 - [n8n recommendation (German)]({SITE_URL}/de/n8n/): The same article in German.
@@ -2063,7 +2092,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
-- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
+- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses in Lisbon: Vitrine (one page) from €390, Atelier (3–5 pages, a good fit if you need more than one page) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Websites (European Portuguese)]({SITE_URL}/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
 - [Demos]({SITE_URL}/demos/): Six example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, Christmas campaign tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
