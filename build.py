@@ -310,8 +310,11 @@ def shell(lang: str, page: str, depth: int, title: str, description: str, body: 
         href = paths[key]
         cur = ' aria-current="page"' if key == page else ""
         if key == "websites":
-            frm = T3(lang, "from €390", "ab 390 €", "desde 390 €")
-            nav.append(f'<a class="nav-hot" href="{href}"{cur}>{esc(label)} <small>{frm}</small></a>')
+            if page == "home":
+                nav.append(f'<a class="nav-hot" href="{href}"{cur}>{esc(label)}</a>')
+            else:
+                frm = T3(lang, "from €390", "ab 390 €", "desde 390 €")
+                nav.append(f'<a class="nav-hot" href="{href}"{cur}>{esc(label)} <small>{frm}</small></a>')
             continue
         nav.append(f'<a href="{href}"{cur}>{esc(label)}</a>')
     other = T3(lang, "Deutsch", "English", "English")
@@ -498,15 +501,14 @@ HOME = {
         "link_journal": "Free trading journal",
         "link_n8n": "Why we recommend n8n",
         "hero_note": "Written quote first · Pay after completion, no deposit",
-        "offer_title": "What you get",
-        "offer_meta": "Lisbon · PT, EN, DE",
-        "offer": [
-            ("Vitrine", "from 390 €"),
-            ("Atelier", "from 750 €"),
-            ("Maison", "from 1,190 €"),
+        "offer_title": "At a glance",
+        "offer_meta": "Lisbon",
+        "offer_benefits": [
+            "From 5–7 working days after a complete briefing",
+            "PT · EN · DE",
+            "Payment only after completion",
         ],
-        "offer_foot": "Payment after completion. Written quote first.",
-        "offer_link": "See packages",
+        "offer_cta": "Free written quote",
         "bip_kicker": "The studio",
         "bip_title": "What we work with",
         "bip_text": "A small AI agent team in Lisbon, demo sites you can click through, and free starting points for your own automation.",
@@ -594,15 +596,14 @@ HOME = {
         "link_journal": "Kostenloses Trading-Journal",
         "link_n8n": "Warum wir n8n empfehlen",
         "hero_note": "Zuerst schriftliches Angebot · Zahlung erst nach Fertigstellung, keine Anzahlung",
-        "offer_title": "Was du bekommst",
-        "offer_meta": "Lissabon · PT, EN, DE",
-        "offer": [
-            ("Vitrine", "ab 390 €"),
-            ("Atelier", "ab 750 €"),
-            ("Maison", "ab 1.190 €"),
+        "offer_title": "Auf einen Blick",
+        "offer_meta": "Lissabon",
+        "offer_benefits": [
+            "Ab 5–7 Werktagen nach vollständigem Briefing",
+            "PT · EN · DE",
+            "Zahlung erst nach Fertigstellung",
         ],
-        "offer_foot": "Zahlung erst nach Fertigstellung. Zuerst ein schriftliches Angebot.",
-        "offer_link": "Pakete ansehen",
+        "offer_cta": "Kostenloses schriftliches Angebot",
         "bip_kicker": "Das Studio",
         "bip_title": "Womit wir arbeiten",
         "bip_text": "Ein kleines KI-Agenten-Team in Lissabon, Demo-Seiten zum Durchklicken und kostenlose Einstiege für deine eigene Automatisierung.",
@@ -1175,10 +1176,7 @@ def websites_body(lang: str) -> str:
 
 def home_body(lang: str, paths: dict) -> str:
     t = HOME[lang]
-    offer = "\n".join(
-        f'<div class="ledger-row"><span>{esc(label)}</span><b>{esc(val)}</b></div>'
-        for label, val in t["offer"]
-    )
+    benefits = "\n            ".join(f"<li>{esc(b)}</li>" for b in t["offer_benefits"])
     stats = "\n".join(
         f'<div class="stat"><div class="value" data-count>{esc(v)}</div><div class="label">{lab}</div><div class="sub">{sub}</div></div>'
         for v, lab, sub in t["stats"]
@@ -1221,8 +1219,12 @@ def home_body(lang: str, paths: dict) -> str:
         </div>
         <aside class="ledger" aria-label="{esc(t["offer_title"])}">
           <div class="ledger-head"><strong>{esc(t["offer_title"])}</strong><span>{esc(t["offer_meta"])}</span></div>
-          {offer}
-          <p class="ledger-foot">{esc(t["offer_foot"])} <a href="{paths["websites"]}">{esc(t["offer_link"])}</a></p>
+          <ul class="ledger-benefits">
+            {benefits}
+          </ul>
+          <div class="actions ledger-cta">
+            <a class="btn btn-outline-light" href="{paths["websites"]}#contacto">{esc(t["offer_cta"])} <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
         </aside>
       </section>
 
