@@ -848,6 +848,11 @@ nav a.nav-hot:hover { box-shadow: inset 0 0 0 1px rgba(63,230,242,.6), 0 0 16px 
 :root[data-theme="light"] .web-hero .aurora i { opacity: .14; }
 .web-hero .page-title { max-width: 13.5em; } /* always two lines -> no reflow when the web font arrives */
 .web-hero .notice { margin-bottom: 0; }
+.web-hero .actions { margin: 1.1rem 0 .45rem; }
+.web-hero .hero-links { margin-top: .2rem; }
+.web-hero .hero-links a { color: var(--ink-2); border-bottom-color: var(--line); }
+.web-hero .hero-links a:hover, .web-hero .hero-links a:focus-visible { color: var(--ink); border-bottom-color: var(--ink); }
+.hero-trust { margin: .9rem 0 0; color: var(--ink-2); font-size: .92rem; max-width: 40rem; }
 .rotator { margin: -.2rem 0 1rem; font-size: clamp(1.05rem, 1.8vw, 1.3rem); font-weight: 650; color: var(--ink-2); letter-spacing: -.01em; }
 .rot { display: inline-grid; vertical-align: bottom; overflow: hidden; }
 .rot-w { grid-area: 1 / 1; white-space: nowrap; background: var(--neon); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0; transform: translateY(.9em); transition: opacity .45s ease, transform .55s cubic-bezier(.2,.7,.2,1); }
