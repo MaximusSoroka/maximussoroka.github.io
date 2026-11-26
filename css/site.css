@@ -806,3 +806,75 @@ nav a.nav-hot:hover { box-shadow: inset 0 0 0 1px rgba(63,230,242,.6), 0 0 16px 
 /* Three-language switch (websites pages): make room for PT next to the theme toggle */
 .lang.lang-3 a { padding-left: .5rem; padding-right: .5rem; }
 @media (max-width: 860px) { .header-inner:has(.lang-3) .theme-toggle { right: 7.4rem; } }
+
+/* =====================================================================
+   Round 5 (26 Nov 2026): before/after slider, websites hero, header shrink, micro-interactions
+   All motion is gated by prefers-reduced-motion; nothing here changes layout after load.
+   ===================================================================== */
+/* Before/after comparison slider (native range input = role slider, keyboard + touch) */
+.case-shots.is-compare { display: block; }
+.compare { --pos: 50%; }
+.compare:hover { transform: none; }
+.compare-stage { position: relative; aspect-ratio: 8 / 5; overflow: hidden; background: var(--bg-2); touch-action: pan-y; }
+.compare-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; aspect-ratio: auto; }
+.compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 18px var(--glow-pink); pointer-events: none; }
+.compare-handle span { position: absolute; top: 50%; left: 50%; width: 42px; height: 42px; margin: -21px 0 0 -21px; border-radius: 50%; background: rgba(12,10,20,.72); border: 2px solid #fff;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 6px 20px -6px rgba(0,0,0,.5); transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s ease; }
+.compare-handle span::before, .compare-handle span::after { content: ""; position: absolute; top: 50%; width: 0; height: 0; margin-top: -5px; border: 5px solid transparent; }
+.compare-handle span::before { left: 7px; border-right-color: #fff; }
+.compare-handle span::after { right: 7px; border-left-color: #fff; }
+.compare-tag { position: absolute; top: .7rem; padding: .22rem .55rem; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .04em; color: #fff; background: rgba(12,10,20,.62); pointer-events: none; transition: opacity .2s ease; }
+.compare-tag.is-b { left: .7rem; } .compare-tag.is-a { right: .7rem; }
+.compare-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; -webkit-appearance: none; appearance: none; background: transparent; }
+.compare-range::-webkit-slider-thumb { -webkit-appearance: none; width: 48px; height: 100vh; }
+.compare-range::-moz-range-thumb { width: 48px; height: 100vh; border: 0; }
+.compare:not(.is-ready) .compare-range, .compare:not(.is-ready) .compare-hint { display: none; }
+.compare-stage:hover .compare-handle span, .compare.is-dragging .compare-handle span { transform: scale(1.08); }
+.compare-stage:has(.compare-range:focus-visible) .compare-handle span { box-shadow: 0 0 0 3px var(--accent), 0 6px 20px -6px rgba(0,0,0,.5); }
+.compare figcaption { display: flex; justify-content: space-between; gap: .6rem; }
+.compare figcaption .is-after-cap { color: var(--accent); }
+.compare-hint { font-weight: 500; opacity: .8; }
+@media (max-width: 520px) { .compare-hint { display: none; } }
+
+/* Websites hero: soft aurora panel + rotating niche word */
+.web-hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(1.6rem, 4.5vw, 3.2rem); border: 1px solid var(--line); border-radius: var(--radius-l);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent-soft) 65%, var(--surface)), var(--surface) 60%); box-shadow: var(--shadow); }
+.web-hero .aurora i { opacity: .22; }
+.web-hero .aurora i:nth-child(1) { left: 55%; top: -55%; }
+.web-hero .aurora i:nth-child(2) { opacity: .14; }
+:root[data-theme="light"] .web-hero .aurora i { opacity: .14; }
+.web-hero .page-title { max-width: 13.5em; } /* always two lines -> no reflow when the web font arrives */
+.web-hero .notice { margin-bottom: 0; }
+.rotator { margin: -.2rem 0 1rem; font-size: clamp(1.05rem, 1.8vw, 1.3rem); font-weight: 650; color: var(--ink-2); letter-spacing: -.01em; }
+.rot { display: inline-grid; vertical-align: bottom; overflow: hidden; }
+.rot-w { grid-area: 1 / 1; white-space: nowrap; background: var(--neon); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0; transform: translateY(.9em); transition: opacity .45s ease, transform .55s cubic-bezier(.2,.7,.2,1); }
+:root[data-theme="light"] .rot-w { background-image: linear-gradient(90deg, #c2189f, #7a2bd9 50%, #0b8ea6); }
+.rot-w.is-on { opacity: 1; transform: none; }
+.rot-w.is-out { opacity: 0; transform: translateY(-.9em); }
+.web-hero > :not(.aurora) { animation: rise .8s cubic-bezier(.2,.7,.2,1) both; }
+.web-hero > :nth-child(3) { animation-delay: .06s; } .web-hero > :nth-child(4) { animation-delay: .14s; }
+.web-hero > :nth-child(5) { animation-delay: .22s; } .web-hero > :nth-child(6) { animation-delay: .3s; }
+
+/* Sticky header shrink: inner height shrinks, margin-bottom grows by the same amount -> content never moves */
+.header-inner { transition: min-height .3s cubic-bezier(.2,.7,.2,1); }
+.site-header { transition: box-shadow .25s ease, background .25s ease, margin-bottom .3s cubic-bezier(.2,.7,.2,1); }
+.site-header.is-scrolled { margin-bottom: .7rem; }
+.site-header.is-scrolled .header-inner { min-height: 3.4rem; }
+.site-header .brand-mark { transition: box-shadow .3s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
+.site-header.is-scrolled .brand-mark { transform: scale(.88); }
+
+/* Micro-interactions: lift on demo cards, press feedback on buttons */
+.demo-card { transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, border-color .2s ease; }
+.demo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-l); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+.demo-card .text-link { transition: letter-spacing .25s ease; }
+.demo-card:hover .text-link { letter-spacing: .02em; }
+.btn:active { transform: translateY(1px) scale(.98) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rot-w, .compare-handle span, .header-inner, .site-header, .demo-card { transition: none !important; }
+  .web-hero > :not(.aurora) { animation: none !important; }
+  .demo-card:hover, .btn:active { transform: none !important; }
+}
+@media (max-width: 600px) { .compare-tag { display: none; } }
+@media (max-width: 600px) { .web-hero .page-title { min-height: 3.24em; } } /* fallback font and Inter can differ by one line here: reserve it */

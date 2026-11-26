@@ -323,6 +323,54 @@
     count();
   }
 
+  /* ---------- Round 5: before/after slider + rotating niche word ---------- */
+  $all(".compare").forEach(function (fig) {
+    var r = fig.querySelector(".compare-range");
+    if (!r) return;
+    var vt = r.getAttribute("data-vt") || "{n}%";
+    function set() {
+      fig.style.setProperty("--pos", r.value + "%");
+      r.setAttribute("aria-valuetext", vt.replace("{n}", r.value));
+    }
+    r.addEventListener("input", set);
+    r.addEventListener("pointerdown", function () { fig.classList.add("is-dragging"); });
+    window.addEventListener("pointerup", function () { fig.classList.remove("is-dragging"); });
+    fig.classList.add("is-ready");
+    set();
+    // one gentle hint sweep the first time the slider scrolls into view
+    if (!reduce && "IntersectionObserver" in window && fig.animate) {
+      var seen = new IntersectionObserver(function (en) {
+        if (!en[0].isIntersecting) return;
+        seen.disconnect();
+        if (r.value !== "50") return;
+        var t0 = null;
+        function sweep(ts) {
+          if (t0 === null) t0 = ts;
+          var p = Math.min(1, (ts - t0) / 1400);
+          if (fig.classList.contains("is-dragging") || r.value !== "50") { set(); return; }
+          var v = 50 + Math.sin(p * Math.PI * 2) * 14 * (1 - p);
+          fig.style.setProperty("--pos", v.toFixed(2) + "%");
+          if (p < 1) requestAnimationFrame(sweep); else set();
+        }
+        setTimeout(function () { requestAnimationFrame(sweep); }, 450);
+      }, { threshold: 0.55 });
+      seen.observe(fig);
+    }
+  });
+  $all(".rot").forEach(function (rot) {
+    var ws = $all(".rot-w", rot);
+    if (reduce || ws.length < 2) return;
+    var i = 0, vis = true;
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (en) { vis = en[0].isIntersecting; }).observe(rot);
+    setInterval(function () {
+      if (!vis || doc.hidden) return;
+      var cur = ws[i]; i = (i + 1) % ws.length;
+      cur.classList.remove("is-on"); cur.classList.add("is-out");
+      ws[i].classList.remove("is-out"); ws[i].classList.add("is-on");
+      setTimeout(function () { cur.classList.remove("is-out"); }, 600);
+    }, 2400);
+  });
+
   /* ---------- Round 3: aurora, word reveal, magnetic, tilt, marquee, parallax ---------- */
   (function () {
     var hero = doc.querySelector(".home-hero");

@@ -846,7 +846,35 @@ CASE = {
            "before": "Vorher · 20.11.2026", "after": "Nachher · 21.11.2026",
            "points": ["Schrift selbst gehostet, keine Anfragen an Dritte", "Helles und dunkles Design, Rücksicht auf reduzierte Bewegung", "Canonical, hreflang, Open Graph, Sitemap und llms.txt", "Gehostet auf GitHub Pages: Serverkosten für die Seite 0 €"],
            "alt_before": "Screenshot der alten Desire-Agency-Startseite: Serifen-Überschriften auf beigem Hintergrund", "alt_after": "Screenshot der neuen Desire-Agency-Startseite: dunkler Hero mit dem Kassenbuch", "cta": "Auch so eine Website?"},
+    "pt": {"kicker": "Caso real", "title": "Este site, refeito numa noite",
+           "text": "O nosso próprio site é o primeiro projeto. O mesmo conteúdo, os mesmos números honestos. Novo sistema de design, animações e EN/DE, continua estático e sem rastreio.",
+           "before": "Antes · 20.11.2026", "after": "Depois · 21.11.2026",
+           "points": ["Tipo de letra alojado no próprio site, sem pedidos a terceiros", "Tema claro e escuro, respeita a preferência por menos movimento", "Canonical, hreflang, Open Graph, sitemap e llms.txt", "Alojado no GitHub Pages: custo de servidor do site 0 €"],
+           "alt_before": "Captura de ecrã da antiga página inicial da Desire Agency: títulos com serifa sobre fundo bege", "alt_after": "Captura de ecrã da nova página inicial da Desire Agency: topo escuro com o livro de contas", "cta": "Quer um site assim?"},
 }
+COMPARE = {
+    "en": {"label": "Before and after comparison. Move the slider to show more of the old or the new site.", "hint": "Drag to compare", "vt": "{n}% old site visible"},
+    "de": {"label": "Vorher-Nachher-Vergleich. Schieberegler bewegen, um mehr von der alten oder der neuen Seite zu sehen.", "hint": "Zum Vergleichen ziehen", "vt": "{n}% alte Seite sichtbar"},
+    "pt": {"label": "Comparação antes e depois. Mova o controlo para ver mais do site antigo ou do novo.", "hint": "Arraste para comparar", "vt": "{n}% do site antigo visível"},
+}
+WEB_ROT = {
+    "en": ("Built for", ["cafés", "barbershops", "restaurants", "shoe repair shops", "tradespeople"]),
+    "de": ("Gemacht für", ["Cafés", "Barbershops", "Restaurants", "Schuhmacher", "Handwerker"]),
+    "pt": ("Feito para", ["cafés", "barbearias", "restaurantes", "sapateiros", "faz-tudo"]),
+}
+
+
+def compare_widget(lang: str, root: str) -> str:
+    """Before/after slider: native range input (implicit role=slider) over two stacked screenshots.
+    Without JS it shows a static 50/50 split; site.js syncs --pos and aria-valuetext."""
+    t, c = CASE[lang], COMPARE[lang]
+    img = lambda src, alt: f'<img src="{root}img/{src}" width="960" height="600" loading="lazy" decoding="async" alt="{esc(alt)}">'
+    return (f'<figure class="mock compare" style="--pos:50%"><div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span>maximussoroka.github.io</span></div>'
+            f'<div class="compare-stage">{img("case-after.svg", t["alt_after"])}<div class="compare-before">{img("case-before.svg", t["alt_before"])}</div>'
+            f'<span class="compare-tag is-b" aria-hidden="true">{esc(t["before"])}</span><span class="compare-tag is-a" aria-hidden="true">{esc(t["after"])}</span>'
+            f'<span class="compare-handle" aria-hidden="true"><span></span></span>'
+            f'<input class="compare-range" type="range" min="0" max="100" value="50" step="1" aria-label="{esc(c["label"])}" aria-valuetext="{esc(c["vt"].format(n=50))}" data-vt="{esc(c["vt"])}"></div>'
+            f'<figcaption><span>{esc(t["before"])}</span><span class="compare-hint" aria-hidden="true">← {esc(c["hint"])} →</span><span class="is-after-cap">{esc(t["after"])}</span></figcaption></figure>')
 
 
 def process_section(lang: str) -> str:
@@ -876,9 +904,10 @@ def stack_section(lang: str) -> str:
 """
 
 
-def case_section(lang: str, paths: dict) -> str:
+def case_section(lang: str, paths: dict, cta_href: str = "") -> str:
     t = CASE[lang]
     root = paths["css"][: -len("css/site.css")]
+    cta_href = cta_href or paths["websites"]
     pts = "".join(f"<li>{esc(x)}</li>" for x in t["points"])
     def frame(src, cap, alt, cls=""):
         return (f'<figure class="mock {cls}"><div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span>maximussoroka.github.io</span></div>'
@@ -887,12 +916,11 @@ def case_section(lang: str, paths: dict) -> str:
       <section class="section" id="case-study">
         <div class="section-head"><div><p class="kicker">{esc(t["kicker"])}</p><h2>{esc(t["title"])}</h2><p>{esc(t["text"])}</p></div></div>
         <div class="case">
-          <div class="case-shots">
-            {frame("case-before.svg", t["before"], t["alt_before"], "is-before")}
-            {frame("case-after.svg", t["after"], t["alt_after"], "is-after")}
+          <div class="case-shots is-compare">
+            {compare_widget(lang, root)}
           </div>
           <div><ul class="checks">{pts}</ul>
-          <p style="margin:1.2rem 0 0"><a class="btn btn-ghost" href="{paths["websites"]}">{esc(t["cta"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
+          <p style="margin:1.2rem 0 0"><a class="btn btn-ghost" href="{cta_href}">{esc(t["cta"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
         </div>
       </section>
 """
@@ -906,7 +934,7 @@ WEBSITES = {
         "description": "Fast, mobile-first websites for small businesses, built by Desire Agency in Lisbon. Vitrine from €390, Atelier from €750, Maison from €1,190, Care €29/month. Final prices, no VAT charged. No builder subscription, no tracking unless you want it.",
         "kicker": "Websites", "h1": "Fast, honest websites for small businesses",
         "lede": "A clean site that works on the phone, brings enquiries and belongs to you. No builder subscription and no tracking unless you want it. Built by the same team that runs this site.",
-        "status": "Projects start after a short call. You get a written quote first. Payment after completion – no deposit.",
+        "status": "Send the form or an email and you get a written quote by email first. Payment after completion – no deposit.",
         "vat": "Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal).",
         "from": "from", "per_month": "/ month",
         "delivery": "Delivery", "revisions": "Revisions",
@@ -929,7 +957,7 @@ WEBSITES = {
         "description": "Schnelle, mobilfreundliche Websites für kleine Betriebe, gebaut von Desire Agency in Lissabon. Vitrine ab 390 €, Atelier ab 750 €, Maison ab 1.190 €, Care 29 €/Monat. Endpreise, keine MwSt. Kein Baukasten-Abo, kein Tracking, wenn du keines willst.",
         "kicker": "Websites", "h1": "Schnelle, ehrliche Websites für kleine Betriebe",
         "lede": "Eine klare Seite, die auf dem Handy funktioniert, Anfragen bringt und dir gehört. Kein Baukasten-Abo und kein Tracking, wenn du keines willst. Gebaut vom selben Team, das diese Seite betreibt.",
-        "status": "Projektstart nach einem kurzen Gespräch. Du bekommst zuerst ein schriftliches Angebot. Zahlung erst nach Fertigstellung – keine Anzahlung.",
+        "status": "Formular oder E-Mail genügt: Du bekommst zuerst ein schriftliches Angebot per E-Mail. Zahlung erst nach Fertigstellung – keine Anzahlung.",
         "vat": "Endpreise. Keine MwSt. – Steuerbefreiung nach Art. 53 CIVA (Portugal).",
         "from": "ab", "per_month": "/ Monat",
         "delivery": "Lieferzeit", "revisions": "Korrekturen",
@@ -952,7 +980,7 @@ WEBSITES = {
         "description": "Sites rápidos, pensados para o telemóvel, para pequenos negócios em Lisboa. Vitrine a partir de 390 €, Atelier a partir de 750 €, Maison a partir de 1190 €, Care 29 €/mês. Preços finais, IVA isento. Sem mensalidade de construtor de sites.",
         "kicker": "Sites", "h1": "Sites rápidos e honestos para pequenos negócios",
         "lede": "Um site limpo, que funciona bem no telemóvel, traz contactos de clientes e é seu. Sem mensalidade de construtor de sites e sem rastreio, a não ser que o queira. Feito pela mesma equipa que gere este site, a partir de Lisboa.",
-        "status": "Cada projeto começa com uma conversa curta. Recebe primeiro um orçamento por escrito. Pagamento só após conclusão – sem sinal.",
+        "status": "Basta o formulário ou um e-mail: recebe primeiro um orçamento por escrito, por e-mail. Pagamento só após conclusão – sem sinal.",
         "vat": "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA.",
         "from": "a partir de", "per_month": "/ mês",
         "delivery": "Prazo", "revisions": "Revisões",
@@ -1105,10 +1133,14 @@ def websites_body(lang: str) -> str:
             <div class="actions"><a class="{btn}" href="{esc(_mailto(t["subject"].format(name=name)))}">{esc(t["ask"].format(name=name))} <span class="arrow" aria-hidden="true">→</span></a></div>
           </article>""")
     common = "".join(f"<li>{esc(c)}</li>" for c in t["common"])
+    rl, rw = WEB_ROT[lang]
+    rot = "".join(f'<span class="rot-w{" is-on" if i == 0 else ""}">{esc(w)}</span>' for i, w in enumerate(rw))
     return f"""
-      <header class="hero">
+      <header class="hero web-hero">
+        <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
         <p class="kicker">{esc(t["kicker"])}</p>
         <h1 class="page-title">{esc(t["h1"])}</h1>
+        <p class="rotator">{esc(rl)} <span class="rot" aria-hidden="true">{rot}</span><span class="visually-hidden">{esc(", ".join(rw))}</span></p>
         <p class="lede">{esc(t["lede"])}</p>
         <p class="notice notice-info" role="note">{esc(t["status"])}</p>
       </header>
@@ -1119,10 +1151,10 @@ def websites_body(lang: str) -> str:
       <section class="section">
         <div class="split">
           <div class="panel"><h3>{esc(t["common_title"])}</h3><ul class="checks">{common}</ul></div>
-          <div class="panel"><p>{esc(t["not"])}</p><p><a href="{paths["home"]}#case-study">{esc(t["example"])}</a></p>
+          <div class="panel"><p>{esc(t["not"])}</p><p><a href="#case-study">{esc(t["example"])}</a></p>
             <p><a class="btn btn-ghost" href="#contacto">{esc(t["contact"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
         </div>
-      </section>{portfolio_section(lang)}{contact_form(lang)}
+      </section>{portfolio_section(lang)}{case_section(lang, paths, "#contacto")}{contact_form(lang)}
 """
 
 
@@ -2153,6 +2185,21 @@ def build() -> None:
         html_out = split_h1(shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head))
         write(path, html_out)
     write(ROOT / "404.html", not_found())
+    # /pt/ has no own home page yet: send visitors to the Portuguese service page instead of a 404.
+    write(ROOT / "pt" / "index.html", """<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desire Agency – Sites para pequenos negócios</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://maximussoroka.github.io/pt/websites/">
+  <meta http-equiv="refresh" content="0; url=websites/">
+  <script>location.replace("websites/" + location.search + location.hash);</script>
+</head>
+<body><p><a href="websites/">Sites para pequenos negócios – Desire Agency</a></p></body>
+</html>
+""")
     write(ROOT / GSC_FILE, f"google-site-verification: {GSC_FILE}")
     import demos as _demos
     for rel, html_doc in _demos.pages(SITE_URL).items():
