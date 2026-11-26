@@ -4,11 +4,10 @@
   "url_de": "https://maximussoroka.github.io/de/directory/",
   "checked_on": "2026-11-18",
   "timezone": "Europe/Madrid",
-  "own_revenue_eur": 0,
   "affiliate_links_active": false,
   "n_entries": 19,
-  "note": "Prices come only from official public vendor pages on the checked date. Where a figure was not reliably readable, price_status is unknown or partial. There are no active affiliate links on this site. This is not financial advice. No earnings promises. Own revenue: €0.",
-  "note_de": "Preise nur aus offiziellen öffentlichen Anbieterseiten vom Prüfdatum. Wo ein Betrag nicht zuverlässig ablesbar war, ist price_status unbekannt oder teilweise. Auf dieser Seite sind keine Affiliate-Links aktiv. Keine Finanzberatung. Kein Gewinnversprechen. Eigener Ertrag: 0 €.",
+  "note": "Prices come only from official public vendor pages on the checked date. Where a figure was not reliably readable, price_status is unknown or partial. There are no active affiliate links on this site. Prices can change; check the official page before you buy.",
+  "note_de": "Preise nur aus offiziellen öffentlichen Anbieterseiten vom Prüfdatum. Wo ein Betrag nicht zuverlässig ablesbar war, ist price_status unbekannt oder teilweise. Auf dieser Seite sind keine Affiliate-Links aktiv. Preise können sich ändern; prüfe die offizielle Seite vor dem Kauf.",
   "pages": {
     "home_en": "https://maximussoroka.github.io/",
     "home_de": "https://maximussoroka.github.io/de/",

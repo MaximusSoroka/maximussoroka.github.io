@@ -5,7 +5,6 @@
 Live site: https://maximussoroka.github.io/
 Operator: Saveliy Soroka, Lisboa. Contact: desire.studio.agency@gmail.com (see /legal/).
 Prices and programme terms: official public vendor pages, checked on 18 November 2026 (Europe/Madrid).
-Own revenue so far: €0. No earnings promises. Not financial advice.
 Products: Agent Team Guide (https://desireagencyai.gumroad.com/l/blhhwg, $19), free Trading Journal + Risk Sheet (https://desireagencyai.gumroad.com/l/htrxgl).
 Elsewhere: X https://x.com/desire__agency · dev.to https://dev.to/desire_agency · Indie Hackers https://www.indiehackers.com/desireagency.
 There are no active affiliate links. Future affiliate links, if any, will be labelled #ad / Anzeige.
@@ -13,9 +12,9 @@ This is a static site with no cookies, tracking or analytics.
 
 ## Pages
 
-- [Home (English)](https://maximussoroka.github.io/): Desire Agency, an AI agent team built in public from Lisbon. Real numbers including the zeros (revenue so far €0), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of 18 November 2026.
+- [Home (English)](https://maximussoroka.github.io/): Desire Agency, websites for small businesses from Lisbon, built with an AI agent team. Packages Vitrine, Atelier and Maison (payment after completion), products (Agent Team Guide, free trading journal, free n8n templates), why we recommend n8n, and sourced cloud-pricing facts as of 18 November 2026.
 - [Home (German)](https://maximussoroka.github.io/de/): The same start page in German.
-- [n8n recommendation (English)](https://maximussoroka.github.io/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site; the n8n partner application was declined on 19 November 2026.
+- [n8n recommendation (English)](https://maximussoroka.github.io/n8n/): Sourced article on n8n, self-hosting, and a fair comparison with Make. Buttons go to the official n8n site.
 - [n8n recommendation (German)](https://maximussoroka.github.io/de/n8n/): The same article in German.
 - [Tool directory (English)](https://maximussoroka.github.io/directory/): 19 sourced entries (n8n listed first). Each entry has a short description, official and pricing URLs, and a price field. Where a figure was not reliably readable, it is marked unknown. schema.org JSON-LD (ItemList of SoftwareApplication) is embedded in the page.
 - [Tool directory (German)](https://maximussoroka.github.io/de/directory/): The same directory in German, with the same JSON-LD in German wording.
@@ -26,7 +25,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Websites (German)](https://maximussoroka.github.io/de/websites/): The same service page in German.
 - [Websites (European Portuguese)](https://maximussoroka.github.io/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
 - [Demos](https://maximussoroka.github.io/demos/): Six example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, Christmas campaign tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
-- [Desire Agency newsletter](https://desireagency.beehiiv.com/subscribe): Sign-up page for the free “build log” newsletter. No earnings promises.
+- [Desire Agency newsletter](https://desireagency.beehiiv.com/subscribe): Sign-up page for the free “build log” newsletter.
 
 ## Machine-readable
 
