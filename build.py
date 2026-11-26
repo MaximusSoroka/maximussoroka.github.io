@@ -1011,6 +1011,8 @@ DEMOS = [
      {"en": "Dark, classic look: prices, gallery, reviews, opening hours, sticky booking button.", "de": "Dunkler, klassischer Look: Preise, Galerie, Bewertungen, Öffnungszeiten, fixierter Buchungsbutton.", "pt": "Visual clássico e escuro: preços, galeria, avaliações, horário, botão de marcação fixo."}),
     ("tasca", {"en": "Restaurant / tasca · Lisbon (PT + EN)", "de": "Restaurant / Tasca · Lissabon (PT + EN)", "pt": "Restaurante / tasca · Lisboa (PT + EN)"}, "Tasca do Pátio Azul",
      {"en": "Bilingual (Maison): dish of the day, menu, gallery, reviews, hours, call to book.", "de": "Zweisprachig (Maison): Tagesgericht, Speisekarte, Galerie, Bewertungen, Öffnungszeiten.", "pt": "Bilingue (Maison): prato do dia, ementa, galeria, avaliações, horário, ligar para reservar."}),
+    ("natal", {"en": "Christmas campaign · Lisbon tasca (PT + EN)", "de": "Weihnachtskampagne · Tasca Lissabon (PT + EN)", "pt": "Campanha de Natal · tasca em Lisboa (PT + EN)"}, "Tasca do Lume Calmo",
+     {"en": "One-page holiday campaign (Vitrine): Christmas Eve menu, gift vouchers, festive hours and a booking button.", "de": "Einseitige Weihnachtskampagne (Vitrine): Festmenü, Geschenkgutscheine, Feiertagszeiten und Reservierungsbutton.", "pt": "Campanha de Natal numa página (Vitrine): menu da Consoada, vales de oferta, horário de festas e botão de reserva."}),
     ("sapateiro", {"en": "Shoe repair & keys · Lisbon (PT)", "de": "Schuhmacher & Schlüssel · Lissabon (PT)", "pt": "Sapateiro & chaves · Lisboa (PT)"}, "Sapataria Meia-Sola",
      {"en": "Repair price list, quote by photo in 3 steps, reviews, opening hours.", "de": "Preisliste für Reparaturen, Angebot per Foto in 3 Schritten, Bewertungen, Öffnungszeiten.", "pt": "Tabela de arranjos, orçamento por foto em 3 passos, avaliações, horário."}),
     ("cafe", {"en": "Café · Dublin (EN)", "de": "Café · Dublin (EN)", "pt": "Café · Dublin (EN)"}, "Linden & Oat",
@@ -1021,7 +1023,7 @@ DEMOS = [
 
 WEB_EXTRA = {
     "en": {
-        "demos_h": "Demos", "demos_p": "Five example sites for typical small businesses in Lisbon, Dublin and Bristol, each with its own look. The businesses are fictional; the pages show what your site can look like on your phone.",
+        "demos_h": "Demos", "demos_p": "Six example sites for typical small businesses in Lisbon, Dublin and Bristol, each with its own look, including a Christmas campaign page. The businesses are fictional; the pages show what your site can look like on your phone.",
         "demo_label": "Demo – fictional business", "demo_open": "Open demo",
         "form_h": "Send an enquiry", "form_p": "Tell us a little about your business. We reply by email with questions or a written quote. No obligation.",
         "f_name": "Name", "f_email": "Email", "f_biz": "Business name or current website (optional)", "f_pkg": "Package",
@@ -1031,7 +1033,7 @@ WEB_EXTRA = {
         "subject": "New enquiry (EN) – Websites",
     },
     "de": {
-        "demos_h": "Demos", "demos_p": "Fünf Beispielseiten für typische kleine Betriebe in Lissabon, Dublin und Bristol, jede mit eigenem Look. Die Betriebe sind erfunden; die Seiten zeigen, wie deine Seite auf dem Handy aussehen kann.",
+        "demos_h": "Demos", "demos_p": "Sechs Beispielseiten für typische kleine Betriebe in Lissabon, Dublin und Bristol, jede mit eigenem Look, darunter eine Weihnachtskampagne. Die Betriebe sind erfunden; die Seiten zeigen, wie deine Seite auf dem Handy aussehen kann.",
         "demo_label": "Demo – fiktiver Betrieb", "demo_open": "Demo öffnen",
         "form_h": "Anfrage senden", "form_p": "Erzähl uns kurz von deinem Betrieb. Wir antworten per E-Mail mit Rückfragen oder einem schriftlichen Angebot. Unverbindlich.",
         "f_name": "Name", "f_email": "E-Mail", "f_biz": "Name des Betriebs oder aktuelle Website (optional)", "f_pkg": "Paket",
@@ -1041,7 +1043,7 @@ WEB_EXTRA = {
         "subject": "Neue Anfrage (DE) – Websites",
     },
     "pt": {
-        "demos_h": "Demos", "demos_p": "Cinco exemplos para pequenos negócios típicos em Lisboa, Dublin e Bristol, cada um com o seu estilo. Os negócios são fictícios; as páginas mostram como o seu site pode ficar no telemóvel.",
+        "demos_h": "Demos", "demos_p": "Seis exemplos para pequenos negócios típicos em Lisboa, Dublin e Bristol, cada um com o seu estilo, incluindo uma campanha de Natal. Os negócios são fictícios; as páginas mostram como o seu site pode ficar no telemóvel.",
         "demo_label": "Exemplo / demo – negócio fictício", "demo_open": "Ver demo",
         "form_h": "Pedir orçamento", "form_p": "Conte-nos um pouco sobre o seu negócio. Respondemos por e-mail com perguntas ou um orçamento por escrito. Sem compromisso.",
         "f_name": "Nome", "f_email": "E-mail", "f_biz": "Nome do negócio ou site atual (opcional)", "f_pkg": "Pacote",
@@ -2094,7 +2096,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Websites (English)]({SITE_URL}/websites/): Website service for small businesses: Vitrine (one page) from €390, Atelier (3–5 pages) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Websites (European Portuguese)]({SITE_URL}/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
-- [Demos]({SITE_URL}/demos/): Five example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
+- [Demos]({SITE_URL}/demos/): Six example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, Christmas campaign tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
 - [Desire Agency newsletter]({SUBSCRIBE_URL}): Sign-up page for the free “build log” newsletter. No earnings promises.
 
 ## Machine-readable
@@ -2130,7 +2132,7 @@ def write_sitemap() -> None:
         ("/tools.json", "0.6", "weekly"),
     ]
     lastmod_default = "2026-11-21"
-    lastmod_today = "2026-11-25"
+    lastmod_today = "2026-11-26"
     urls = []
     for path, prio, freq in paths:
         lastmod = lastmod_today if path in ("/", "/websites/", "/de/websites/", "/pt/websites/", "/demos/", "/llms.txt") else lastmod_default
