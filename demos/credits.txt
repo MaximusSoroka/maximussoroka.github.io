@@ -30,6 +30,11 @@ Downloaded 2026-11-25, resized, compressed to WebP and embedded in SVG wrapper f
 - demos/cafe/img/g3*.svg (WebP inside SVG): "Coffee Cafe" by Chevanon - https://stocksnap.io/photo/coffee-cafe-O8DPBEPOY6
 - demos/cafe/img/g4*.svg (WebP inside SVG): "Coffee Cafe" by Lesly Juarez - https://stocksnap.io/photo/coffee-cafe-VQ7MOYUFIE
 - demos/cafe/img/bake*.svg (WebP inside SVG): "Cookies Chocolatechipcookies" by Suzy Hazelwood - https://stocksnap.io/photo/cookies-chocolatechipcookies-S4T2FDBYCN
+- demos/natal/img/hero*.svg (WebP inside SVG): "Dark Restaurant" by Todd Diemer - https://stocksnap.io/photo/dark-restaurant-VXU7CK0T65
+- demos/natal/img/g1*.svg (WebP inside SVG): "Restaurant Food" by Jay Wennington - https://stocksnap.io/photo/restaurant-food-47E77904CB
+- demos/natal/img/g2*.svg (WebP inside SVG): "Pouring Wine" by Burst - https://stocksnap.io/photo/pouring-wine-6JMD0WXXTG
+- demos/natal/img/g3*.svg (WebP inside SVG): "Thanksgiving Autumn" by Element5 Digital - https://stocksnap.io/photo/thanksgiving-autumn-AMSC0RDEDB
+- demos/natal/img/g4*.svg (WebP inside SVG): "Street Architecture" by Sergei Gussev - https://stocksnap.io/photo/street-architecture-N6LYB1HWK5
 
 FONTS - SIL Open Font License 1.1, latin subset from Google Fonts, embedded as base64 (demos/assets/fonts/*.css):
 - Oswald (Vernon Adams et al.) - barbearia
@@ -37,6 +42,7 @@ FONTS - SIL Open Font License 1.1, latin subset from Google Fonts, embedded as b
 - DM Serif Display (Colophon Foundry) - sapateiro
 - Barlow Condensed (Jeremy Tribby) - handyman
 - Young Serif (Bastien Sozeau) - cafe
+- Cormorant Garamond (Christian Thalmann / Catharsis Fonts) - natal
   Licence text: https://openfontlicense.org
 
 Maps are stylised SVG illustrations, not real map data. Icons are inline SVG drawn for this site.
