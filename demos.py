@@ -15,6 +15,7 @@ IMG = {  # (width, height) of generated images (WebP inside SVG wrapper)
     "sapateiro": {"hero": (960, 638), "hero_s": (560, 372)},
     "handyman": {"hero": (960, 640), "hero_s": (560, 373)},
     "cafe": {"hero": (960, 720), "hero_s": (560, 420)},
+    "natal": {"hero": (960, 607), "hero_s": (560, 354)},
 }
 FONTS = {
     "oswald": ("Oswald", "oswald-500.woff2", "500 600"),
@@ -22,6 +23,7 @@ FONTS = {
     "dmserif": ("DM Serif Display", "dmserif-400.woff2", "400"),
     "barlow": ("Barlow Condensed", "barlow-700.woff2", "700"),
     "youngserif": ("Young Serif", "youngserif-400.woff2", "400"),
+    "cormorant": ("Cormorant Garamond", "cormorant-600.woff2", "600"),
 }
 PKG = {  # name -> (anchor, price text per language). Prices identical to /websites/.
     "Vitrine": ("pkg-vitrine", {"pt": "a partir de 390 €", "en": "from €390", "de": "ab 390 €"}),
@@ -891,10 +893,231 @@ def cafe(site: str) -> str:
                preload_hero="").replace('imagesizes="(min-width:900px) 50vw, 100vw"', 'imagesizes="(min-width:1000px) 980px, 100vw"')
 
 
+
+
+# ================================================================== natal (PT + EN, Vitrine) — Christmas campaign
+NATAL_CSS = """
+body{background:#f3eee4;color:#1c1914;font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3,.logo,.price,.vprice{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-weight:600;font-size-adjust:from-font}
+a{color:#1e3a2c}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:1rem;border-bottom:1px solid #ddd4c4}
+.logo{font-size:1.4rem;color:#1e3a2c;text-decoration:none;line-height:1.1}
+.logo small{display:block;font:700 .72rem/1.45 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#6b4a18;margin-top:.15rem}
+.nav-r{display:flex;align-items:center;gap:1.2rem}
+.nav ul{display:none;list-style:none;margin:0;padding:0;gap:1.4rem}
+.nav ul a{text-decoration:none;color:#1c1914;font-weight:500}
+.lang{display:inline-flex;border:2px solid #1e3a2c;border-radius:999px;overflow:hidden;font-weight:700;font-size:.85rem}
+.lang a,.lang span{min-block-size:36px;min-inline-size:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 .7rem;text-decoration:none;color:#1e3a2c}
+.lang span{background:#1e3a2c;color:#f3eee4}
+.hero{display:grid;gap:1.8rem;padding-block:1.4rem 3.2rem}
+.hero-media{position:relative;margin:0;aspect-ratio:16/10;border-radius:4px 4px 28px 4px;overflow:hidden;box-shadow:0 18px 40px -24px rgba(30,58,44,.55)}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(20,16,12,.35))}
+.kicker{font:700 .8rem/1.3 system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#7a2c2c;margin:0}
+.hero h1{font-size:clamp(2.5rem,8vw,4.5rem);line-height:1.02;color:#1e3a2c;margin:.55rem 0 1rem;letter-spacing:-.015em}
+.hero h1 i{font-style:italic;color:#9a6f2e}
+.hero p{max-width:40ch;margin:0 0 1.6rem;font-size:1.08rem;color:#3f3a32}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-block-size:48px;padding:0 1.35rem;border-radius:999px;background:#1e3a2c;color:#f3eee4;font-weight:700;text-decoration:none}
+.btn.o{background:transparent;color:#1e3a2c;border:2px solid #1e3a2c}
+.row{display:flex;flex-wrap:wrap;gap:.7rem}
+section.s{padding-block:3.6rem;border-top:1px solid #ddd4c4}
+.s h2{font-size:clamp(2rem,5vw,3rem);color:#1e3a2c;line-height:1.05;margin-bottom:.4rem}
+.s .lead{color:#5c564c;margin:0 0 2rem;max-width:56ch}
+.offers{display:grid;gap:1rem}
+.offer{background:#fffaf3;border:1px solid #ddd4c4;border-radius:18px;padding:1.35rem 1.4rem 1.5rem;display:grid;gap:.35rem}
+.offer .when{font:700 .78rem/1.3 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7a2c2c}
+.offer h3{font-size:1.55rem;color:#1e3a2c}
+.offer p{margin:0;color:#3f3a32}
+.offer .price{font-size:1.85rem;color:#9a6f2e}
+.offer small{color:#5c564c;font-size:.88rem}
+.note{font-size:.85rem;color:#5c564c;margin-top:1.1rem}
+.vals{display:grid;gap:1rem}
+.vale{background:#1e3a2c;color:#f3eee4;border-radius:18px;padding:1.4rem 1.35rem;text-align:center;position:relative}
+.vale .vprice{display:block;font-size:2.4rem;line-height:1;color:#e8c778;margin:.35rem 0 .2rem}
+.vale p{margin:0;color:#d5dece;font-size:.95rem}
+.gal img{border-radius:10px}
+.info{display:grid;gap:1rem}
+.card{background:#fffaf3;border:1px solid #ddd4c4;border-radius:18px;padding:1.4rem}
+.card h3{color:#1e3a2c;font-size:1.35rem;margin-bottom:.55rem}
+.card p{margin:.2rem 0}
+.hours{width:100%;border-collapse:collapse}
+.hours th,.hours td{padding:.65rem 0;border-bottom:1px solid #ddd4c4;text-align:left;font-weight:400}
+.hours td{text-align:right;color:#3f3a32}
+.hours th{color:#3f3a32}
+.hours .fest th,.hours .fest td{color:#7a2c2c;font-weight:600}
+.map{border-radius:14px;overflow:hidden;border:6px solid #fffaf3}
+.maplink{display:inline-flex;align-items:center;gap:.4rem;min-block-size:44px;font-weight:600}
+footer.f{padding:2rem 0 2.4rem;color:#5c564c;font-size:.85rem;border-top:1px solid #ddd4c4}
+.mcta{background:rgba(243,238,228,.95);border-top:1px solid #ddd4c4;backdrop-filter:blur(8px)}
+.mcta a{background:#1e3a2c;color:#f3eee4;border-radius:999px}
+.mcta a.alt{background:transparent;color:#1e3a2c;border:2px solid #1e3a2c}
+@media(min-width:700px){
+ .offers{grid-template-columns:repeat(3,1fr)}
+ .vals{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:900px){
+ .nav ul{display:flex}
+ .hero{grid-template-columns:1.05fr .95fr;align-items:center;padding-block:3.2rem 4.6rem;gap:2.4rem}
+ .hero-media{aspect-ratio:4/4.2;order:0}
+ .info{grid-template-columns:1.1fr 1fr 1.25fr}
+}
+"""
+
+NATAL_TXT = {
+    "pt": dict(
+        nav=["Oferta", "Vales", "Reservas"],
+        kicker="Campanha de Natal 2026 · Santos, Lisboa",
+        h1="A Consoada, <i>à mesa connosco.</i>",
+        p="Menu de festa, vales de oferta e horário especial de 1 de dezembro a 6 de janeiro. Uma tasca de bairro — este negócio é fictício, criado só como exemplo.",
+        b1="Reservar mesa", b2="Ver a oferta",
+        alt="Sala de uma tasca ao anoitecer, com mesas de madeira, copos de vinho e luz de uma janela",
+        off_h="A oferta de Natal",
+        off_l="Três menus de festa, com preço de exemplo por pessoa. A reserva é recomendada.",
+        offers=[
+            ("24 de dezembro", "Menu de Consoada", "32 €", "por pessoa", "Sopa, bacalhau com todos, sobremesa e vinho da casa. Dois horários: 19:00 e 21:30."),
+            ("25 de dezembro", "Almoço de Natal", "28 €", "por pessoa", "Peru no forno ou polvo à lagareiro, com sopa e rabanadas. Serviço até às 16:00."),
+            ("31 de dezembro", "Ceia de Ano Novo", "36 €", "por pessoa", "Entradas, prato, bolo-rei e uma taça de espumante à meia-noite. Só com reserva, às 20:00."),
+        ],
+        note="Menus, preços e horários de exemplo — negócio fictício.",
+        val_h="Vales de oferta",
+        val_l="Três valores de exemplo para oferecer. No seu site, o cliente pede o vale por telefone ou no balcão.",
+        vales=[("20 €", "Um almoço de semana"), ("40 €", "Um jantar para duas pessoas"), ("60 €", "Um dos menus de festa")],
+        gal_h="A casa",
+        gal_l="A mesa, o vinho e a rua — fotografias de ambiente, não de clientes reais.",
+        gal=["Prato servido numa mesa de restaurante", "Vinho branco a ser servido em copos", "Ponche de fruta com canela e maçã sobre uma mesa de madeira", "Rua de Lisboa ao anoitecer, com calçada molhada"],
+        vis_h="Horário e reservas",
+        vis_l="Horário especial de 24 de dezembro a 1 de janeiro. Tudo o que se segue é um exemplo.",
+        hours_h="Horário de exemplo",
+        hours=[
+            ("Terça a sábado", "12:00–15:00 e 19:00–23:00", False),
+            ("Domingo", "12:00–15:00", False),
+            ("Segunda", "Fechado", False),
+            ("24 de dezembro", "Almoço 12:00–15:00; jantar só com reserva", True),
+            ("25 de dezembro", "Almoço 12:00–16:00; jantar fechado", True),
+            ("31 de dezembro", "Almoço 12:00–15:00; ceia às 20:00, só com reserva", True),
+            ("1 de janeiro", "Fechado", True),
+        ],
+        c2_h="Onde estamos",
+        c2=["Travessa Inventada, 00 – Santos, Lisboa", "Estação de Santos (Linha de Cascais), 6 min a pé", "Reservas: +351 21X XXX XXX (fictício)", "reservas@lumecalmo.example (fictício)"],
+        map_l="Mapa ilustrativo de Santos com a localização da tasca",
+        maps="Abrir no Google Maps",
+        foot="© Tasca do Lume Calmo – negócio fictício, criado para demonstração.",
+        m1="Reservar", m2="Oferta", quick="Ações rápidas",
+        title="Tasca do Lume Calmo – Campanha de Natal",
+        desc="Exemplo de página de campanha de Natal (PT/EN) para uma tasca em Lisboa (negócio fictício).",
+        what="Página única de campanha de Natal, em português e inglês: menu da Consoada, vales de oferta, horário de festas e um botão de reserva.",
+    ),
+    "en": dict(
+        nav=["Offer", "Vouchers", "Bookings"],
+        kicker="Christmas campaign 2026 · Santos, Lisbon",
+        h1="Christmas Eve, <i>at our table.</i>",
+        p="A festive menu, gift vouchers and special hours from 1 December to 6 January. A neighbourhood tasca — this business is fictional, created only as an example.",
+        b1="Book a table", b2="See the offer",
+        alt="A dimly lit tavern dining room with wooden tables, wine glasses and light from a window",
+        off_h="The Christmas offer",
+        off_l="Three festive menus, with an example price per person. Booking is recommended.",
+        offers=[
+            ("24 December", "Christmas Eve menu", "€32", "per person", "Soup, salt-cod with all the trimmings, dessert and house wine. Two sittings: 19:00 and 21:30."),
+            ("25 December", "Christmas Day lunch", "€28", "per person", "Roast turkey or octopus lagareiro, with soup and rabanadas. Service until 16:00."),
+            ("31 December", "New Year’s Eve dinner", "€36", "per person", "Starters, a main, bolo-rei and a glass of sparkling wine at midnight. Booking only, at 20:00."),
+        ],
+        note="Example menus, prices and hours — fictional business.",
+        val_h="Gift vouchers",
+        val_l="Three example values to give as a gift. On your own site, customers would request a voucher by phone or at the counter.",
+        vales=[("€20", "A weekday lunch"), ("€40", "Dinner for two"), ("€60", "One of the festive menus")],
+        gal_h="The room",
+        gal_l="The table, the wine and the street — atmosphere photographs, not pictures of real customers.",
+        gal=["A restaurant dish served at the table", "White wine being poured into glasses", "Fruit punch with cinnamon and an apple on a wooden table", "A Lisbon street at dusk, with wet cobblestones"],
+        vis_h="Hours and bookings",
+        vis_l="Special hours from 24 December to 1 January. Everything below is an example.",
+        hours_h="Example opening hours",
+        hours=[
+            ("Tuesday to Saturday", "12:00–15:00 and 19:00–23:00", False),
+            ("Sunday", "12:00–15:00", False),
+            ("Monday", "Closed", False),
+            ("24 December", "Lunch 12:00–15:00; dinner by booking only", True),
+            ("25 December", "Lunch 12:00–16:00; dinner closed", True),
+            ("31 December", "Lunch 12:00–15:00; dinner at 20:00, booking only", True),
+            ("1 January", "Closed", True),
+        ],
+        c2_h="Find us",
+        c2=["Travessa Inventada, 00 – Santos, Lisbon", "Santos station (Cascais line), 6 min walk", "Bookings: +351 21X XXX XXX (fictional)", "reservas@lumecalmo.example (fictional)"],
+        map_l="Illustrated map of Santos showing the tavern",
+        maps="Open in Google Maps",
+        foot="© Tasca do Lume Calmo – fictional business, created as a demo.",
+        m1="Book", m2="Offer", quick="Quick actions",
+        title="Tasca do Lume Calmo – Christmas campaign",
+        desc="Example Christmas campaign page (PT/EN) for a Lisbon tasca (fictional business).",
+        what="A one-page Christmas campaign in Portuguese and English: holiday menu, gift vouchers, festive opening hours and a booking button.",
+    ),
+}
+
+
+def natal(site: str, lang: str = "pt") -> str:
+    t = NATAL_TXT[lang]
+    en = lang == "en"
+    root = "../../../" if en else "../../"
+    pre = "../" if en else ""
+    sw = ('<span aria-current="true">EN</span>' if en else '<a href="en/" hreflang="en" lang="en">EN</a>')
+    sw = (f'<a href="../" hreflang="pt-PT" lang="pt-PT">PT</a>{sw}' if en else f'<span aria-current="true">PT</span>{sw}')
+    ids = ["oferta", "vales", "reservas"]
+    nav = "".join(f'<li><a href="#{i}">{n}</a></li>' for i, n in zip(ids, t["nav"]))
+    offers = "".join(
+        f'<article class="offer"><p class="when">{when}</p><h3>{name}</h3>'
+        f'<p class="price">{price} <small>{per}</small></p><p>{desc}</p></article>'
+        for when, name, price, per, desc in t["offers"]
+    )
+    vales = "".join(
+        f'<div class="vale"><span class="vprice">{price}</span><p>{desc}</p></div>'
+        for price, desc in t["vales"]
+    )
+    hours = "".join(
+        f'<tr class="{"fest" if fest else ""}"><th>{d}</th><td>{h}</td></tr>'
+        for d, h, fest in t["hours"]
+    )
+    where = "".join(f"<p>{x}</p>" for x in t["c2"])
+    body = f"""
+<header class="wrap nav">
+  <a class="logo" href="#top">Tasca do Lume Calmo<small>Santos · Lisboa</small></a>
+  <div class="nav-r"><nav aria-label="{'Sections' if en else 'Secções'}"><ul>{nav}</ul></nav><div class="lang" role="group" aria-label="{'Language' if en else 'Idioma'}">{sw}</div></div>
+</header>
+<main id="top">
+<section class="wrap hero">
+  <div class="hero-media">{hero_img("natal", t["alt"], "(min-width:900px) 45vw, 100vw", pre)}</div>
+  <div>
+    <p class="kicker">{t["kicker"]}</p>
+    <h1>{t["h1"]}</h1>
+    <p>{t["p"]}</p>
+    <div class="row"><a class="btn" href="#reservas">{PHONE_SVG} {t["b1"]}</a><a class="btn o" href="#oferta">{t["b2"]}</a></div>
+  </div>
+</section>
+<section class="s wrap" id="oferta"><h2>{t["off_h"]}</h2><p class="lead">{t["off_l"]}</p>
+  <div class="offers">{offers}</div><p class="note">{t["note"]}</p></section>
+<section class="s wrap" id="vales"><h2>{t["val_h"]}</h2><p class="lead">{t["val_l"]}</p>
+  <div class="vals">{vales}</div><p class="note">{t["note"]}</p></section>
+<section class="s wrap" id="galeria"><h2>{t["gal_h"]}</h2><p class="lead">{t["gal_l"]}</p>{gallery(t["gal"], pre)}</section>
+<section class="s wrap" id="reservas"><h2>{t["vis_h"]}</h2><p class="lead">{t["vis_l"]}</p>
+  <div class="info">
+    <div class="card"><h3>{t["hours_h"]}</h3><table class="hours">{hours}</table></div>
+    <div class="card"><h3>{t["c2_h"]}</h3>{where}</div>
+    <div><div class="map">{map_svg({"bg": "#eef3ee", "block": "#d5e0d4", "park": "#c9dcc0", "road": "#ffffff", "pin": "#1e3a2c", "text": "#5c564c"}, t["map_l"], "Rua de Santos-o-Velho", "Travessa Inventada")}</div>
+      <a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=Santos%2C+Lisboa">{PIN_SVG} {t["maps"]}</a></div>
+  </div></section>
+</main>
+<footer class="f wrap">{t["foot"]}</footer>
+<nav class="mcta" aria-label="{t["quick"]}"><a href="#reservas">{PHONE_SVG} {t["m1"]}</a><a class="alt" href="#oferta">{t["m2"]}</a></nav>"""
+    canon = site + ("/demos/natal/en/" if en else "/demos/natal/")
+    alt = (f'\n  <link rel="alternate" hreflang="pt-PT" href="{site}/demos/natal/">'
+           f'\n  <link rel="alternate" hreflang="en" href="{site}/demos/natal/en/">')
+    return doc(lang=lang, title=t["title"], desc=t["desc"], canon=canon, theme="#1e3a2c", font="cormorant", root=root,
+               css=NATAL_CSS, body=body, pkg="Vitrine", what=t["what"], preload_hero=pre, alternates=alt).replace(
+        'imagesizes="(min-width:900px) 50vw, 100vw"', 'imagesizes="(min-width:900px) 45vw, 100vw"')
+
+
 # ================================================================== index
 DEMO_LIST = [  # slug, name, niche (pt/en), lang label, package
     ("barbearia", "Barbearia Navalha d'Ouro", "Barbearia · Lisboa", "Barbershop · Lisbon", "PT", "Vitrine"),
     ("tasca", "Tasca do Pátio Azul", "Tasca / restaurante · Lisboa", "Tavern / restaurant · Lisbon", "PT + EN", "Maison"),
+    ("natal", "Tasca do Lume Calmo", "Campanha de Natal · Lisboa", "Christmas campaign · Lisbon", "PT + EN", "Vitrine"),
     ("sapateiro", "Sapataria Meia-Sola", "Sapateiro & chaves · Lisboa", "Shoe repair & keys · Lisbon", "PT", "Vitrine"),
     ("cafe", "Linden & Oat", "Café · Dublin", "Café · Dublin", "EN", "Vitrine"),
     ("handyman", "Tidy Joist", "Faz-tudo · Bristol", "Handyman / trades · Bristol", "EN", "Vitrine"),
@@ -914,7 +1137,7 @@ def index(site: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <title>Demos de sites para pequenos negócios — Desire Agency</title>
-  <meta name="description" content="Cinco exemplos de sites para negócios fictícios: barbearia, tasca, sapateiro (Lisboa), café (Dublin) e faz-tudo (Bristol). Pacote Vitrine a partir de 390 €.">
+  <meta name="description" content="Seis exemplos de sites para negócios fictícios: barbearia, tasca, campanha de Natal, sapateiro (Lisboa), café (Dublin) e faz-tudo (Bristol). Pacote Vitrine a partir de 390 €.">
   <link rel="canonical" href="{site}/demos/">
   <meta name="theme-color" content="#06060c">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -941,7 +1164,7 @@ def index(site: str) -> str:
 <body><main class="w">
   <div class="top"><a class="brand" href="../">Desire Agency</a><span><a href="../pt/websites/">PT</a> · <a href="../websites/">EN</a> · <a href="../de/websites/">DE</a></span></div>
   <h1>Demos: sites para pequenos negócios</h1>
-  <p class="lede">Cinco exemplos, cada um com o seu próprio estilo. Os negócios são fictícios: nomes, moradas, contactos, preços, horários e avaliações são inventados. Mostram como pode ficar o seu site no telemóvel – pacote <strong>Vitrine</strong> a partir de 390 €, bilingue com <strong>Maison</strong> a partir de 1190 €.<br><span lang="en">Five example sites for fictional businesses in Lisbon, Dublin and Bristol.</span> · <span lang="de">Fünf Beispielseiten für fiktive Betriebe in Lissabon, Dublin und Bristol.</span></p>
+  <p class="lede">Seis exemplos, cada um com o seu próprio estilo, incluindo uma campanha de Natal. Os negócios são fictícios: nomes, moradas, contactos, preços, horários e avaliações são inventados. Mostram como pode ficar o seu site no telemóvel – pacote <strong>Vitrine</strong> a partir de 390 €, bilingue com <strong>Maison</strong> a partir de 1190 €.<br><span lang="en">Six example sites for fictional businesses in Lisbon, Dublin and Bristol, including a Christmas campaign page.</span> · <span lang="de">Sechs Beispielseiten für fiktive Betriebe in Lissabon, Dublin und Bristol, darunter eine Weihnachtskampagne.</span></p>
   <div class="g">{cards}
   </div>
   <a class="cta" href="../pt/websites/#contacto">Pedir orçamento sem compromisso →</a>
@@ -957,6 +1180,8 @@ def pages(site: str) -> dict:
         "demos/barbearia/index.html": barbearia(site),
         "demos/tasca/index.html": tasca(site, "pt"),
         "demos/tasca/en/index.html": tasca(site, "en"),
+        "demos/natal/index.html": natal(site, "pt"),
+        "demos/natal/en/index.html": natal(site, "en"),
         "demos/sapateiro/index.html": sapateiro(site),
         "demos/cafe/index.html": cafe(site),
         "demos/handyman/index.html": handyman(site),
