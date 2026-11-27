@@ -945,7 +945,7 @@ WEBSITES = {
         "delivery": "Delivery", "revisions": "Revisions",
         "ask": "Ask about {name}", "subject": "Enquiry {name}",
         "common_title": "Included in every package",
-        "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless you ask for it", "Hosting on GitHub Pages with HTTPS in the first year; you own the files", "Domain set up in your name (registry fee paid by you or passed on 1:1)"],
+        "common": ["Mobile-first, premium design in the style of this site", "One clear main action: WhatsApp, call or form", "Technical SEO: titles, descriptions, sitemap, robots.txt, preview image", "Basic legal pages; no tracking unless you ask for it", "Hosting on GitHub Pages with HTTPS in the first year; you own the files", "Domain set up in your name (registry fee paid by you or passed on 1:1)", "Your Google profile checked at launch: name, address, hours and phone match your new site, and the Website, Call and Directions buttons work."],
         "packages": [
             ("Vitrine", "One-page site", "For a local business or a single offer.", ["One long page, one language (PT, EN or DE)", "WhatsApp button and/or contact form", "Basic SEO and preview image"], "390 €", False, "5–7 working days", "2 rounds"),
             ("Atelier", "Business site, 3–5 pages", "A good fit if you need more than one page.", ["Everything in Vitrine", "Up to 5 pages, one language", "Navigation, 404 page, shared footer", "Optional embedded map and links to your profiles"], "750 €", False, "10–14 working days", "2 rounds"),
@@ -971,7 +971,7 @@ WEBSITES = {
         "delivery": "Lieferzeit", "revisions": "Korrekturen",
         "ask": "{name} anfragen", "subject": "Anfrage {name}",
         "common_title": "In jedem Paket enthalten",
-        "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer du wünschst es", "Hosting auf GitHub Pages mit HTTPS im ersten Jahr; die Dateien gehören dir", "Domain auf deinen Namen eingerichtet (Registry-Gebühr zahlst du oder sie wird 1:1 weitergegeben)"],
+        "common": ["Hochwertiges, mobilfreundliches Design im Stil dieser Seite", "Eine klare Hauptaktion: WhatsApp, Anruf oder Formular", "Technisches SEO: Titel, Beschreibungen, Sitemap, robots.txt, Vorschaubild", "Rechtstexte in Grundform; kein Tracking, außer du wünschst es", "Hosting auf GitHub Pages mit HTTPS im ersten Jahr; die Dateien gehören dir", "Domain auf deinen Namen eingerichtet (Registry-Gebühr zahlst du oder sie wird 1:1 weitergegeben)", "Dein Google-Profil beim Start geprüft: Name, Adresse, Öffnungszeiten und Telefon stimmen mit der neuen Website überein, und die Buttons Website, Anrufen und Route funktionieren."],
         "packages": [
             ("Vitrine", "Onepager", "Für einen lokalen Betrieb oder ein einzelnes Angebot.", ["Eine lange Seite, eine Sprache (PT, EN oder DE)", "WhatsApp-Button und/oder Kontaktformular", "Grundlegendes SEO und Vorschaubild"], "390 €", False, "5–7 Werktage", "2 Runden"),
             ("Atelier", "Firmenwebsite, 3–5 Seiten", "Passt, wenn eine Seite nicht reicht.", ["Alles aus Vitrine", "Bis zu 5 Seiten, eine Sprache", "Navigation, 404-Seite, einheitlicher Footer", "Optional eingebettete Karte und Links zu deinen Profilen"], "750 €", False, "10–14 Werktage", "2 Runden"),
@@ -997,7 +997,7 @@ WEBSITES = {
         "delivery": "Prazo", "revisions": "Revisões",
         "ask": "Pedir o {name}", "subject": "Pedido {name}",
         "common_title": "Incluído em todos os pacotes",
-        "common": ["Design cuidado, pensado primeiro para o telemóvel, no estilo deste site", "Uma ação principal clara: WhatsApp, chamada ou formulário", "SEO técnico: títulos, descrições, sitemap, robots.txt, imagem de pré-visualização", "Páginas legais básicas; sem rastreio, a não ser que o peça", "Alojamento no GitHub Pages com HTTPS no primeiro ano; os ficheiros são seus", "Domínio registado em seu nome (a taxa do registo é paga por si ou cobrada ao preço de custo)"],
+        "common": ["Design cuidado, pensado primeiro para o telemóvel, no estilo deste site", "Uma ação principal clara: WhatsApp, chamada ou formulário", "SEO técnico: títulos, descrições, sitemap, robots.txt, imagem de pré-visualização", "Páginas legais básicas; sem rastreio, a não ser que o peça", "Alojamento no GitHub Pages com HTTPS no primeiro ano; os ficheiros são seus", "Domínio registado em seu nome (a taxa do registo é paga por si ou cobrada ao preço de custo)", "O seu perfil Google verificado no lançamento: nome, morada, horário e telefone iguais aos do site, e os botões Site, Ligar e Direções a funcionar."],
         "packages": [
             ("Vitrine", "Site de uma página", "Para um negócio local ou uma única oferta.", ["Uma página longa, num idioma (PT, EN ou DE)", "Botão de WhatsApp e/ou formulário de contacto", "SEO básico e imagem de pré-visualização"], "390 €", False, "5–7 dias úteis", "2 rondas"),
             ("Atelier", "Site de empresa, 3–5 páginas", "Indicado se precisa de mais do que uma página.", ["Tudo o que o Vitrine inclui", "Até 5 páginas, num idioma", "Navegação, página 404 e rodapé comum", "Mapa incorporado e ligações aos seus perfis (opcional)"], "750 €", False, "10–14 dias úteis", "2 rondas"),
@@ -1042,6 +1042,20 @@ WEB_EXTRA = {
         "privacy": "Privacy: we use your details only to answer your enquiry. The form is delivered to our inbox by FormSubmit (formsubmit.co); this site stores nothing. No newsletter, no sharing.",
         "fallback": "Prefer email? Write to", "thanks": "Thank you – your message was sent. We will reply by email.",
         "subject": "New enquiry (EN) – Websites",
+        "faq_h": "Questions owners ask first",
+        "faq_items": [
+            ("Do I pay anything upfront?", "No. You get a written quote first and pay only after the site is finished."),
+            ("What do you need from me?", "Your texts, photos, logo and any access we need. Delivery time starts once we have them."),
+            ("Do I own the site?", "Yes. You own the files, and the domain is set up in your name."),
+            ("What if I want changes?", "Every package includes revision rounds: 2 for Vitrine and Atelier, 3 for Maison."),
+            ("Is there a monthly fee?", "No builder subscription. Care at 29 €/month is optional and can be cancelled with 30 days’ notice."),
+        ],
+        "next_h": "What happens next",
+        "next_steps": [
+            ("01", "Enquiry", "You send the form."),
+            ("02", "Written quote", "We reply by email with questions or a written quote."),
+            ("03", "Completion", "You approve, send your material, and pay only when the site is finished."),
+        ],
     },
     "de": {
         "demos_h": "Demos", "demos_p": "Sechs Beispielseiten für typische kleine Betriebe in Lissabon, Dublin und Bristol, jede mit eigenem Look, darunter eine Weihnachtskampagne. Die Betriebe sind erfunden; die Seiten zeigen, wie deine Seite auf dem Handy aussehen kann.",
@@ -1052,6 +1066,20 @@ WEB_EXTRA = {
         "privacy": "Datenschutz: Wir nutzen deine Angaben nur, um deine Anfrage zu beantworten. Das Formular wird über FormSubmit (formsubmit.co) an unser Postfach zugestellt; diese Seite speichert nichts. Kein Newsletter, keine Weitergabe.",
         "fallback": "Lieber per E-Mail? Schreib an", "thanks": "Danke – deine Nachricht wurde gesendet. Wir antworten per E-Mail.",
         "subject": "Neue Anfrage (DE) – Websites",
+        "faq_h": "Fragen, die Inhaber zuerst stellen",
+        "faq_items": [
+            ("Zahle ich etwas im Voraus?", "Nein. Du bekommst zuerst ein schriftliches Angebot und zahlst erst, wenn die Seite fertig ist."),
+            ("Was braucht ihr von mir?", "Deine Texte, Fotos, Logo und die nötigen Zugänge. Die Lieferzeit beginnt, sobald wir sie haben."),
+            ("Gehört mir die Website?", "Ja. Die Dateien gehören dir, und die Domain wird auf deinen Namen eingerichtet."),
+            ("Was ist, wenn ich Änderungen will?", "Jedes Paket enthält Korrekturrunden: 2 bei Vitrine und Atelier, 3 bei Maison."),
+            ("Gibt es eine monatliche Gebühr?", "Kein Baukasten-Abo. Care für 29 €/Monat ist optional und mit 30 Tagen Vorlauf kündbar."),
+        ],
+        "next_h": "So geht es weiter",
+        "next_steps": [
+            ("01", "Anfrage", "Du sendest das Formular."),
+            ("02", "Schriftliches Angebot", "Wir antworten per E-Mail mit Rückfragen oder einem schriftlichen Angebot."),
+            ("03", "Fertigstellung", "Du sagst zu, schickst dein Material und zahlst erst, wenn die Seite fertig ist."),
+        ],
     },
     "pt": {
         "demos_h": "Demos", "demos_p": "Seis exemplos para pequenos negócios típicos em Lisboa, Dublin e Bristol, cada um com o seu estilo, incluindo uma campanha de Natal. Os negócios são fictícios; as páginas mostram como o seu site pode ficar no telemóvel.",
@@ -1062,6 +1090,20 @@ WEB_EXTRA = {
         "privacy": "Privacidade: usamos os seus dados apenas para responder ao seu pedido. O formulário é entregue na nossa caixa de correio através do FormSubmit (formsubmit.co); este site não guarda nada. Sem newsletter, sem partilha com terceiros.",
         "fallback": "Prefere e-mail? Escreva para", "thanks": "Obrigado – a sua mensagem foi enviada. Respondemos por e-mail.",
         "subject": "Novo pedido (PT) – Sites",
+        "faq_h": "Perguntas que os donos fazem primeiro",
+        "faq_items": [
+            ("Pago alguma coisa antes?", "Não. Recebe primeiro um orçamento por escrito e só paga depois do site estar pronto."),
+            ("O que precisam de mim?", "Os seus textos, fotografias, logótipo e os acessos necessários. O prazo começa quando os tivermos."),
+            ("O site fica meu?", "Sim. Os ficheiros são seus e o domínio fica registado em seu nome."),
+            ("E se quiser alterações?", "Cada pacote inclui rondas de revisão: 2 no Vitrine e no Atelier, 3 no Maison."),
+            ("Há mensalidade?", "Não há subscrição de construtor. O plano Care (29 €/mês) é opcional e cancela-se com 30 dias de aviso."),
+        ],
+        "next_h": "O que acontece a seguir",
+        "next_steps": [
+            ("01", "Pedido", "Envia o formulário."),
+            ("02", "Orçamento por escrito", "Respondemos por e-mail com perguntas ou um orçamento por escrito."),
+            ("03", "Conclusão", "Aprova, envia o material e só paga quando o site estiver pronto."),
+        ],
     },
 }
 
@@ -1090,6 +1132,28 @@ def portfolio_section(lang: str) -> str:
       </section>"""
 
 
+def pre_enquiry_section(lang: str) -> str:
+    x = WEB_EXTRA[lang]
+    items = "".join(
+        f'<details><summary>{esc(q)}</summary><div class="faq-a"><p>{esc(a)}</p></div></details>'
+        for q, a in x["faq_items"]
+    )
+    steps = "".join(
+        f'<li class="step"><span class="step-n">{esc(n)}</span><h3>{esc(h)}</h3><p>{esc(p)}</p></li>'
+        for n, h, p in x["next_steps"]
+    )
+    return f"""
+      <section class="section" id="perguntas">
+        <div class="section-head"><h2>{esc(x["faq_h"])}</h2></div>
+        <div class="faq">{items}</div>
+      </section>
+      <section class="section" id="seguinte">
+        <div class="section-head"><h2>{esc(x["next_h"])}</h2></div>
+        <ol class="steps steps-3">{steps}</ol>
+      </section>
+"""
+
+
 def contact_form(lang: str) -> str:
     x = WEB_EXTRA[lang]
     nxt = site_url(CANONICAL[(lang, "websites")]) + "?enviado=1#obrigado"
@@ -1104,7 +1168,7 @@ def contact_form(lang: str) -> str:
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="{esc(nxt)}">
           <input type="hidden" name="origem" value="{lang}" id="origem">
-          <div class="hp"><label><span class="visually-hidden">Leave empty</span><input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"></label></div>
+          <div class="hp" aria-hidden="true"><label><span class="visually-hidden">Leave empty</span><input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
           <div class="form-row">
             <label>{esc(x["f_name"])}<input type="text" name="name" required autocomplete="name" maxlength="120"></label>
             <label>{esc(x["f_email"])}<input type="email" name="email" required autocomplete="email" maxlength="160"></label>
@@ -1170,7 +1234,7 @@ def websites_body(lang: str) -> str:
           <div class="panel"><p>{esc(t["not"])}</p><p><a href="#case-study">{esc(t["example"])}</a></p>
             <p><a class="btn btn-ghost" href="#contacto">{esc(t["contact"])} <span class="arrow" aria-hidden="true">→</span></a></p></div>
         </div>
-      </section>{portfolio_section(lang)}{case_section(lang, paths, "#contacto")}{contact_form(lang)}
+      </section>{portfolio_section(lang)}{case_section(lang, paths, "#contacto")}{pre_enquiry_section(lang)}{contact_form(lang)}
 """
 
 
@@ -1941,6 +2005,27 @@ def site_url(path: str) -> str:
     return SITE_URL + (path if path.startswith("/") else "/" + path)
 
 
+def websites_faq_jsonld(lang: str) -> str:
+    """schema.org FAQPage from the pre-enquiry questions on /websites/."""
+    x = WEB_EXTRA[lang]
+    path = {"en": "/websites/", "de": "/de/websites/", "pt": "/pt/websites/"}[lang]
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": q,
+                "acceptedAnswer": {"@type": "Answer", "text": a},
+            }
+            for q, a in x["faq_items"]
+        ],
+        "url": site_url(path),
+    }
+    dumped = json.dumps(payload, ensure_ascii=False, indent=2).replace("</", "<\\/")
+    return f'  <script type="application/ld+json">\n{dumped}\n  </script>\n'
+
+
 def directory_jsonld(lang: str) -> str:
     """schema.org ItemList of SoftwareApplication for the directory page."""
     t = DIR[lang]
@@ -2094,7 +2179,7 @@ This is a static site with no cookies, tracking or analytics.
 - [Free n8n templates (English)]({SITE_URL}/templates/): Three free, importable n8n workflows (RSS digest email, form to Google Sheet, website uptime alert with a 60-second retry before the alert). Each section has setup steps and a download link to workflow.json. Credentials in the files are placeholders only. There is no German version of this page.
 - [Legal notice / Impressum (English)]({SITE_URL}/legal/): Operator, address, contact, advertising note, and privacy (static site, no cookies or tracking).
 - [Legal notice / Impressum (German)]({SITE_URL}/de/legal/): The same legal notice in German.
-- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses in Lisbon: Vitrine (one page) from €390, Atelier (3–5 pages, a good fit if you need more than one page) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit.
+- [Websites (English)]({SITE_URL}/websites/): Website service for small businesses in Lisbon: Vitrine (one page) from €390, Atelier (3–5 pages, a good fit if you need more than one page) from €750, Maison (up to 8 pages, two languages) from €1,190, Care €29/month. Final prices. No VAT charged – exempt under Art. 53 CIVA (Portugal). Delivery times count from the complete briefing. Enquiries by contact form (delivered via FormSubmit) or email; no online payment. Payment after completion, no deposit. Every website package includes a Google profile check at launch so name, address, hours and phone match the site, and the Website, Call and Directions buttons work. The page answers common questions on payment, ownership, revisions and optional Care, and sets out the steps after an enquiry.
 - [Websites (German)]({SITE_URL}/de/websites/): The same service page in German.
 - [Websites (European Portuguese)]({SITE_URL}/pt/websites/): The same service page in Portuguese (pt-PT). "Preços finais. IVA isento ao abrigo do artigo 53.º do CIVA."
 - [Demos]({SITE_URL}/demos/): Six example sites for fictional small businesses (Lisbon barbearia, bilingual tasca, Christmas campaign tasca, sapateiro; Dublin café; Bristol handyman), clearly labelled as demos.
@@ -2184,7 +2269,12 @@ def build() -> None:
             body = body_fn(lang, paths)
         else:
             body = body_fn(lang)
-        extra_head = directory_jsonld(lang) if page == "directory" else ""
+        if page == "directory":
+            extra_head = directory_jsonld(lang)
+        elif page == "websites":
+            extra_head = websites_faq_jsonld(lang)
+        else:
+            extra_head = ""
         html_out = split_h1(shell(lang, page, depth, meta["title"], meta["description"], body, extra_head=extra_head))
         write(path, html_out)
     write(ROOT / "404.html", not_found())
